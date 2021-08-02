@@ -11,7 +11,9 @@ module.exports = function () {
             //     throw new Error("El caracter digitado no es un numero");
             // }
 
-            let query = `INSERT INTO ligas(CodiPais,NombreLiga) Values('${req.CodiPais}','${req.NombreLiga}')`
+            
+
+            let query = `INSERT INTO ligas(codiPais,nombreLiga) Values('${req.CodiPais}','${req.NombreLiga}')`
             const InsertLiga = await pool.query(query);
 
             if(InsertLiga.affectedRows <= 0){
@@ -25,9 +27,21 @@ module.exports = function () {
         }
     }
 
+    const RegistrarPais = async(codigo, nombre, urlLogo) => {
+        try {
+
+            let query = `INSERT INTO paises(codigoPais,nombrePais,logoPais) Values('${codigo}','${nombre}','${urlLogo}')`
+            const InsertLiga = await pool.query(query);
+
+        } catch (error) {
+            return `Se produjo el siguiente error al registrar la liga: ${error}`;
+        }
+    }
+
     
 
     return {
         RegistrarLigas,
+        RegistrarPais
     }
 }
