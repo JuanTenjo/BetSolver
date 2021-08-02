@@ -12,7 +12,14 @@ const passportConfig = function (app) {
 
     //Serializacion
     passport.serializeUser(function (user, done) {
-        done(null, user);
+
+        const sessionData = {
+            idUsuarios: user.idUsuarios,
+            idRol: user.idRol
+        };
+
+        done(null, sessionData);
+
     });
 
     //Deseralizacion

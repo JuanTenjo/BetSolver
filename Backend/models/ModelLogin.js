@@ -46,7 +46,7 @@ module.exports = function () {
     const ValidarUser = async (email) => {
         try {
 
-        let query = `SELECT idUsuarios,idRol,nombre,apellidos,correo,genero,usuario,password FROM usuarios where correo = '${email}'`
+        let query = `SELEdCT idUsuarios,idRol,nombre,apellidos,correo,genero,usuario,password FROM usuarios where correo = '${email}'`
 
         const session = await pool.query(query);
 
@@ -55,8 +55,8 @@ module.exports = function () {
         }catch (err) {
             return {
                 error: true,
-                catacteristicas: err,
-            }
+                mensaje: `Hubo un error al validar el usuario en el Model: ModelLogin, en la funcion: ValidaUser. ERROR: ${err.sqlMessage} `
+            };
         }
     }
 

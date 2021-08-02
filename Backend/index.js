@@ -42,9 +42,10 @@ require('./config/passport')(app);
 //Routes
 
 //app.use('/Home', require('./routes/MostrarDatos'))
+app.use('/', require('./routes/Login'))
+app.use('/login', require('./routes/Login'))
 app.use('/Registro', require('./routes/Registrar'))
 app.use('/RegistrarPais', require('./routes/RegistrarPais'))
-app.use('/login', require('./routes/Login'))
 
 
 

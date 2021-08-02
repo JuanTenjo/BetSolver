@@ -13,6 +13,7 @@ router.post('/', passport.authenticate('local', {
     failureFlash: true,
 }))
 
+
 passport.use(new localStrategy({
     usernameField: 'email',
     passwordField: 'password',
@@ -21,7 +22,7 @@ passport.use(new localStrategy({
 
         const User = await LoginController.findOne(username);
 
-        if(User.error) return done(User.error);
+        if(User.error) return done(null,false,{message: `Error de servidor: ${User.mensaje}`});
         if(!User) return done(null,false,{message: `El email ${username} no existe!`});
        
         
@@ -48,18 +49,29 @@ router.get('/succesLogin', async(req,res,next) =>{
 
 },(req,res) => {
 
-    console.log(req.session);
-    res.send("Home");
+    let respuesta = {
+        error: false,
+        mensaje: 'Inicio de sesion exitoso',
+        respuesta: req.session.passport.user
+    };
+
+    res.status(200).json(respuesta)
+    //res.status(200).send(respuesta)
 
 });
 
 router.get('/FailLogin', async(req,res) =>{
  
     let error_message = req.flash('error')[0];
-    //console.log(req.flash('info')[0])
-    res.json({
-        "message": error_message
-    });  
+
+    let respuesta = {
+        error: true,
+        mensaje: error_message,
+        respuesta: false
+    };
+
+    res.status(200).json(respuesta)
+
 });
 
 // router.post('/',
