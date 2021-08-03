@@ -3,6 +3,7 @@ const validator = require("email-validator");
 const router = express.Router();
 const ModelRegistro = require('../models/ModelRegistro')
 const ModelValidacion = require('../models/ModelValidation')
+const bcryptjs = require('bcrypt');
 
 const ValidarNulo = (Campo) => {
 
@@ -15,19 +16,22 @@ const ValidarNulo = (Campo) => {
 
 const ValidarPais = async (codigoPais) => {
 
-    const Validacion = await ModelValidacion().ValidarPais(codigoPais);
+    let Validacion = await ModelValidacion().ValidarPais(codigoPais);
 
+    let res = (Validacion ? true: false)
 
-    return Validacion;
+    return res;
     //Cambiarlo por un if ternario
 
 }
 
 async function RegistrarUsuario(params) {
     try {
+        console.log(params);
+        
         // El patterns que vamos a comprobar
-        const pattern = new RegExp('^[A-Z]+$', 'i');
-        const patternPassword = new RegExp('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$');
+        const pattern = new RegExp(/^[A-Za-z\s]+$/); //Letras y espacios en blanco
+        const patternPassword = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/); //Mayuscula, Minuscula y Numero
 
         let espacios = false;
         let cont = 0;
@@ -38,30 +42,39 @@ async function RegistrarUsuario(params) {
             cont++;
         }
 
+
         const ErroresValidacion = [];
 
         !validator.validate(params.email) ? ErroresValidacion.push('Email invalido') : true;
-        !ValidarPais(params.idPais) ? ErroresValidacion.push("Codigo del pais invalido") : true;
+        await ValidarPais(params.idPais) == false ? ErroresValidacion.push("Codigo del pais invalido") : true;
         (params.nombreUsuario.length > 45 || params.nombreUsuario.length < 5) ? ErroresValidacion.push("El campo nombre es mayor a 45 caracteres o menor a 5 caracteres") : true;
         isNaN(params.celular) ?  ErroresValidacion.push("El campo celular solo acepta numeros") : true;
-        (params.apellidoUsuario.length > 45 || params.nombreUsuario.length < 4) ? ErroresValidacion.push("El campo apellido es mayor a 45 caracteres o menor 4 caracteres") : true;
+        (params.apellidoUsuario.length > 45 || params.apellidoUsuario.length < 4) ? ErroresValidacion.push("El campo apellido es mayor a 45 caracteres o menor 4 caracteres") : true;
         !pattern.test(params.nombreUsuario) ? ErroresValidacion.push("El campo nombre solo acepta letras") : true;
         !pattern.test(params.apellidoUsuario) ? ErroresValidacion.push("El campo apellido solo acepta letras") : true;
-        (params.genero != 'Masculino' || params.genero != 'Femenino') ? ErroresValidacion.push("El campo genero solo acepta Masculino o Femenino") : true;
+        (params.genero == "Masculino" || params.genero == "Femenino") ? true : ErroresValidacion.push("El campo genero solo acepta Masculino o Femenino");
         !patternPassword.test(params.password) ? ErroresValidacion.push("El campo contraseña necesita Mayusculas, minusculas y numeros") : true;
-        (params.password.length > 12 || params.password.length < 7) ? ErroresValidacion.push("La contraseña que ingreso es mayor a 12 caracteres o menor a 7 caracteres") : true;
+        (params.password.length > 20 || params.password.length < 6) ? ErroresValidacion.push("La contraseña que ingreso es mayor a 20 caracteres o menor a 6 caracteres") : true;
         espacios ? ErroresValidacion.push("La contraseña no puede contener espacios en blanco") : true;
 
-        if (ErroresValidacion.length != 0) return { error: false, message: ErroresValidacion, respuesta: false }
+        console.log(ErroresValidacion);
 
 
-        const RegistraUser = await ModelRegistro().RegistrarUsuario(params);
+        // if (ErroresValidacion.length != 0) return { error: false, message: ErroresValidacion, respuesta: false }
 
-        if (RegistraUser.error) return { error: true, message: RegistraUser.mensaje, respuesta: false }
+        // let passwordHash = await bcryptjs.hash(params.password, 8);
 
-        if (!RegistraUser) return { error: false, message: "Registro Incorrecto", respuesta: false }
+        // params.password = passwordHash;
 
-        if (RegistraUser) return { error: false, message: "Registro Exitoso", respuesta: true }
+     
+
+        // const RegistraUser = await ModelRegistro().RegistrarUsuario(params);
+
+        // if (RegistraUser.error) return { error: true, message: RegistraUser.mensaje, respuesta: false }
+
+        // if (!RegistraUser) return { error: false, message: "Registro Incorrecto", respuesta: false }
+
+        // if (RegistraUser) return { error: false, message: "Registro Exitoso", respuesta: true }
     
 
     } catch (err) {

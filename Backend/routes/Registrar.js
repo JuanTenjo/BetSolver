@@ -12,13 +12,15 @@ router.post('/usuario', async(req,res) =>{
 
     const RegistrarUsuario= await Registro.RegistrarUsuario(DATOS);
     
-    if(RegistrarUsuario.error){
-        res.status(400).json(RegistrarUsuario);
-    }else if(!RegistrarUsuario){
-        res.status(200).json(RegistrarUsuario);
-    } else if(RegistrarUsuario.respuesta){
-        res.status(200).json(RegistrarUsuario);
-    }
+    // if(RegistrarUsuario.error){
+    //     res.status(400).json(RegistrarUsuario);
+    // }else if(!RegistrarUsuario){
+    //     res.status(200).json(RegistrarUsuario);
+    // } else if(RegistrarUsuario.respuesta){
+    //     res.status(200).json(RegistrarUsuario);
+    // }
+
+    res.send("Aqui estoy");
 
 });
 

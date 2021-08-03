@@ -12,7 +12,7 @@ const local = function(app) {
         async function(username,password,done){
             console.log(username);
             console.log(password);
-            let passwordHash = await bcryptjs.hash(password, 8,);
+            let passwordHash = await bcryptjs.hash(password, 8);
 
             if(username === 'Tenjo2001@gmail.com'){
                 if(password === '12345'){

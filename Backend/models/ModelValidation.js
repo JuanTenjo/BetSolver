@@ -25,17 +25,6 @@ module.exports = function () {
     const ValidarPais = async(CodiPais) => {
         try {
             
-            // let numero = "d";
-            // if(isNaN(numero)){
-            //     throw new Error("El caracter digitado no es un numero");
-            // }         
-
-            // pool.query(query, function(err,rows,fields){
-            //     if(err) throw err;
-            //     console.log('La solucion es; ', rows[0].Existe);
-            // });
-            
-
             let query = `Select count(codigoPais) as Existe FROM paises WHERE codigoPais = '${CodiPais}'`
 
             const ValidarPais = await pool.query(query);
