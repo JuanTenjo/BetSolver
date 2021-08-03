@@ -42,10 +42,30 @@ module.exports = function () {
             return err;
         }
     }
+
+    const ValidarCorreo = async(correo) => {
+        try {
+            
+            let query = `Select count(correo) as Existe FROM usuario WHERE correo = '${correo}'`
+
+            const ValidarCorreo = await pool.query(query);
+
+            if(ValidarCorreo[0].Existe > 0){
+                return true;
+            }else{
+                return false;
+            }
+
+
+        } catch (err) {
+            return err;
+        }
+    }
     
 
     return {
         ValidarPais,
-        ValidarLiga
+        ValidarLiga,
+        ValidarCorreo
     }
 }
