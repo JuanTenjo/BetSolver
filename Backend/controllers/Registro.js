@@ -21,6 +21,15 @@ const ValidarPais = async (codigoPais) => {
 
 }
 
+
+async function RegistrarUsuario(params) { 
+
+    
+
+
+
+}
+
 async function RegistrarLigas(params) {
 
     if(ValidarNulo(params.CodiPais)){
@@ -68,5 +77,6 @@ async function RegistrarPais(body) {
 
 module.exports = {
     RegistrarLigas,
-    RegistrarPais
+    RegistrarPais,
+    RegistrarUsuario
 }
