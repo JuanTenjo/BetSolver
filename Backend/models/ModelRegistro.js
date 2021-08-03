@@ -38,10 +38,30 @@ module.exports = function () {
         }
     }
 
+    const RegistrarUsuario = async(params) => {
+        try {
+
+            let query = `INSERT INTO usuarios(CodiPais,nombre,apellidos,email,password,genero,celular) Values('${params.idPais}','${params.nombreUsuario}','${params.apellidoUsuario}','${params.email}','${params.password}','${params.genero}','${params.celular}')`
+
+            const InsertLiga = await pool.query(query);
+
+            let estado = InsertLiga.affectedRows > 0 ?  true : false
+            
+            return estado;
+
+        } catch (error) {
+            return {
+                error: true,
+                mensaje: `Hubo un error al validar el usuario en el Model: ModelRegistro, en la funcion: RegistrarUsuario. ERROR: ${err.sqlMessage} `
+            };
+        }
+    }
+
     
 
     return {
         RegistrarLigas,
-        RegistrarPais
+        RegistrarPais,
+        RegistrarUsuario,
     }
 }
