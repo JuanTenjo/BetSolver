@@ -27,7 +27,9 @@ const ValidarCorreo = async (Correo) => {
 
     let Validacion = await ModelValidacion().ValidarCorreo(Correo);
 
+
     let res = (Validacion ? true: false)
+
 
     return res;
     //Cambiarlo por un if ternario
@@ -57,10 +59,9 @@ async function RegistrarUsuario(params) {
 
 
 
-        await ValidarNulo(params.email) == false ?  ErroresValidacion.push('Email no puede estar vacio') : true;
-        await ValidarNulo(params.password) == false ?  ErroresValidacion.push('Contraseña no puede estar vacio') : true;      
+        await ValidarNulo(params.email) ?  ErroresValidacion.push('Email no puede estar vacio') : true;  
         !validator.validate(params.email) ? ErroresValidacion.push('Email invalido') : true;
-        await ValidarCorreo(params.email) == false ? ErroresValidacion.push(`El correo ${params.email} ya esta registrado`) : true;
+        await ValidarCorreo(params.email) ? ErroresValidacion.push(`El correo ${params.email} ya esta registrado`) : true;
         await ValidarPais(params.idPais) == false ? ErroresValidacion.push("Codigo del pais invalido") : true;
         (params.nombreUsuario.length > 45 || params.nombreUsuario.length < 5) ? ErroresValidacion.push("El campo nombre es mayor a 45 caracteres o menor a 5 caracteres") : true;
         isNaN(params.celular) ?  ErroresValidacion.push("El campo celular solo acepta numeros") : true;
@@ -72,15 +73,16 @@ async function RegistrarUsuario(params) {
         (params.password.length > 20 || params.password.length < 6) ? ErroresValidacion.push("La contraseña que ingreso es mayor a 20 caracteres o menor a 6 caracteres") : true;
         espacios ? ErroresValidacion.push("La contraseña no puede contener espacios en blanco") : true;
 
-        console.log(ErroresValidacion);
 
+        if (ErroresValidacion.length != 0) return { error: false, message: ErroresValidacion, respuesta: false }
 
-        // if (ErroresValidacion.length != 0) return { error: false, message: ErroresValidacion, respuesta: false }
+        return "Paso aqui";
 
-        // let passwordHash = await bcryptjs.hash(params.password, 8);
+        let passwordHash = await bcryptjs.hash(params.password, 8);
 
-        // params.password = passwordHash;
+        params.password = passwordHash;
 
+        console.log(params);
      
 
         // const RegistraUser = await ModelRegistro().RegistrarUsuario(params);

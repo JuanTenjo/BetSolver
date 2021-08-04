@@ -10,7 +10,9 @@ router.post('/usuario', async(req,res) =>{
 
     const DATOS = req.body;
 
-    const RegistrarUsuario= await Registro.RegistrarUsuario(DATOS);
+    const RegisUser = await Registro.RegistrarUsuario(DATOS);
+
+    res.json(RegisUser);
     
     // if(RegistrarUsuario.error){
     //     res.status(400).json(RegistrarUsuario);
@@ -20,7 +22,7 @@ router.post('/usuario', async(req,res) =>{
     //     res.status(200).json(RegistrarUsuario);
     // }
 
-    res.send("Aqui estoy");
+   //res.send("Aqui estoy");
 
 });
 

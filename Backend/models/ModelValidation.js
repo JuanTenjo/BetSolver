@@ -29,7 +29,6 @@ module.exports = function () {
 
             const ValidarPais = await pool.query(query);
 
-            console.log(ValidarPais[0].Existe);
 
             if(ValidarPais[0].Existe > 0){
                 return true;
@@ -46,7 +45,8 @@ module.exports = function () {
     const ValidarCorreo = async(correo) => {
         try {
             
-            let query = `Select count(correo) as Existe FROM usuario WHERE correo = '${correo}'`
+            let query = `Select count(email) as Existe FROM usuarios WHERE email = '${correo}'`
+
 
             const ValidarCorreo = await pool.query(query);
 
