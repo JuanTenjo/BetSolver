@@ -1,5 +1,8 @@
 import React from 'react';
 import logo from '../../assets/Logo.png';
+import Loader from '../Necesarios/Loader'
+import Message from '../Necesarios/Message'
+
 import {
     Grid,
     TextField,
@@ -7,7 +10,7 @@ import {
     makeStyles,
     Button
 } from '@material-ui/core'
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import UseForm from '../../Hooks/useForm'
 
 const useStyles = makeStyles(() => ({
     text: {
@@ -23,53 +26,104 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const handleSubmit = (e) => {
-    e.preventDefault(); //Para que no se recargue la pagina en el submit
-    window.alert("asd");
+
+const initialForm = {
+    //Lo hacemos para inicializar las variables del formulario y no nos salgan warning
+    email: '',
+    password: '',
 }
+
+const validationForm = (form) => {
+    let error = {};
+  
+    let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/; //Validacion para nombre
+    let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/; //Validacion para correo
+    let regexComments = /^.{1,255}$/;//Vaya de 1 a 255 caracteres
+    let regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; //Mayuscula, Minuscula y Numero
+  
+    //Trim se hace para bloquear que no se termine ni empiece con un caracter especial o un espacio en blanco
+    if (!form.password.trim()) {
+      error.password = "Ingresa tu contraseña"
+    }
+  
+    if (!form.email.trim()) {
+      error.email = "Ingresa tu correo"
+    }else if(!regexEmail.test(form.email.trim())){
+      error.email = "El email es incorrecto"
+    }
+  
+ 
+    return error;
+  };
 
 
 const LoginForm = () => {
 
     const styles = useStyles();
 
+    const {
+        form,
+        error,
+        loading,
+        response,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+      } = UseForm(initialForm, validationForm);
+
+
     return (
-        <div>
-            <Grid container justifyContent="center" alignContent="center">
-                <Grid item xs={12}>
-                    <center>
-                        <img src={logo} alt='Logo Bet Solver' width='40%' />
-                    </center>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8}>
+      <div>
+        <Grid container justifyContent="center" alignContent="center">
+          <Grid item xs={12}>
+            <center>
+              <img src={logo} alt="Logo Bet Solver" width="40%" />
+            </center>
+          </Grid>
+          <Grid item xs={12} sm={12} md={8}>
+            <Typography align="center" variant="h5">
+              Iniciar Sesion
+            </Typography>
 
-                    <Typography align="center" variant="h5">
-                        Iniciar Sesion
-                    </Typography>
-
-                    <form onSubmit={handleSubmit} className={styles.form}>
-                        <TextField  required type="email" className={styles.text} label="Email" variant="outlined" />
-                        <TextField  required type="password" className={styles.text} label="Password" variant="outlined" />
-
-                        <Button
-                            className={styles.boton} 
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            endIcon={<KeyboardArrowRightIcon />}
-                        >
-                            Ingresar
-                        </Button>
-                    </form>
-
-                </Grid>
-            </Grid>
-
-
-
-
-        </div>
-
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <TextField
+                type="email"
+                name="email"
+                value={form.email}
+                className={styles.text}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                label="Email"
+                variant="outlined"
+              />
+              {error.email && <p>{error.email}</p>}
+              <TextField
+                type="password"
+                name="password"
+                value={form.password}
+                className={styles.text}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                label="Contraseña"
+                variant="outlined"
+              />
+             {error.password && <p>{error.password}</p>}
+              <Button
+                className={styles.boton}
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                Ingresar
+              </Button>
+            </form>
+            
+            {loading && <Loader/>}
+            {response && <Message msg="Usuario Verificado" bgColor="#198754"/>}
+            
+          </Grid>
+        </Grid>
+      </div>
     );
 }
 

@@ -12,18 +12,10 @@ router.post('/usuario', async(req,res) =>{
 
     const RegisUser = await Registro.RegistrarUsuario(DATOS);
 
-    res.json(RegisUser);
+    RegisUser.error ? res.status(400).json(RegisUser):false;
+
+    res.status(200).json(RegisUser);
     
-    // if(RegistrarUsuario.error){
-    //     res.status(400).json(RegistrarUsuario);
-    // }else if(!RegistrarUsuario){
-    //     res.status(200).json(RegistrarUsuario);
-    // } else if(RegistrarUsuario.respuesta){
-    //     res.status(200).json(RegistrarUsuario);
-    // }
-
-   //res.send("Aqui estoy");
-
 });
 
 router.post('/RegistrarLiga', async(req,res) =>{

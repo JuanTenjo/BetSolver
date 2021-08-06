@@ -46,7 +46,7 @@ module.exports = function () {
     const ValidarUser = async (email) => {
         try {
 
-        let query = `SELEdCT idUsuarios,idRol,nombre,apellidos,correo,genero,usuario,password FROM usuarios where correo = '${email}'`
+        let query = `SELECT idUsuarios,idRol,nombre,apellidos,email,genero,password FROM usuarios where email = '${email}'`
 
         const session = await pool.query(query);
 

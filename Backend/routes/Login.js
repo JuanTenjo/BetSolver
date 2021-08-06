@@ -7,7 +7,6 @@ const LoginController = require('../controllers/LoginController');
 
 
 router.post('/', passport.authenticate('local', {
-    //successRedirect: '/Home',
     successRedirect: '/login/succesLogin',
     failureRedirect: '/login/FailLogin',
     failureFlash: true,
@@ -20,7 +19,10 @@ passport.use(new localStrategy({
     },
     async function(username,password,done){
 
+
         const User = await LoginController.findOne(username);
+
+        console.log(User);
 
         if(User.error) return done(null,false,{message: `Error de servidor: ${User.mensaje}`});
         if(!User) return done(null,false,{message: `El email ${username} no existe!`});

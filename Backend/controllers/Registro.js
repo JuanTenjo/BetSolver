@@ -57,8 +57,6 @@ async function RegistrarUsuario(params) {
 
         const ErroresValidacion = [];
 
-
-
         await ValidarNulo(params.email) ?  ErroresValidacion.push('Email no puede estar vacio') : true;  
         !validator.validate(params.email) ? ErroresValidacion.push('Email invalido') : true;
         await ValidarCorreo(params.email) ? ErroresValidacion.push(`El correo ${params.email} ya esta registrado`) : true;
@@ -74,24 +72,20 @@ async function RegistrarUsuario(params) {
         espacios ? ErroresValidacion.push("La contraseña no puede contener espacios en blanco") : true;
 
 
-        if (ErroresValidacion.length != 0) return { error: false, message: ErroresValidacion, respuesta: false }
-
-        return "Paso aqui";
+        if (ErroresValidacion.length != 0) return { error: false, message: ErroresValidacion, respuesta: false }        
 
         let passwordHash = await bcryptjs.hash(params.password, 8);
 
         params.password = passwordHash;
 
-        console.log(params);
-     
 
-        // const RegistraUser = await ModelRegistro().RegistrarUsuario(params);
+        const RegistraUser = await ModelRegistro().RegistrarUsuario(params);
 
-        // if (RegistraUser.error) return { error: true, message: RegistraUser.mensaje, respuesta: false }
+        if (RegistraUser.error) return { error: true, message: RegistraUser.mensaje, respuesta: false }
 
-        // if (!RegistraUser) return { error: false, message: "Registro Incorrecto", respuesta: false }
+        if (!RegistraUser) return { error: false, message: "Registro Incorrecto", respuesta: false }
 
-        // if (RegistraUser) return { error: false, message: "Registro Exitoso", respuesta: true }
+        if (RegistraUser) return { error: false, message: "Registro Exitoso", respuesta: true }
     
 
     } catch (err) {
