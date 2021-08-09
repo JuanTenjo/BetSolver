@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const ModelLogin = require('../models/ModelLogin')
 
 
 async function findOne(email) {

@@ -6,7 +6,7 @@ const passportConfig = function (app) {
     app.use(passport.session());
     
 
-    require('./local.js')(app);
+    //require('./local.js')(app);
 
     //Serializacion, guarda solo el el id y cuando necesita los Deserealizas para que vote el objeto con el usuario
 
