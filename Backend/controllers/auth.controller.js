@@ -4,6 +4,29 @@ const {ValidarUser} = require('../models/validation.models')
 //const bcryptjs = require('bcrypt');
 const passport  = require('passport');
 
+const controller = {};
+
+controller.login = async (req, res, next) => {
+    passport.authenticate("local", (err, user) => {
+        if (err) throw err;
+        if (!user) res.status(200).json({
+            "mensaje": "Usuario no existe",
+            "data": false
+        });
+        else {
+            req.login(user, (err) => {
+                if (err) { return next(err); }
+                res.status(200).json({
+                    "mensaje": "Inicio se sesión exitoso",
+                    "data": req.user
+                });
+            });
+        }
+    })(req, res, next);
+};
+
+
+
 const ValidarNulo = (Campo) => {
 
     if (Campo == '' || Campo == null) {
@@ -35,10 +58,6 @@ const ValidarCorreo = async (Correo) => {
 
 }
 
-
-const controller = {};
-
-
 controller.findOne = async function(email){
     try {
 
@@ -68,21 +87,6 @@ controller.findOne = async function(email){
         return { error: true, message: `Error en el controlador findOne ERROR: ${err}`, respuesta: false}
     } 
 }
-
-controller.login = async (req, res, next) => {
-    passport.authenticate("local", (err, user) => {
-        if (err) throw err;
-        if (!user) res.send("El usuario no existe");
-        else {
-            req.login(user, (err) => {
-                if (err) { return next(err); }
-                res.send("Inicio se sesión exitoso");
-                console.log(req.user);
-            });
-        }
-    })(req, res, next);
-};
-
 
 controller.register = async function (req,res){
 

@@ -122,7 +122,8 @@ const LoginForm = () => {
             </form>
             
             {loading && <Loader/>}
-            {response && <Message msg="Usuario Verificado" bgColor="#198754"/>}
+            
+            {response && <Message msg={response.data.mensaje} bgColor="#198754"/>}
             
           </Grid>
         </Grid>

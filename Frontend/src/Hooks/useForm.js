@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { helpHttp } from '../Helpers/helpHttps';
+//import { helpHttp } from '../Helpers/helpHttps';
 import Axios from 'axios';
 
 
@@ -62,13 +62,26 @@ const UseForm = (initialForm,validateForm) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-      
-        Axios({
-            method: "POST",
-            data: form,
-            withCredentials: true,
-            url: "http://localhost:4000/auth/login",
-          }).then((res) => console.log(res));
+
+        setError(validateForm(form))
+        //Se valida que el objeto error venga vacio
+        if(Object.keys(error).length === 0){
+            setLoading(true);
+            
+            Axios({
+                method: "POST",
+                data: form,
+                withCredentials: true,
+                url: "http://localhost:4000/auth/login",
+              }).then((res) => {
+                setLoading(false)
+                setResponse(res)
+              });
+
+              
+        }
+
+
     };
 
 
