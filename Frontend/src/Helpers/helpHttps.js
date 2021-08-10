@@ -26,7 +26,7 @@ export const helpHttp = () => {
 
 
     //Si despues de 5 segundo no se recibe respuesta del servidor, aplicamor abort que aborta la peticion
-    //setTimeout(() => controller.abort(), 7000);
+    setTimeout(() => controller.abort(), 7000);
 
     return fetch(endpoint, options)
       .then((res) => 
@@ -61,6 +61,6 @@ export const helpHttp = () => {
     post, 
     put, 
     del,
-   };
+    };
 };
 

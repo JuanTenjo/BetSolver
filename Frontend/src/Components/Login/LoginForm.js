@@ -2,7 +2,6 @@ import React from 'react';
 import logo from '../../assets/Logo.png';
 import Loader from '../Necesarios/Loader';
 import Message from '../Necesarios/Message';
-
 import {
     Grid,
     TextField,
@@ -11,6 +10,7 @@ import {
     Button
 } from '@material-ui/core'
 import UseForm from '../../Hooks/useForm'
+
 
 const useStyles = makeStyles(() => ({
     text: {
@@ -39,21 +39,21 @@ const validationForm = (form) => {
     //let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/; //Validacion para nombre
     let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/; //Validacion para correo
     // let regexComments = /^.{1,255}$/;//Vaya de 1 a 255 caracteres
-    // let regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; //Mayuscula, Minuscula y Numero
+    //let regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; //Mayuscula, Minuscula y Numero
   
     //Trim se hace para bloquear que no se termine ni empiece con un caracter especial o un espacio en blanco
     if (!form.password.trim()) {
       error.password = "Ingresa tu contraseña"
     }
-  
+
     if (!form.email.trim()) {
       error.email = "Ingresa tu correo"
     }else if(!regexEmail.test(form.email.trim())){
       error.email = "El email es incorrecto"
     }
-  
- 
+
     return error;
+
   };
 
 
@@ -68,6 +68,7 @@ const LoginForm = () => {
         error,
         loading,
         response,
+        color,
         handleChange,
         handleBlur,
         handleSubmit   
@@ -123,7 +124,7 @@ const LoginForm = () => {
             
             {loading && <Loader/>}
             
-            {response && <Message msg={response.data.mensaje} bgColor="#198754"/>}
+            {response &&  <Message msg={response} bgColor={color}/>}
             
           </Grid>
         </Grid>
