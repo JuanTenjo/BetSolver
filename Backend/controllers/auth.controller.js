@@ -1,7 +1,7 @@
 const validator = require("email-validator");
 // const ModelRegistro = require('../models/ModelRegistro')
-// const ModelValidacion = require('../models/ModelValidation')
-const bcryptjs = require('bcrypt');
+const {ValidarUser} = require('../models/validation.models')
+//const bcryptjs = require('bcrypt');
 const passport  = require('passport');
 
 const ValidarNulo = (Campo) => {
@@ -36,27 +36,53 @@ const ValidarCorreo = async (Correo) => {
 }
 
 
-
 const controller = {};
 
-controller.login = async function (req,res){
-    passport.authenticate("local", (err, user, info) => {
+
+controller.findOne = async function(email){
+    try {
+
+        const findOne = await ValidarUser(email);
+
+        if(findOne.error){
+            return findOne;
+        }
+    
+        if(findOne[0]){
+            let user  = {
+                idUsuarios: findOne[0].idUsuarios,
+                idRol: findOne[0].idRol,
+                nombre: findOne[0].nombre,
+                apellidos: findOne[0].apellidos,
+                email: findOne[0].email,
+                genero: findOne[0].genero,
+                password: findOne[0].password,
+            }
+    
+            return user;
+    
+        }else{
+            return false;  
+        }
+    } catch (err) {
+        return { error: true, message: `Error en el controlador findOne ERROR: ${err}`, respuesta: false}
+    } 
+}
+
+controller.login = async (req, res, next) => {
+    passport.authenticate("local", (err, user) => {
         if (err) throw err;
-        if (!user) res.send("No User Exists");
+        if (!user) res.send("El usuario no existe");
         else {
-        req.logIn(user, (err) => {
-            if (err) throw err;
-            res.send("Successfully Authenticated");
-            console.log(req.user);
-        });
+            req.login(user, (err) => {
+                if (err) { return next(err); }
+                res.send("Inicio se sesión exitoso");
+                console.log(req.user);
+            });
         }
     })(req, res, next);
-
-
-    res.json({
-        "Data": req.body
-    });
 };
+
 
 controller.register = async function (req,res){
 
@@ -112,12 +138,11 @@ controller.register = async function (req,res){
 
     // if (RegistraUser) return { error: false, message: "Registro Exitoso", respuesta: true }
 
-
 };
 
 controller.user = async function (req,res){
     res.json({
-        "messagge": "Llego al User controller"
+        "messagge": req.user
     });
 };
 

@@ -36,10 +36,10 @@ const initialForm = {
 const validationForm = (form) => {
     let error = {};
   
-    let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/; //Validacion para nombre
+    //let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/; //Validacion para nombre
     let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/; //Validacion para correo
-    let regexComments = /^.{1,255}$/;//Vaya de 1 a 255 caracteres
-    let regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; //Mayuscula, Minuscula y Numero
+    // let regexComments = /^.{1,255}$/;//Vaya de 1 a 255 caracteres
+    // let regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; //Mayuscula, Minuscula y Numero
   
     //Trim se hace para bloquear que no se termine ni empiece con un caracter especial o un espacio en blanco
     if (!form.password.trim()) {
@@ -100,6 +100,7 @@ const LoginForm = () => {
               />
               {error.email && <p>{error.email}</p>}
               <TextField
+                autoComplete="on"
                 type="password"
                 name="password"
                 value={form.password}
