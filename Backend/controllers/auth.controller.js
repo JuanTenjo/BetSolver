@@ -7,22 +7,7 @@ const passport = require('passport');
 const controller = {};
 
 controller.login = async (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-        if (err) throw err;
-        if (!user) res.status(200).json({
-            "mensaje": "Usuario no existe",
-            "user": false
-        });
-        else {
-            req.logIn(user, (err) => {
-                if (err) throw err;
-                res.status(200).json({
-                    "mensaje": "Inicio se sesión exitoso",
-                    "user": req.user
-                })
-            });
-        }
-    })(req, res, next);
+    res.send("LLego AQUIIIIII");
 };
 
 // passport.authenticate("local", (err, user) => {
