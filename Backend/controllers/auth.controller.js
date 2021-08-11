@@ -7,7 +7,6 @@ const passport = require('passport');
 const controller = {};
 
 controller.login = async (req, res, next) => {
-<<<<<<< HEAD
     passport.authenticate("local", (err, user, info) => {
         if (err) throw err;
         if (!user) res.status(200).json({
@@ -24,9 +23,6 @@ controller.login = async (req, res, next) => {
             });
         }
     })(req, res, next);
-=======
-    res.send("LLego aqui");
->>>>>>> pruebaToken
 };
 
 // passport.authenticate("local", (err, user) => {
