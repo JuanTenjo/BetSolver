@@ -7,9 +7,25 @@ const passport  = require('passport');
 const controller = {};
 
 controller.login = async (req, res, next) => {
-    res.send("Llego aqui");
+    res.send("LLego aqui");
 };
 
+// passport.authenticate("local", (err, user) => {
+//     if (err) throw err;
+//     if (!user) res.status(200).json({
+//         "mensaje": "Usuario no existe",
+//         "user": false
+//     });
+//     else {
+//         req.login(user, (err) => {
+//             if (err) { return next(err); }
+//             res.status(200).json({
+//                 "mensaje": "Inicio se sesión exitoso",
+//                 "user": req.user
+//             });
+//         });
+//     }
+// })(req, res, next);
 
 
 const ValidarNulo = (Campo) => {
