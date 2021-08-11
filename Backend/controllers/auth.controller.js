@@ -7,7 +7,7 @@ const passport  = require('passport');
 const controller = {};
 
 controller.login = async (req, res, next) => {
-    res.send("LLego aqui");
+    res.send("LLego AQUIIIIII");
 };
 
 // passport.authenticate("local", (err, user) => {
