@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import NavBar from '../Components/Navbar/NavbarApp';
+import NavBar from '../Navbar/NavbarApp';
 import{
     Hidden,
     makeStyles
 } from '@material-ui/core'
-import Cajon from '../Components/Home/cajon';
-import Contenido from '../Components/Home/contenido';
+import Cajon from './cajon';
+import Contenido from './contenido';
 
 const useStyle = makeStyles(theme => ({
     root:{
@@ -19,7 +19,7 @@ const useStyle = makeStyles(theme => ({
     },
 }))
 
-const PageHome = () => {
+const Contenedor = () => {
 
     const classes = useStyle();
 
@@ -49,4 +49,4 @@ const PageHome = () => {
      );
 }
  
-export default PageHome;
+export default Contenedor;

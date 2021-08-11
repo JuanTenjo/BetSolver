@@ -12,7 +12,7 @@ const passportConfig = function (app) {
 
     //Serializacion
     passport.serializeUser(function (user, done) {
-        done(null, user.idUsuarios);
+        done(null, user);
 
     });
 

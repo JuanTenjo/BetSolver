@@ -1,29 +1,35 @@
 const validator = require("email-validator");
 // const ModelRegistro = require('../models/ModelRegistro')
-const {ValidarUser} = require('../models/validation.models')
+const { ValidarUser } = require('../models/validation.models')
 //const bcryptjs = require('bcrypt');
-const passport  = require('passport');
+const passport = require('passport');
 
 const controller = {};
 
 controller.login = async (req, res, next) => {
-    passport.authenticate("local", (err, user) => {
+    passport.authenticate("local", (err, user, info) => {
         if (err) throw err;
         if (!user) res.status(200).json({
             "mensaje": "Usuario no existe",
             "user": false
         });
         else {
-            req.login(user, (err) => {
-                if (err) { return next(err); }
+            req.logIn(user, (err) => {
+                if (err) throw err;
                 res.status(200).json({
                     "mensaje": "Inicio se sesión exitoso",
                     "user": req.user
-                });
+                })
             });
         }
     })(req, res, next);
 };
+
+
+controller.user = async function (req, res) {
+    res.send(req.user);
+};
+
 
 
 
@@ -39,7 +45,7 @@ const ValidarPais = async (codigoPais) => {
 
     let Validacion = await ModelValidacion().ValidarPais(codigoPais);
 
-    let res = (Validacion ? true: false)
+    let res = (Validacion ? true : false)
 
     return res;
     //Cambiarlo por un if ternario
@@ -50,7 +56,7 @@ const ValidarCorreo = async (Correo) => {
     let Validacion = await ModelValidacion().ValidarCorreo(Correo);
 
 
-    let res = (Validacion ? true: false)
+    let res = (Validacion ? true : false)
 
 
     return res;
@@ -58,17 +64,17 @@ const ValidarCorreo = async (Correo) => {
 
 }
 
-controller.findOne = async function(email){
+controller.findOne = async function (email) {
     try {
 
         const findOne = await ValidarUser(email);
 
-        if(findOne.error){
+        if (findOne.error) {
             return findOne;
         }
-    
-        if(findOne[0]){
-            let user  = {
+
+        if (findOne[0]) {
+            let user = {
                 idUsuarios: findOne[0].idUsuarios,
                 idRol: findOne[0].idRol,
                 nombre: findOne[0].nombre,
@@ -77,25 +83,25 @@ controller.findOne = async function(email){
                 genero: findOne[0].genero,
                 password: findOne[0].password,
             }
-    
+
             return user;
-    
-        }else{
-            return false;  
+
+        } else {
+            return false;
         }
     } catch (err) {
-        return { error: true, message: `Error en el controlador findOne ERROR: ${err}`, respuesta: false}
-    } 
+        return { error: true, message: `Error en el controlador findOne ERROR: ${err}`, respuesta: false }
+    }
 }
 
-controller.register = async function (req,res){
+controller.register = async function (req, res) {
 
     res.json({
         "messagge": "Llego al Register controller"
     });
 
     // console.log(params);
-        
+
     // // El patterns que vamos a comprobar
     // const pattern = new RegExp(/^[A-Za-z\s]+$/); //Letras y espacios en blanco
     // const patternPassword = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/); //Mayuscula, Minuscula y Numero
@@ -142,12 +148,6 @@ controller.register = async function (req,res){
 
     // if (RegistraUser) return { error: false, message: "Registro Exitoso", respuesta: true }
 
-};
-
-controller.user = async function (req,res){
-    res.json({
-        "messagge": req.user
-    });
 };
 
 module.exports = controller;

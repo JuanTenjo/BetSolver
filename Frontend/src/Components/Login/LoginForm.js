@@ -74,7 +74,6 @@ const LoginForm = () => {
         handleSubmit   
       } = UseForm(initialForm, validationForm);
 
-
     return (
       <div>
         <Grid container justifyContent="center" alignContent="center">

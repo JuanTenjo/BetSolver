@@ -8,7 +8,7 @@ router.post('/login', login);
 router.post('/register', register);
 
 //Traer Usuario
-router.post('/user', user);
+router.get('/user', user);
 
 
 module.exports = router;
