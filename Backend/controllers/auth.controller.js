@@ -1,31 +1,40 @@
 const validator = require("email-validator");
 // const ModelRegistro = require('../models/ModelRegistro')
 const {ValidarUser} = require('../models/validation.models')
-//const bcryptjs = require('bcrypt');
+const { comparePassword, encrypt } = require("../utils/bcrypt");
+const { createToken } = require("../utils/common");
 const passport  = require('passport');
 
 const controller = {};
 
-controller.login = async (req, res, next) => {
-    res.send("LLego AQUIIIIII");
-};
+controller.login = async function (req, res) {
+    const { email, password } = req.body;
+    const userFinded = await ValidarUser(email);
+    if (userFinded && userFinded[0]) {
+      const user = userFinded[0];
+      console.log(user);
+      const validarContrasena = await comparePassword(password, user.password);
+      if (validarContrasena) {
+        res.json({
+          msg: "Inicio sessión correctamente",
+          token : createToken({id: user.idUsuarios, username: user.usuario, email: user.email }),
+          });
+      } else {
+        res.status(400).json({ msg: "La contraseña es incorrecta" });
+      }
+    } else {
+      res
+        .status(400)
+        .json({
+          mensaje: "No se ha encontrado ninguna cuenta asociada a ese correo",
+        });
+    }
+  };
 
-// passport.authenticate("local", (err, user) => {
-//     if (err) throw err;
-//     if (!user) res.status(200).json({
-//         "mensaje": "Usuario no existe",
-//         "user": false
-//     });
-//     else {
-//         req.login(user, (err) => {
-//             if (err) { return next(err); }
-//             res.status(200).json({
-//                 "mensaje": "Inicio se sesión exitoso",
-//                 "user": req.user
-//             });
-//         });
-//     }
-// })(req, res, next);
+  controller.getinfotoken = async function (req, res) {
+    const user = req.user;
+    res.json(user);
+  };
 
 
 const ValidarNulo = (Campo) => {

@@ -42,7 +42,7 @@ model.ValidarCorreo = async function(correo){
 model.ValidarUser = async function(email){
     try {
         
-    const sql = `SELECT idUsuarios,idRol,nombre,apellidos,email,genero,password FROM usuarios where email = '${email}'`
+    const sql = `SELECT idUsuarios,idRol,nombre,apellidos,email,genero,password,usuario FROM usuarios where email = '${email}'`
     const result = await pool.query(sql);
     return result
     
