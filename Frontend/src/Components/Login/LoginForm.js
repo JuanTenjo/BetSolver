@@ -1,6 +1,5 @@
 import React from 'react';
 import logo from '../../assets/Logo.png';
-import Loader from '../Necesarios/Loader';
 import Message from '../Necesarios/Message';
 import {
     Grid,
@@ -58,7 +57,6 @@ const validationForm = (form) => {
 
 
 
-
 const LoginForm = () => {
 
     const styles = useStyles();
@@ -66,13 +64,14 @@ const LoginForm = () => {
     const {
         form,
         error,
-        loading,
         response,
         color,
         handleChange,
         handleBlur,
-        handleSubmit   
+        handleSubmitLogin
       } = UseForm(initialForm, validationForm);
+
+      
 
     return (
       <div>
@@ -87,7 +86,7 @@ const LoginForm = () => {
               Iniciar Sesion
             </Typography>
 
-            <form onSubmit={handleSubmit} className={styles.form}>
+            <form onSubmit={handleSubmitLogin} className={styles.form}>
               <TextField
                 type="email"
                 name="email"
@@ -120,8 +119,6 @@ const LoginForm = () => {
                 Ingresar
               </Button>
             </form>
-            
-            {loading && <Loader/>}
             
             {response &&  <Message msg={response} bgColor={color}/>}
             

@@ -1,4 +1,7 @@
-const {login,register,user} = require('../controllers/auth.controller');
+const {login,register,getinfotoken} = require('../controllers/auth.controller');
+const passport  = require('passport');
+
+
 const router = require('express').Router();
 
 // Inciar Sesion
@@ -7,8 +10,9 @@ router.post('/login', login);
 //Registrar Usuario 
 router.post('/register', register);
 
-//Traer Usuario
-router.get('/user', user);
+router.get('/getinfotoken',
+    passport.authenticate('jwt', { session: false }),
+    getinfotoken);
 
 
 module.exports = router;

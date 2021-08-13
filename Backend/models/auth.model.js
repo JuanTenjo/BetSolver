@@ -30,7 +30,7 @@ model.findUserByEmail = async function (email) {
 
 model.findUserById = async function(data){
     console.log(data);
-    const sql = `SELECT * FROM user where id = ${data.id}`;
+    const sql = `SELECT * FROM usuarios where idUsuarios = ${data.id}`;
     const result = pool.query(sql);
     return result
 }
