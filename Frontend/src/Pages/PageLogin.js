@@ -21,7 +21,8 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PageLogin = () => {
+const PageLogin = ({Auth}) => {
+
     const styles = useStyles();
 
     const AltoImagen = (e) => {
@@ -38,7 +39,7 @@ const PageLogin = () => {
                 alignItems="center"
             >
                 <Grid item xs={12} sm={6} md={6}  >
-                    <LoginForm />
+                    <LoginForm Auth={Auth} />
                 </Grid>
                 <Hidden smDown>
                         <center>

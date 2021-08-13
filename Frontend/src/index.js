@@ -4,10 +4,14 @@ import ReactDOM from 'react-dom';
 // import App from './App';
 import Routes from './Routes/Routes';
 import reportWebVitals from './reportWebVitals';
-
+import { HashRouter } from "react-router-dom";
 ReactDOM.render(
   <div>
+
+    <HashRouter>
       <Routes/>
+    </HashRouter> 
+
   </div>,
   document.getElementById('root')
 );

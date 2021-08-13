@@ -5,6 +5,7 @@ import{
     Divider
 } from '@material-ui/core'
 import Listas from '../Navbar/Listas';
+import logo from '../../assets/Logo.png';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -24,7 +25,6 @@ const Cajon = ({variant,open,onClose}) => {
 
     const classes = useStyles();
 
-
     return (    
         <Drawer
         className={classes.drawer} 
@@ -36,9 +36,15 @@ const Cajon = ({variant,open,onClose}) => {
         onClose={onClose ? onClose : null}
         anchor="left"
         >
-        <div className={classes.toolbar}></div>
+        <div className={classes.toolbar}>
+            <center>
+              <img src={logo} alt="Logo Bet Solver" width="80%" />
+            </center>
+        </div>
         <Divider/>
+
         <Listas/>
+
         </Drawer>
      );
 }

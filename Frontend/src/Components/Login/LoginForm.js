@@ -57,7 +57,7 @@ const validationForm = (form) => {
 
 
 
-const LoginForm = () => {
+const LoginForm = ({Auth}) => {
 
     const styles = useStyles();
 
@@ -66,11 +66,17 @@ const LoginForm = () => {
         error,
         response,
         color,
+        success,
         handleChange,
         handleBlur,
         handleSubmitLogin
       } = UseForm(initialForm, validationForm);
 
+
+
+    const AuthPrueba = () => {
+      return Auth()
+    }
       
 
     return (
@@ -82,6 +88,7 @@ const LoginForm = () => {
             </center>
           </Grid>
           <Grid item xs={12} sm={12} md={8}>
+
             <Typography align="center" variant="h5">
               Iniciar Sesion
             </Typography>
@@ -121,6 +128,8 @@ const LoginForm = () => {
             </form>
             
             {response &&  <Message msg={response} bgColor={color}/>}
+
+            {success && AuthPrueba()}
             
           </Grid>
         </Grid>

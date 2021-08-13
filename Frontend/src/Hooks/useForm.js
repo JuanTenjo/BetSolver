@@ -11,6 +11,7 @@ const UseForm = (initialForm, validateForm) => {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [color, setColor] = useState(null);
+  const [success, setSuccess] = useState(false);
   let history = useHistory();
 
   const handleChange = (e) => {
@@ -58,15 +59,12 @@ const UseForm = (initialForm, validateForm) => {
             if(data.rol === 3){
 
               window.localStorage.setItem("LoggedAppUser", JSON.stringify(data.token))
-
-            
               
-
               setResponse(data.msg)
               setColor("#0CA842")
               setTimeout(() => {           
                 setResponse(false)
-                history.push('/home');
+                setSuccess(true)
               },1000)
 
               
@@ -105,10 +103,11 @@ const UseForm = (initialForm, validateForm) => {
     loading,
     response,
     color,
+    success,
     handleChange,
     handleBlur,
     handleSubmit,
-    handleSubmitLogin,
+    handleSubmitLogin,   
   };
 };
 
