@@ -16,7 +16,7 @@ model.registerUser = async (params) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error AQUI AÑADIR ESTO al validar el usuario en el Model: ModelRegistro, en la funcion: RegistrarUsuario. ERROR: ${err.sqlMessage} `,
+            mensaje: `Hubo un error al validar el usuario en el Model: ModelRegistro, en la funcion: RegistrarUsuario. ERROR: ${err.sqlMessage} `,
             respuesta: false
         };
     }
