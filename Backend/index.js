@@ -4,9 +4,11 @@ const morgan = require("morgan") //ver todo los end poins que estamos requiriend
 const cors = require("cors") //para hacer trasminitir recursos tanto en el frontend como en el backend
 const bodyParser = require("body-parser") //Para hacer los submits
 const path = require('path');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
+const passport = require('passport');
+const passportMiddleware = require('./middlewares/passport.middleware');
 const indexRoutes = require('./routes/index.route'); //Trae la routes
+
+
 const app = express(); //instancias
 //----------------------------------------Fin Import & Require -----------------------------------------
 
@@ -23,15 +25,7 @@ app.use(
     })
   );
 app.use(express.json());
-require('dotenv').config(); //Para tener nuestras variables protegidas
-app.use(cookieParser('secretcode'));
-app.use(
-  session({
-    secret: "secretcode",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
+passport.use(passportMiddleware);
 
 
 //------------------------------------------------ Fin middleware -------------------------------------------------------
@@ -41,8 +35,6 @@ app.use(
 app.set('appName', 'BETFOOBALL'); //De esta forma se crean variables
 app.set('port', process.env.PORT || 4000); //Asigna el puerto 4000 y si esta ocupado asigneme otro
 app.use(express.static(path.join(__dirname, 'public')));  //Siempre nuestros directorio publico va a hacer public
-
-require('./config/passport')(app);
 
 //------------------------------------------------ Fin Configuraciones -----------------------------------------------
 

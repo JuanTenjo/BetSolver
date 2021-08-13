@@ -3,6 +3,8 @@ const AuthRoutes = require('./auth.route');
 
 router.use('/auth', AuthRoutes);
 
+
+
 // router.use('/', require('./Login'))
 // router.use('/login', require('./Login'))
 // router.use('/registro', require('./registrar'))

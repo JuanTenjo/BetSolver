@@ -1,31 +1,43 @@
 const validator = require("email-validator");
 // const ModelRegistro = require('../models/ModelRegistro')
-const { ValidarUser } = require('../models/validation.models')
-//const bcryptjs = require('bcrypt');
-const passport = require('passport');
+const {ValidarUser} = require('../models/validation.models')
+const { comparePassword, encrypt } = require("../utils/bcrypt");
+const { createToken } = require("../utils/common");
 
 const controller = {};
 
-controller.login = async (req, res, next) => {
-    res.send("LLego AQUIIIIII");
-};
+controller.login = async function (req, res) {
+    const { email, password } = req.body;
+    const userFinded = await ValidarUser(email);
+    if (userFinded && userFinded[0]) {
+      const user = userFinded[0];
+      console.log(user);
+      const validarContrasena = await comparePassword(password, user.password);
+      if (validarContrasena) {
+        res.status(200).json({     
+          msg: "Inicio sessión correctamente",
+          rol: user.idRol,
+          token : createToken({id: user.idUsuarios, username: user.usuario, email: user.email }),
+          });
+      } else {
 
-// passport.authenticate("local", (err, user) => {
-//     if (err) throw err;
-//     if (!user) res.status(200).json({
-//         "mensaje": "Usuario no existe",
-//         "user": false
-//     });
-//     else {
-//         req.login(user, (err) => {
-//             if (err) { return next(err); }
-//             res.status(200).json({
-//                 "mensaje": "Inicio se sesión exitoso",
-//                 "user": req.user
-//             });
-//         });
-//     }
-// })(req, res, next);
+        //res.status(403).json({ msg: "La contraseña es incorrecta" });
+
+        res.status(403).send("La contraseña es incorrecta");
+
+        //res.sendStatus(403, {error: error});
+      }
+    } else {
+
+        res.status(403).send("No se ha encontrado ninguna cuenta asociada a ese correo");
+        
+    }
+  };
+
+  controller.getinfotoken = async function (req, res) {
+    const user = req.user;
+    res.json(user);
+  };
 
 controller.user = async function (req, res) {
     res.send(req.user);
