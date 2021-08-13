@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { helpHttp } from "../Helpers/helpHttps";
 // import Axios from "axios";
 import { useHistory } from "react-router-dom";
+import Axios from 'axios';
 
 const UseForm = (initialForm, validateForm) => {
+
+
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
@@ -22,71 +24,80 @@ const UseForm = (initialForm, validateForm) => {
     handleChange(e);
     setError(validateForm(form));
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setError(validateForm(form));
 
     //Se valida que el objeto error venga vacio
     if (Object.keys(error).length === 0) {
-      setLoading(true);
-      helpHttp()
-        .post("http://localhost:4000/auth/login", {
-          body: form,
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          withCredentials: true,
-        })
-        .then((res) => {
-          console.log(res);
-          setLoading(false);
 
-          setTimeout(() => {        
-            if (res.user.idRol === 3) {
-                setResponse(false);
-                history.push("/home");
-              }
-          }, 1000);
-          
-          setResponse(res.mensaje);
-          res.user ? setColor("#198754") : setColor("#BA1D1D");
-          setForm(initialForm);
-          
+      
 
-        });
     } else {
       return;
     }
   };
 
-  //   const handleSubmit = (e) => {
-  //     e.preventDefault();
+  const handleSubmitLogin = async (e) => {
+    e.preventDefault();
+    try {
 
-  //     setError(validateForm(form));
-  //     //Se valida que el objeto error venga vacio
-  //     if (Object.keys(error).length === 0) {
-  //       setLoading(true);
+      setError(validateForm(form));
 
-  //       Axios({
-  //         method: "POST",
-  //         data: form,
-  //         withCredentials: true,
-  //         url: "http://localhost:4000/auth/login",
-  //       }).then((res) => {
-  //         setLoading(false);
-  //         setResponse(res.data);
-  //         res.data.user ? setColor('#198754') : setColor('#BA1D1D');
-  //         setForm(initialForm)
-  //         setTimeout(() => {
-  //           setResponse(false);
-  //         }, 3000);
-  //         history.push("/home");
+      if (Object.keys(error).length === 0) {
+  
+          const BaseUrl = "http://localhost:4000/auth/login";
+  
+          setLoading(true)
+  
+          const {data} = await Axios.post(BaseUrl,form);
+              
+          setLoading(false)
+  
+          if(data){
+            if(data.rol === 3){
 
-  //       });
-  //     }
-  //   };
+              window.localStorage.setItem("LoggedAppUser", JSON.stringify(data.token))
+
+            
+              
+
+              setResponse(data.msg)
+              setColor("#0CA842")
+              setTimeout(() => {           
+                setResponse(false)
+                history.push('/home');
+              },1000)
+
+              
+
+            }else{
+              setResponse("Lo siento pero no tiene permisos de administrador");
+              setColor("#BF1010");
+              setTimeout(() => {
+                setResponse(false);
+              }, 3000);
+            }   
+          }
+        
+      } else {
+        return;
+      }
+
+    } catch (err) {
+      if(err.response){
+        window.localStorage.removeItem('LoggedAppUser')
+        setResponse(err.response.data);
+        setColor("#BF1010");
+        setTimeout(() => {
+          setResponse(false);
+        }, 3000);
+      }
+    }
+
+
+  };
+
 
   return {
     form,
@@ -97,6 +108,7 @@ const UseForm = (initialForm, validateForm) => {
     handleChange,
     handleBlur,
     handleSubmit,
+    handleSubmitLogin,
   };
 };
 

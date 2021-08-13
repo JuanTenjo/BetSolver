@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Grid,
-    Box,
     makeStyles,
     Hidden
 
@@ -41,7 +40,7 @@ const PageLogin = () => {
                 <Grid item xs={12} sm={6} md={6}  >
                     <LoginForm />
                 </Grid>
-                <Hidden xsDown>
+                <Hidden smDown>
                         <center>
                             <img onLoad={AltoImagen} src={Banner} alt="Banner Bet Solver" style={{maxHeight:MaxHeight,width:width, margin:10}} />
                         </center>                
