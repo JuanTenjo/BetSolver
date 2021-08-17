@@ -7,9 +7,7 @@ const router = require('express').Router();
 // Inciar Sesion
 router.post('/login', login);
        
-//Registrar Usuario 
-router.post('/register', register);
-
+//Traer Usuario
 router.get('/getinfotoken',
     passport.authenticate('jwt', { session: false }),
     getinfotoken);
