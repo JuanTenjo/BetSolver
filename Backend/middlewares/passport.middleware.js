@@ -1,7 +1,7 @@
 
 const { Strategy, ExtractJwt } = require('passport-jwt');
 const { jwtSecret } = require('../config/keyJWT');
-const {findUserById} = require('../models/auth.model')
+const {findUserById} = require('../models/validation.models')
 
 const options = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -10,7 +10,7 @@ const options = {
 
 module.exports = new Strategy(options, async (payload, done) => {
     try {
-        console.log(payload);
+        //console.log(payload);
         const user = await findUserById(payload);
         if (user) {
             return done(null, user);
