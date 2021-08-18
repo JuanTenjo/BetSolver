@@ -21,9 +21,10 @@ const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
 }))
 
-const Cajon = ({variant,open,onClose}) => {
+const Cajon = ({variant,open,onClose,nombreUser}) => {
 
     const classes = useStyles();
+    console.log(nombreUser)
 
     return (    
         <Drawer
@@ -39,6 +40,7 @@ const Cajon = ({variant,open,onClose}) => {
         <div className={classes.toolbar}>
             <center>
               <img src={logo} alt="Logo Bet Solver" width="80%" />
+              <h2>{nombreUser}</h2>
             </center>
         </div>
         <Divider/>

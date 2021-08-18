@@ -8,6 +8,7 @@ import { Hidden, makeStyles } from "@material-ui/core";
 import Cajon from "../Components/Home/cajon";
 import PageLogin from "../Pages/PageLogin";
 import PageHome from "../Pages/PageHome";
+import axios from "axios";
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -20,9 +21,11 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const RoutesLogged = () => {
+const RoutesLogged = ({ nombreUser }) => {
+
   const classes = useStyle();
   const [abrir, setAbrir] = useState(false);
+
   const AccionAbrir = () => {
     setAbrir(!abrir);
   };
@@ -32,18 +35,18 @@ const RoutesLogged = () => {
 
       <NavBar accionAbrir={AccionAbrir} />
       <Hidden xsDown>
-        <Cajon variant="permanent" open={true} />
+        <Cajon variant="permanent" nombreUser={nombreUser} open={true} />
       </Hidden>
       <Hidden smUp>
-        <Cajon variant="temporary" open={abrir} onClose={AccionAbrir} />
+        <Cajon variant="temporary" nombreUser={nombreUser} open={abrir} onClose={AccionAbrir} />
       </Hidden>
 
       <div className={classes.content}>
         <div className={classes.toolbar}>
-            <PageHome/> 
+          <PageHome />
         </div>
       </div>
-     
+
       <Switch>
         <Route exact path="/gestionUser" component={GestionUserApp} />
         {/* <Route exact path="/gestionUser" render={props => <GestionUserApp {...props} />} /> */}
@@ -58,23 +61,45 @@ const RoutesLogged = () => {
 };
 
 const Routes = () => {
+
   const [auth, setAuth] = useState(false);
+  const [nombreUser, setNombreUser] = useState('');
 
   useEffect(() => {
     AccionAuth();
   }, []); //Cuando el arrayt de dependencia esta vacios solo se va a ejecuar una vez al cargar el componente
 
   const AccionAuth = () => {
+
     const Logged = window.localStorage.getItem("LoggedAppUser");
+
     if (Logged) {
+
       const token = JSON.parse(Logged);
+
+      const requestUser = async () => {
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+
+        const requestUser = await axios.get("http://localhost:4000/auth/getinfotoken", config);
+        setNombreUser(requestUser.data[0].usuario)
+
+      }
+
+      requestUser();
+
       setAuth(token);
     } else {
       setAuth(false);
     }
+
   };
 
-  return <>{auth ? <RoutesLogged /> : <PageLogin Auth={AccionAuth} />}</>;
+  return <>{auth ? <RoutesLogged nombreUser={nombreUser} /> : <PageLogin Auth={AccionAuth} />}</>;
 
 };
 
