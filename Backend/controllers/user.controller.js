@@ -17,29 +17,40 @@ controller.registerUser = async function (req, res) {
         let espacios = false;
         let cont = 0;
     
-        while (!espacios && (cont < params.password.length)) {
-            if (params.password.charAt(cont) == " ")
-                espacios = true;
-            cont++;
-        }
+
 
     
         const ErroresValidacion = [];
 
-        !validator.validate(params.email) ? ErroresValidacion.push('Email invalido') : true;
-        isNaN(params.celular) ?  ErroresValidacion.push("El campo celular solo acepta numeros") : true;
-        (params.nombre.length > 45 || params.nombre.length < 5) ? ErroresValidacion.push("El campo nombre es mayor a 45 caracteres o menor a 5 caracteres") : true;
-        (params.apellidos.length > 45 || params.apellidos.length < 4) ? ErroresValidacion.push("El campo apellido es mayor a 45 caracteres o menor 4 caracteres") : true;
-        (params.genero == "Masculino" || params.genero == "Femenino") ? true : ErroresValidacion.push("El campo genero solo acepta Masculino o Femenino");
-        (params.password.length > 20 || params.password.length < 6) ? ErroresValidacion.push("La contraseña que ingreso es mayor a 20 caracteres o menor a 6 caracteres") : true;
-        espacios ? ErroresValidacion.push("La contraseña no puede contener espacios en blanco") : true;
+        await validarNulo(params.password) ?  ErroresValidacion.push('Password no puede estar vacio') : true; 
+        await validarNulo(params.nombre) ?  ErroresValidacion.push('Nombre no puede estar vacio') : true;  
+        await validarNulo(params.apellidos) ?  ErroresValidacion.push('Apellido no puede estar vacio') : true;  
         await validarNulo(params.email) ?  ErroresValidacion.push('Email no puede estar vacio') : true;  
         await validarNulo(params.genero) ?  ErroresValidacion.push('El genero no puede estar vacio') : true; 
+        await validarNulo(params.CodiPais) ?  ErroresValidacion.push('El codigo del pais no puede estar vacio') : true; 
         await ValidarCorreo(params.email) ? ErroresValidacion.push(`El correo ${params.email} ya esta registrado`) : true;
         await ValidarPais(params.CodiPais) == false ? ErroresValidacion.push("Codigo del pais invalido") : true;
         await patternString(params.nombre) == false ? ErroresValidacion.push("El campo nombre solo acepta letras") : true;
         await patternString(params.apellidos) == false ? ErroresValidacion.push("El campo apellido solo acepta letras") : true;
         await patternPassword(params.password) == false ? ErroresValidacion.push("El campo contraseña necesita Mayusculas, minusculas y numeros") : true;
+        !validator.validate(params.email) ? ErroresValidacion.push('Email invalido') : true;
+        isNaN(params.celular) ?  ErroresValidacion.push("El campo celular solo acepta numeros") : true;
+        if(params.nombre) (params.nombre.length > 45 || params.nombre.length < 5) ? ErroresValidacion.push("El campo nombre es mayor a 45 caracteres o menor a 5 caracteres") : true;
+        if(params.apellidos) (params.apellidos.length > 45 || params.apellidos.length < 4) ? ErroresValidacion.push("El campo apellido es mayor a 45 caracteres o menor 4 caracteres") : true;
+        if(params.genero) (params.genero == "Masculino" || params.genero == "Femenino") ? true : ErroresValidacion.push("El campo genero solo acepta Masculino o Femenino");
+        if(params.password){        
+            (params.password.length > 20 || params.password.length < 6) ? ErroresValidacion.push("La contraseña que ingreso es mayor a 20 caracteres o menor a 6 caracteres") : true;
+    
+            while (!espacios && (cont < params.password.length)) {
+                if (params.password.charAt(cont) == " ")
+                    espacios = true;
+                cont++;
+            }
+
+            espacios ? ErroresValidacion.push("La contraseña no puede contener espacios en blanco") : true;
+        } 
+
+        
     
         
         if (ErroresValidacion.length != 0){

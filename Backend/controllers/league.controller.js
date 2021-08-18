@@ -1,150 +1,159 @@
-const {ValidarPais, ValidaLiga, validarNulo} = require('../models/validation.models')
-const {register,update, erase, leagues} = require('../models/league.model')
-
+const { ValidarPais, ValidaLiga, ValidaNombreLiga } = require('../models/validation.models')
+const { register, update, erase, leagues } = require('../models/league.model')
+const { validarNulo } = require('../utils/validationPatters')
 const controller = {};
 
 
 controller.register = async function (req, res) {
 
-    if(req.user[0].idRol === 3){
+    if (req.user[0].idRol === 3) {
 
-        //Acepta nombreLiga, CodiPais
+        //Acepta nombreLiga, codiPais
 
         const params = req.body;
-    
+
+
         const ErroresValidacion = [];
 
-        (params.nombreLiga.length > 40 || params.nombreLiga.length < 2) ? ErroresValidacion.push("El nombre de la liga es mayor a 45 caracteres o menor 2 caracteres") : true;
+        await validarNulo(params.codiPais) ? ErroresValidacion.push("Codigo del pais no puede estar vacio") : true;
+        await ValidarPais(params.codiPais) == false ? ErroresValidacion.push("Codigo del pais es invalido") : true;
+        await ValidaLiga(params) ? ErroresValidacion.push(`La liga con nombre: ${params.nombreLiga} y codigo de pais: ${params.codiPais} ya esta registrado`) : true;
 
-        await ValidarPais(params.CodiPais) == false ? ErroresValidacion.push("Codigo del pais invalido") : true;
-        await ValidaLiga(params) == false ? ErroresValidacion.push(`La liga con nombre: ${params.nombreLiga} y codigo de pais: ${params.CodiPais} ya esta registrado`) : true;
-     
-        
-        if (ErroresValidacion.length != 0){
-            
-            res.status(400).json({"message": ErroresValidacion});
-
+        if (params.nombreLiga) {
+            params.nombreLiga.length > 40 || params.nombreLiga.length <= 2 ? ErroresValidacion.push("El nombre de la liga es mayor a 45 caracteres o menor 2 caracteres") : true
         }else{
-            
+            ErroresValidacion.push("Nombre de la liga no puede estar vacio")
+        }
+
+
+        if (ErroresValidacion.length != 0) {
+
+            res.status(400).json({ "message": ErroresValidacion });
+
+        } else {
+
             const estado = await register(params);
 
-            if(estado.error || estado === false){
+            if (estado.error || estado === false) {
 
-                res.status(400).json({"message": estado.mensaje ? estado.mensaje : "No se registro la liga" });
+                res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se registro la liga" });
 
-            }else{
+            } else {
 
-                res.status(200).json({"message": "Registro Exitoso"});
+                res.status(200).json({ "message": "Registro Exitoso" });
 
             }
 
         }
-    
-    }else{
-        res.status(403).json({"message": "Lo siento pero no tiene los permisos necesarios para hacer esta peticion"});
+
+    } else {
+        res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta peticion" });
     }
 
 };
 
-controller.update = async function(req, res) {
+controller.update = async function (req, res) {
 
-    if(req.user[0].idRol === 3){
+    if (req.user[0].idRol === 3) {
 
         //Acepta nombreLiga, codiPais, habilitada, idLigas
 
         const params = req.body;
-    
+
         const ErroresValidacion = [];
 
-        (params.nombreLiga.length > 40 || params.nombreLiga.length < 2) ? ErroresValidacion.push("El nombre de la liga es mayor a 45 caracteres o menor 2 caracteres") : true;
-
+        await validarNulo(params.codiPais) ? ErroresValidacion.push("Codigo del pais no puede estar vacio") : true;
         await ValidarPais(params.codiPais) == false ? ErroresValidacion.push("Codigo del pais invalido") : true;
-        await ValidaLiga(params) == false ? ErroresValidacion.push(`La liga con nombre: ${params.nombreLiga} y codigo de pais: ${params.codiPais} ya esta registrada`) : true;
-        await validarNulo(params.codiPais) == false ? ErroresValidacion.push("Codigo del pais no puede estar vacio") : true;
-        await validarNulo(params.nombreLiga) == false ? ErroresValidacion.push("Nonbre de la liga no puede estar vacio") : true;
-        await validarNulo(params.habilitada) == false ? ErroresValidacion.push("El estado Habilitado no puede estar vacio") : true;
-        await validarNulo(params.idLigas) == false ? ErroresValidacion.push("El ID de la liga no puede estar vacio") : true;
+        await ValidaNombreLiga(params) ? ErroresValidacion.push(`La liga con nombre: ${params.nombreLiga} no esta disponible`) : true;
+        await validarNulo(params.habilitada) ? ErroresValidacion.push("El estado Habilitado no puede estar vacio") : true;
+        await validarNulo(params.idLigas) ? ErroresValidacion.push("El ID de la liga no puede estar vacio") : true;
         
-        if (ErroresValidacion.length != 0){
-            
-            res.status(400).json({"message": ErroresValidacion});
-
+        if (params.nombreLiga) {
+            params.nombreLiga.length > 40 || params.nombreLiga.length <= 2 ? ErroresValidacion.push("El nombre de la liga es mayor a 45 caracteres o menor 2 caracteres") : true
         }else{
-            
+            ErroresValidacion.push("Nombre de la liga no puede estar vacio")
+        }
+
+        if (ErroresValidacion.length != 0) {
+
+            res.status(400).json({ "message": ErroresValidacion });
+
+        } else {
+
             const estado = await update(params);
 
-            if(estado.error || estado === false){
+            if (estado.error || estado === false) {
 
-                res.status(400).json({"message": estado.mensaje ? estado.mensaje : "No se actualizo la liga" });
+                res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se actualizo la liga" });
 
-            }else{
+            } else {
 
-                res.status(200).json({"message": "Actualización Exitosa"});
+                res.status(200).json({ "message": "Actualización Exitosa" });
 
             }
 
         }
-    
-    }else{
-        res.status(403).json({"message": "Lo siento pero no tiene los permisos necesarios para hacer esta peticion"});
+
+    } else {
+        res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta peticion" });
     }
 
 };
 
-controller.erase = async function(req, res) {
+controller.erase = async function (req, res) {
 
-    if(req.user[0].idRol === 3){
+    if (req.user[0].idRol === 3) {
 
-        const idUser = req.body.id; 
-    
+        const idLigas = req.body.idLigas;
+
         const ErroresValidacion = [];
 
-        await validarNulo(idUser) ?  ErroresValidacion.push('El ID del usuario no puede estar vacio') : true;  
+        await validarNulo(idLigas) ? ErroresValidacion.push('El ID de la liga no puede estar vacio') : true;
 
-        if (ErroresValidacion.length != 0){
-            
-            res.status(400).json({"message": ErroresValidacion});
+        if (ErroresValidacion.length != 0) {
 
-        }else{
-        
-            const estado = await deleteUser(idUser);
+            res.status(400).json({ "message": ErroresValidacion });
 
-            if(estado.error || estado === false){
+        } else {
 
-                res.status(400).json({"message": estado.mensaje ? estado.mensaje : "No se elimino"});
+            const estado = await erase(idLigas);
 
-            }else{
+            if (estado.error || estado === false) {
 
-                res.status(200).json({"message": "Eliminación Exitosa"});
+                res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se desabilito" });
+
+            } else {
+
+                res.status(200).json({ "message": `De desabilito la liga Exitosamente` });
 
             }
 
         }
-    
-    }else{
-        res.status(403).json({"message": "Lo siento pero no tiene los permisos necesarios para hacer esta operacion"});
+
+    } else {
+        res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta operacion" });
     }
 
 };
 
-controller.leagues = async function(req, res) {
+controller.leagues = async function (req, res) {
 
-    if(req.user[0].idRol === 3){
+    if (req.user[0].idRol === 3) {
 
-        const estado = await users();
+        const estado = await leagues();
 
-        if(estado.error || estado === false){
+        if (estado.error || estado === false) {
 
             res.status(400).json(estado);
 
-        }else{
+        } else {
 
             res.status(200).json(estado);
-            
-        }    
-    
-    }else{
-        res.status(403).json({"message": "Lo siento pero no tiene los permisos necesarios para hacer esta operacion"});
+
+        }
+
+    } else {
+        res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta operacion" });
     }
 
 };

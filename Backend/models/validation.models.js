@@ -2,8 +2,10 @@ const pool = require("../config/database");
 
 const model = {};
 
+
 model.ValidarPais = async (CodiPais) => {
-  const sql = `Select count(codigoPais) as Existe FROM paises WHERE codigoPais = '${CodiPais}'`;
+  
+  const sql = `Select count(codiPais) as Existe FROM paises WHERE codiPais = '${CodiPais}'`;
   const result = await pool.query(sql);
 
   if (result[0].Existe > 0) {
@@ -47,7 +49,7 @@ model.findUserById = async function (data) {
 model.ValidaLiga = async function (params) {
   try {
 
-    const sql = `SELECT count(nombreLiga) FROM ligas where nombreLiga = '${params.nombreLiga}' and codiPais = '${params.CodiPais}'`;
+    const sql = `Select count(idLigas) as Existe FROM ligas WHERE nombreLiga = '${params.nombreLiga}' and codiPais = '${params.codiPais}'`;
 
     const result = await pool.query(sql);
 
@@ -64,5 +66,90 @@ model.ValidaLiga = async function (params) {
     };
   }
 };
+
+model.ValidaIDLiga = async function (params) {
+  try {
+
+    const sql = `Select count(idLigas) as Existe FROM ligas WHERE idLigas = '${params.idLigas}' and habilitada = 1`;
+
+    const result = await pool.query(sql);
+
+    if (result[0].Existe > 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaLiga. ERROR: ${err.sqlMessage} `,
+    };
+  }
+};
+
+model.ValidaNombreLiga = async function (params) {
+  try {
+
+    const sql = `Select count(idLigas) as Existe FROM ligas WHERE nombreLiga = '${params.nombreLiga}' and idLigas <> ${params.idLigas} and habilitada = 1`;
+
+    const result = await pool.query(sql);
+
+    if (result[0].Existe > 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaLiga. ERROR: ${err.sqlMessage} `,
+    };
+  }
+};
+
+model.ValidaTeam = async function (params) {
+  try {
+
+    const sql = `Select count(idEquipos) as Existe FROM equipos WHERE nombreEquipo = '${params.nombreEquipo}' and idLigas = ${params.idLigas} and habilitado = 1`;
+
+    const result = await pool.query(sql);
+
+    if (result[0].Existe > 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaLiga. ERROR: ${err.sqlMessage} `,
+    };
+  }
+};
+
+model.ValidaNameTeam = async function (params) {
+  try {
+
+    const sql = `Select count(idEquipos) as Existe FROM equipos WHERE idEquipos <> '${params.idEquipos}' and nombreEquipo = '${params.nombreEquipo}' and habilitado = 1`;
+
+    const result = await pool.query(sql);
+    
+    if (result[0].Existe > 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaLiga. ERROR: ${err.sqlMessage} `,
+    };
+  }
+};
+
 
 module.exports = model;
