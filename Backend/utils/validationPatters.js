@@ -18,6 +18,12 @@ module.exports = {
         const patter = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/); //Mayuscula, Minuscula y Numero
         let estado = patter.test(campo) ? true : false;
         return estado
+    },
+
+    validateDate: async function (fecha) {
+        const patter = new RegExp(/^\d{2}\/\d{2}\/\d{4}$/); //Mayuscula, Minuscula y Numero
+        let estado = patter.test(campo) ? true : false;
+        return estado
     }
 
 

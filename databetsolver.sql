@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-08-2021 a las 05:31:08
--- Versión del servidor: 10.4.20-MariaDB
--- Versión de PHP: 7.3.29
+-- Tiempo de generación: 19-08-2021 a las 00:56:29
+-- Versión del servidor: 10.4.19-MariaDB
+-- Versión de PHP: 8.0.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,12 +29,14 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `competencias` (
   `idCompeticiones` int(11) NOT NULL,
+  `idLigas` int(11) NOT NULL,
   `idEquipoLocal` int(11) NOT NULL,
   `idEquipoVisitante` int(11) NOT NULL,
   `golesLocal` varchar(2) NOT NULL DEFAULT '0',
   `golesVisitante` varchar(2) NOT NULL DEFAULT '0',
   `fechaCompeticion` datetime NOT NULL DEFAULT current_timestamp(),
-  `habilitado` tinyint(4) NOT NULL DEFAULT 1
+  `habilitado` tinyint(4) NOT NULL DEFAULT 1,
+  `horaCompeticion` time NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -63,6 +65,13 @@ CREATE TABLE `equipos` (
   `NombreEquipo` varchar(255) NOT NULL,
   `habilitado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `equipos`
+--
+
+INSERT INTO `equipos` (`idEquipos`, `idLigas`, `NombreEquipo`, `habilitado`) VALUES
+(1, 5, 'Barcelona Futbol', 1);
 
 -- --------------------------------------------------------
 
@@ -477,7 +486,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `competencias`
 --
 ALTER TABLE `competencias`
-  MODIFY `idCompeticiones` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idCompeticiones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `detallecompentencia`
@@ -489,7 +498,7 @@ ALTER TABLE `detallecompentencia`
 -- AUTO_INCREMENT de la tabla `equipos`
 --
 ALTER TABLE `equipos`
-  MODIFY `idEquipos` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idEquipos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `estrategias`
