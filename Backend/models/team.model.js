@@ -62,7 +62,7 @@ model.erase = async (idEquipos) => {
     }
 }
 
-model.teams = async (ID) => {
+model.teams = async () => {
     try {
 
         let query = `SELECT * FROM equipos`

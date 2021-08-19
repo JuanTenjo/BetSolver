@@ -13,7 +13,7 @@ controller.register = async function (req, res) {
         const params = req.body;
 
         
-       // console.log(params);
+       console.log(params);
 
 
         const ErroresValidacion = [];
@@ -30,57 +30,76 @@ controller.register = async function (req, res) {
         params.idEquipoLocal === params.idEquipoVisitante ?  ErroresValidacion.push(`No puede registrar una competición con el mismo equipo`) : true;
         
         const hoy = new Date();
+        
+        //let fechaActual = new Date(hoy.getFullYear() + '-' + (hoy.getMonth()) + '-' + hoy.getDate());
 
-        let fechaActual = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
-        let horaActual = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
-        let FechaHora = fechaActual + ' ' + horaActual;
+        let fechaCompeticion =new Date(params.fechaCompeticion); // 2020/2/29 / 2021-08-18 / 18-08-2021
 
-        var addTime = 6000; //Equivalen a 100 minutos que equivale a 1 hora y 30 minutos 
+        if(isNaN(fechaCompeticion)){
+            console.log("Fecha de la competicion no tiene un formato valido por favor ingrese yyyy-MM-dd")
+        }
 
-        const hoyEditado  = new Date();
+        console.log(fechaCompeticion);
+        console.log(hoy);
 
-        hoyEditado.setSeconds(addTime);
+        fechaCompeticion < hoy ?  ErroresValidacion.push(`No puede registrar una competicion con una fecha anteior a ${hoy.toDateString()}`) : true;
+
+
+        // 
+
+        // let horaActual = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+
+        // let FechaHora = fechaActual + ' ' + horaActual;
+
+        // var addTime = 6000; //Equivalen a 100 minutos que equivale a 1 hora y 30 minutos 
+
+        // const hoyEditado  = new Date();
+
+        // hoyEditado.setSeconds(addTime);
 
         //let fechaActualMas100 = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear() + ' ' +  hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
 
-        let horaSuficiente = hoyEditado.getHours() + ':' + hoyEditado.getMinutes() + ':' + hoyEditado.getSeconds();
-
-        console.log(fechaActual)
-        console.log(horaActual)
-        console.log(FechaHora)
-        console.log(horaSuficiente)
-        
-        res.send("Llego")
-
-       
-        
-        params.fechaCompeticion < fechaActual ?  ErroresValidacion.push(`No puede registrar una competicion con una fecha anteior a ${DateActual}`) : true;
-
-        if(params.fechaCompeticion === fechaActual && params.horaCompeticion <= horaSuficiente){
-            ErroresValidacion.push(`Se debe registrar la competicion hora y media antes de que empiece`)
-        }
+        //horaSuficiente = hoyEditado.getHours() + ':' + hoyEditado.getMinutes() + ':' + hoyEditado.getSeconds();
 
         
 
-        // if (ErroresValidacion.length != 0) {
+        //let fechaActual = new Date(`${hoy.getDate()} + '-' + ${(hoy.getMonth() + 1)} + '-' + ${hoy.getFullYear()}`);
 
-        //     res.status(400).json({ "message": ErroresValidacion });
+        
 
-        // } else {
+    
 
-        //     const estado = await register(params);
+      
 
-        //     if (estado.error || estado === false) {
+        
 
-        //         res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se registro el equipo" });
+        // if(params.fechaCompeticion === hoy && params.horaCompeticion <= horaSuficiente){
 
-        //     } else {
-
-        //         res.status(200).json({ "message": "Registro Exitoso" });
-
-        //     }
+        //     ErroresValidacion.push(`Se debe registrar la competicion hora y media antes de que empiece`)
 
         // }
+
+        if (ErroresValidacion.length != 0) {
+
+            res.status(400).json({ "message": ErroresValidacion });
+
+        } else {
+
+            res.send("LLego")
+
+            // const estado = await register(params);
+
+            // if (estado.error || estado === false) {
+
+            //     res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se registro el equipo" });
+
+            // } else {
+
+            //     res.status(200).json({ "message": "Registro Exitoso" });
+
+            // }
+
+        }
 
     } else {
         res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta peticion" });
