@@ -11,14 +11,19 @@ controller.register = async function (req, res) {
         //Acepta idLigas, nombreEquipo
 
         const params = req.body;
+
         console.log(params);
 
 
         const ErroresValidacion = [];
 
+        await ValidaTeam(params) ? ErroresValidacion.push(`El equipo ya existe`) : true;
+
         await validarNulo(params.idLigas) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true;      
         await ValidaIDLiga(params) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
-        await ValidaTeam(params) ? ErroresValidacion.push(`El equipo ya existe`) : true;
+
+       
+
         if (params.nombreEquipo) {
             await ValidaNameTeam(params) ? ErroresValidacion.push(`El nombre del equipo ${params.nombreEquipo} no esta disponible`) : true;
             params.nombreEquipo.length > 100 || params.nombreEquipo.length <= 2 ? ErroresValidacion.push("El nombre del equipo es mayor a 100 caracteres o menor 2 caracteres") : true

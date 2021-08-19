@@ -110,8 +110,8 @@ model.ValidaNombreLiga = async function (params) {
 };
 
 model.ValidaTeam = async function (params) {
-  try {
 
+  try {
     const sql = `Select count(idEquipos) as Existe FROM equipos WHERE nombreEquipo = '${params.nombreEquipo}' and idLigas = ${params.idLigas} and habilitado = 1`;
 
     const result = await pool.query(sql);
@@ -151,7 +151,7 @@ model.ValidaNameTeam = async function (params) {
   }
 };
 
-model.ValidaTeam = async function (idEquipo) {
+model.ValidaIDTeam = async function (idEquipo) {
   try {
 
     const sql = `Select count(idEquipos) as Existe FROM ligas WHERE idEquipos = '${idEquipo}' and habilitado = 1`;

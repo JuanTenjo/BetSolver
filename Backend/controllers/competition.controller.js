@@ -1,5 +1,5 @@
-const { ValidaIDLiga, ValidaTeam, ValidaNameTeam } = require('../models/validation.models')
-const { register, update, erase, teams } = require('../models/team.model')
+const { ValidaIDLiga, ValidaIDTeam, ValidaNameTeam } = require('../models/validation.models')
+const { register, update, erase, teams, validarCompetition,traerUltimoID } = require('../models/competition.model')
 const { validarNulo } = require('../utils/validationPatters')
 const controller = {};
 
@@ -8,103 +8,128 @@ controller.register = async function (req, res) {
 
     if (req.user[0].idRol === 3) {
 
-        //Acepta idLigas, idEquipoLocal, idEquipoVisitante, fechaCompeticion, hora competicion
+        // //Acepta idLigas, idEquipoLocal, idEquipoVisitante, fechaCompeticion, hora competicion
 
         const params = req.body;
 
-        
-       console.log(params);
+        // const ErroresValidacion = [];
+   
+        // await validarNulo(params.idLigas) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true; 
+        // await validarNulo(params.idEquipoLocal) ? ErroresValidacion.push("No se selecciono un equipo local") : true;    
+        // await validarNulo(params.idEquipoVisitante) ? ErroresValidacion.push("No se selecciono un equipo visitante") : true;   
+        // await validarNulo(params.horaCompeticion) ? ErroresValidacion.push("No se ingreso la hora de la competicion") : true;      
+        // await validarNulo(params.fechaCompeticion) ? ErroresValidacion.push("No se ingreso la fecha de la competicion") : true;     
+        // await ValidaIDLiga(params) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
+        // await ValidaIDTeam(params.idEquipoLocal) == false ? ErroresValidacion.push(`El equipo local ingresado ya no existe o esta desabilitado`) : true;
+        // await ValidaIDTeam(params.idEquipoVisitante) == false ? ErroresValidacion.push(`El equipo visitante ingresado ya no existe o esta desabilitado`) : true;
+        // await validarCompetition(params) ? ErroresValidacion.push(`Esta competición ya existe`) : true;
 
+        // params.idEquipoLocal === params.idEquipoVisitante ?  ErroresValidacion.push(`No puede registrar una competición con el mismo equipo`) : true;
 
-        const ErroresValidacion = [];
+        // const hoy = new Date();      
 
-        
-        await validarNulo(params.idLigas) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true; 
-        await validarNulo(params.idEquipoLocal) ? ErroresValidacion.push("No se selecciono un equipo local") : true;    
-        await validarNulo(params.idEquipoVisitante) ? ErroresValidacion.push("No se selecciono un equipo visitante") : true;   
-        await validarNulo(params.horaCompeticion) ? ErroresValidacion.push("No se ingreso la hora de la competicion") : true;      
-        await validarNulo(params.fechaCompeticion) ? ErroresValidacion.push("No se ingreso la fecha de la competicion") : true;     
-        await ValidaIDLiga(params) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
-        await ValidaTeam(params.idEquipoLocal) == false ? ErroresValidacion.push(`El equipo local ingresado ya no existe o esta desabilitado`) : true;
-        await ValidaTeam(params.idEquipoVisitante) == false ? ErroresValidacion.push(`El equipo visitante ingresado ya no existe o esta desabilitado`) : true;
-        params.idEquipoLocal === params.idEquipoVisitante ?  ErroresValidacion.push(`No puede registrar una competición con el mismo equipo`) : true;
-        
-        const hoy = new Date();
-        
-        //let fechaActual = new Date(hoy.getFullYear() + '-' + (hoy.getMonth()) + '-' + hoy.getDate());
+        // let fechaCompeticion =new Date(params.fechaCompeticion); // 2020/2/29 / 2021-08-18 / 18-08-2021
 
-        let fechaCompeticion =new Date(params.fechaCompeticion); // 2020/2/29 / 2021-08-18 / 18-08-2021
-
-        if(isNaN(fechaCompeticion)){
-            console.log("Fecha de la competicion no tiene un formato valido por favor ingrese yyyy-MM-dd")
-        }
-
-        console.log(fechaCompeticion);
-        console.log(hoy);
-
-        fechaCompeticion < hoy ?  ErroresValidacion.push(`No puede registrar una competicion con una fecha anteior a ${hoy.toDateString()}`) : true;
-
-
-        // 
-
-        // let horaActual = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
-
-        // let FechaHora = fechaActual + ' ' + horaActual;
-
-        // var addTime = 6000; //Equivalen a 100 minutos que equivale a 1 hora y 30 minutos 
-
-        // const hoyEditado  = new Date();
-
-        // hoyEditado.setSeconds(addTime);
-
-        //let fechaActualMas100 = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear() + ' ' +  hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
-
-        //horaSuficiente = hoyEditado.getHours() + ':' + hoyEditado.getMinutes() + ':' + hoyEditado.getSeconds();
-
-        
-
-        //let fechaActual = new Date(`${hoy.getDate()} + '-' + ${(hoy.getMonth() + 1)} + '-' + ${hoy.getFullYear()}`);
-
-        
-
-    
-
-      
-
-        
-
-        // if(params.fechaCompeticion === hoy && params.horaCompeticion <= horaSuficiente){
-
-        //     ErroresValidacion.push(`Se debe registrar la competicion hora y media antes de que empiece`)
-
+        // if(isNaN(fechaCompeticion)){
+        //     console.log("Fecha de la competicion no tiene un formato valido por favor ingrese yyyy-MM-dd")
         // }
 
-        if (ErroresValidacion.length != 0) {
+        // fechaCompeticion < hoy ?  ErroresValidacion.push(`No puede registrar una competicion con una fecha anterior`) : true;
 
-            res.status(400).json({ "message": ErroresValidacion });
+        // if (ErroresValidacion.length != 0) {
 
-        } else {
+        //     res.status(400).json({ "message": ErroresValidacion });
 
-            res.send("LLego")
+        // } else {
 
-            // const estado = await register(params);
+        //     const estado = await register(params);
 
-            // if (estado.error || estado === false) {
+        //     if (estado.error || estado === false) {
 
-            //     res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se registro el equipo" });
+        //         res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se registro la competición" });
 
-            // } else {
+        //     } else {
 
-            //     res.status(200).json({ "message": "Registro Exitoso" });
+        //        
 
-            // }
+        //         if(IDCompeticion){
 
-        }
+                    const IDCompeticion = await traerUltimoID(); //Esta va arriba AAAAAAAAAAAAAA
+
+                    const estadoDetalle = await registerDetalle(params.estrategias,IDCompeticion)
+
+                    res.send("Hola")
+
+                    // if(estadoDetalle.error){
+
+                    //     res.status(400).json({ "message": estadoDetalle.error});
+                        
+                    // }else{
+    
+                    //     res.status(200).json({ "message": "Registro Exitoso" });
+    
+                    // }
+
+        //         }
+
+        //     }
+
+        // }
 
     } else {
         res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta peticion" });
     }
 };
+
+
+
+
+const registerDetalle = async function (estrategias, IDCompeticion) {
+
+    //Acepta idLigas, idEquipoLocal, idEquipoVisitante, fe
+
+
+    const ErroresValidacion = [];
+    
+    
+
+    estrategias.forEach(estrategiasRow => {
+
+      
+
+        let ValidaEstrategia = estrategias.filter(estrategias => estrategias.idEstrategia === estrategiasRow.idEstrategia);
+
+        if(ValidaEstrategia.length > 1){
+
+            ErroresValidacion.push("Esta repitiendo una estrategia en esta competicion");
+            return true;
+        }
+        
+    });
+
+    console.log(ErroresValidacion);
+
+    // if (ErroresValidacion.length != 0) {
+
+    //     res.status(400).json({ "message": ErroresValidacion });
+
+    // } else {
+
+    //     const estado = await register(params);
+
+    //     if (estado.error || estado === false) {
+
+    //         res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se registro la competición" });
+
+    //     } else {
+
+    //         res.status(200).json({ "message": "Registro Exitoso" });
+
+    //     }
+
+    // }
+};
+
 
 controller.update = async function (req, res) {
 
