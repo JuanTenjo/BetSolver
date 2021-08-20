@@ -1,7 +1,7 @@
 module.exports = {
 
     validarNulo : async function (campo) {
-        if (campo == '' || campo == null) {
+        if (campo == '' || campo == null || campo == "") {
             return true;
         } else {
             return false;

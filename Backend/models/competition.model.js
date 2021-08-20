@@ -42,6 +42,7 @@ model.register = async (params) => {
         };
     }
 }
+
 model.traerUltimoID = async () => {
     try {
 
@@ -60,41 +61,82 @@ model.traerUltimoID = async () => {
     }
 }
 
-model.update = async (params) => {
+model.registerEstrategias = async (estrategias,IDCompeticion) => {
     try {
 
-        let query = `UPDATE equipos SET idLigas = '${params.idLigas}', nombreEquipo = '${params.nombreEquipo}', habilitado = '${params.habilitado}' WHERE idEquipos  = ${params.idEquipos}`
+        let query = `INSERT INTO detallecompentencia(idCompeticion,idEstrategia,PorceLocal,PorceVisitante)
+        Values('${IDCompeticion}','${estrategias.idEstrategia}','${estrategias.PorceLocal}','${estrategias.PorceVisitante}')`
 
-        const UpdateLiga = await pool.query(query);
+        const InsertDetail = await pool.query(query);
 
-        let estado = UpdateLiga.affectedRows > 0 ?  true : false
+        let estado = InsertDetail.affectedRows > 0 ?  true : false
         
         return estado;
 
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al actualizar la liga en el Model: team.model, en la funcion: update. ERROR: ${err.sqlMessage} `,
+            mensaje: `Hubo un error al insertar el detalle de la competicion en el Model: comptetition.model, en la funcion: registerEstrategias. ERROR: ${err.sqlMessage} `,
             respuesta: false
         };
     }
 }
 
-model.erase = async (idEquipos) => {
+model.deleteEstrategias = async (idCompeticiones) => {
     try {
 
-        let query = `UPDATE equipos SET habilitado = 0 WHERE idEquipos = ${idEquipos}`
+        let query = `DELETE FROM detallecompentencia WHERE idCompeticion =  ${idCompeticiones}`
 
-        const DeleteEquipo = await pool.query(query);
+        const deleteDetail = await pool.query(query);
 
-        let estado = DeleteEquipo.affectedRows > 0 ?  true : false
+        let estado = deleteDetail.affectedRows > 0 ?  true : false
         
         return estado;
 
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al desabilitar el equipo en el Model: team.model, en la funcion: erase. ERROR: ${err.sqlMessage} `,
+            mensaje: `Hubo un error al actualizar el detalle de la competicion en el Model: comptetition.model, en la funcion: deleteEstrategias. ERROR: ${err.sqlMessage} `,
+            respuesta: false
+        };
+    }
+}
+
+model.update = async (params) => {
+    try {
+
+        let query = `UPDATE competencias SET idLigas = '${params.idLigas}', idEquipoLocal = '${params.idEquipoLocal}', idEquipoVisitante = '${params.idEquipoVisitante}', fechaCompeticion = '${params.fechaCompeticion}', horaCompeticion = '${params.horaCompeticion}' WHERE idCompeticiones = ${params.idCompeticiones}`
+   
+        const UpdateCompeticion = await pool.query(query);
+
+        let estado = UpdateCompeticion.affectedRows > 0 ?  true : false
+        
+        return estado;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje: `Hubo un error al actualizar el enfrentamiento, en el Model: competition.model, en la funcion: update. ERROR: ${err.sqlMessage} `,
+            respuesta: false
+        };
+    }
+}
+
+model.erase = async (idCompeticiones) => {
+    try {
+
+        let query = `DELETE FROM competencias WHERE idCompeticiones = ${idCompeticiones}`
+
+        const DeleteCompe = await pool.query(query);
+
+        let estado = DeleteCompe.affectedRows > 0 ?  true : false
+        
+        return estado;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje: `Hubo un error al desabilitar el equipo en el Model: competition.model, en la funcion: erase. ERROR: ${err.sqlMessage} `,
             respuesta: false
         };
     }

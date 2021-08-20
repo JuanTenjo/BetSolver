@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-08-2021 a las 00:56:29
--- Versión del servidor: 10.4.19-MariaDB
--- Versión de PHP: 8.0.6
+-- Tiempo de generación: 20-08-2021 a las 07:37:06
+-- Versión del servidor: 10.4.20-MariaDB
+-- Versión de PHP: 7.3.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -39,6 +39,13 @@ CREATE TABLE `competencias` (
   `horaCompeticion` time NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `competencias`
+--
+
+INSERT INTO `competencias` (`idCompeticiones`, `idLigas`, `idEquipoLocal`, `idEquipoVisitante`, `golesLocal`, `golesVisitante`, `fechaCompeticion`, `habilitado`, `horaCompeticion`) VALUES
+(7, 1, 2, 1, '0', '0', '2022-08-19 05:00:00', 1, '11:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -52,6 +59,14 @@ CREATE TABLE `detallecompentencia` (
   `PorceLocal` int(11) NOT NULL DEFAULT 0,
   `PorceVisitante` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `detallecompentencia`
+--
+
+INSERT INTO `detallecompentencia` (`idDetalleCompentencia`, `idCompeticion`, `idEstrategia`, `PorceLocal`, `PorceVisitante`) VALUES
+(12, 7, 1, 43, 50),
+(14, 7, 2, 23, 50);
 
 -- --------------------------------------------------------
 
@@ -71,7 +86,11 @@ CREATE TABLE `equipos` (
 --
 
 INSERT INTO `equipos` (`idEquipos`, `idLigas`, `NombreEquipo`, `habilitado`) VALUES
-(1, 5, 'Barcelona Futbol', 1);
+(1, 5, 'Barcelona Futbol', 1),
+(2, 5, 'Real Madrird', 1),
+(3, 5, 'Atletico de madrid', 1),
+(4, 5, 'Paris', 1),
+(5, 5, 'Nacional', 1);
 
 -- --------------------------------------------------------
 
@@ -84,6 +103,14 @@ CREATE TABLE `estrategias` (
   `nombreEstrategia` varchar(45) NOT NULL,
   `habilitado` varchar(45) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `estrategias`
+--
+
+INSERT INTO `estrategias` (`idEstrategia`, `nombreEstrategia`, `habilitado`) VALUES
+(1, 'Favorito', '1'),
+(2, 'Gol Primer Tiempo', '1');
 
 -- --------------------------------------------------------
 
@@ -409,21 +436,22 @@ CREATE TABLE `usuarios` (
   `password` varchar(72) NOT NULL,
   `genero` varchar(9) DEFAULT NULL,
   `celular` varchar(12) DEFAULT NULL,
-  `usuario` varchar(45) DEFAULT NULL
+  `usuario` varchar(45) DEFAULT NULL,
+  `fechaIngreso` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`idUsuarios`, `idRol`, `CodiPais`, `nombre`, `apellidos`, `email`, `password`, `genero`, `celular`, `usuario`) VALUES
-(1, 3, 'COP', 'Juan Diego', 'Pimentel Tenjo', 'tenjo2001@gmail.com', '$2b$08$6IfUh229waJtiqKnW9p1NegJLr6GGMcH.aBQnR5.ArmBT46p3H64i', 'Masculino', '3144147105', 'JuanTenjo'),
-(2, 1, 'AX', 'asdasdP', 'Prueas', 'tenjddo2001@gmail.com', '$2b$08$F1YRNYdP1r.dI1kKTnkSJODbOAITjlz8fDt4NRsWN2Nj5fEDuhmx2', 'Femenino', '3144147105', NULL),
-(3, 1, 'AX', 'asdasdP', 'Prueas', 'tenjddof2001@gmail.com', '$2b$08$3GxIa6yppJ3QCA0e80MBuOyBHEgSHdu5PeFltT/CvGZ1Y2uQwZ.oK', 'Femenino', '3144147105', NULL),
-(4, 1, 'AX', 'asdasdP', 'Prueas', 'teasdnjddof2001@gmail.com', '$2b$08$1P9lkrkeIqsWJ28GzLmYYOomAe96n9OkRru7l9Wy961sVmPVWTJuS', 'Femenino', '3144147105', NULL),
-(5, 1, 'AX', 'asdasdP', 'Prueas', 'teasdnjddof2002@gmail.com', '$2b$08$QySRzYVBhCacOg7nborc8elu7SeZDnYjDypo7QNDgIJZVtePIL5hq', 'Femenino', '3144147105', NULL),
-(6, 1, 'AX', 'asdasdP', 'Prueas', 'tenjo002@gmail.com', '$2b$08$zheraxk8ev3Vl95HLd2M6eR.V9NRy58utkGOJy4PyztUWJrZdl4xy', 'Femenino', '3144147105', NULL),
-(7, 1, 'AX', 'asdasdP', 'Prueas', 'tenjo0sdfsdf02@gmail.com', '$2b$08$4wR7uEybXThjxL9RXVXiS.wNZWYmf158DbPC3tWZVbRgkMNHigedG', 'Femenino', '3144147105', NULL);
+INSERT INTO `usuarios` (`idUsuarios`, `idRol`, `CodiPais`, `nombre`, `apellidos`, `email`, `password`, `genero`, `celular`, `usuario`, `fechaIngreso`) VALUES
+(1, 3, 'COP', 'Juan Diego', 'Pimentel Tenjo', 'tenjo2001@gmail.com', '$2b$08$6IfUh229waJtiqKnW9p1NegJLr6GGMcH.aBQnR5.ArmBT46p3H64i', 'Masculino', '3144147105', 'JuanTenjo', '2021-08-18 19:13:04'),
+(2, 1, 'AX', 'asdasdP', 'Prueas', 'tenjddo2001@gmail.com', '$2b$08$F1YRNYdP1r.dI1kKTnkSJODbOAITjlz8fDt4NRsWN2Nj5fEDuhmx2', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04'),
+(3, 1, 'AX', 'asdasdP', 'Prueas', 'tenjddof2001@gmail.com', '$2b$08$3GxIa6yppJ3QCA0e80MBuOyBHEgSHdu5PeFltT/CvGZ1Y2uQwZ.oK', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04'),
+(4, 1, 'AX', 'asdasdP', 'Prueas', 'teasdnjddof2001@gmail.com', '$2b$08$1P9lkrkeIqsWJ28GzLmYYOomAe96n9OkRru7l9Wy961sVmPVWTJuS', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04'),
+(5, 1, 'AX', 'asdasdP', 'Prueas', 'teasdnjddof2002@gmail.com', '$2b$08$QySRzYVBhCacOg7nborc8elu7SeZDnYjDypo7QNDgIJZVtePIL5hq', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04'),
+(6, 1, 'AX', 'asdasdP', 'Prueas', 'tenjo002@gmail.com', '$2b$08$zheraxk8ev3Vl95HLd2M6eR.V9NRy58utkGOJy4PyztUWJrZdl4xy', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04'),
+(7, 1, 'AX', 'asdasdP', 'Prueas', 'tenjo0sdfsdf02@gmail.com', '$2b$08$4wR7uEybXThjxL9RXVXiS.wNZWYmf158DbPC3tWZVbRgkMNHigedG', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04');
 
 --
 -- Índices para tablas volcadas
@@ -433,13 +461,18 @@ INSERT INTO `usuarios` (`idUsuarios`, `idRol`, `CodiPais`, `nombre`, `apellidos`
 -- Indices de la tabla `competencias`
 --
 ALTER TABLE `competencias`
-  ADD PRIMARY KEY (`idCompeticiones`);
+  ADD PRIMARY KEY (`idCompeticiones`),
+  ADD KEY `EquipoLoca` (`idEquipoLocal`),
+  ADD KEY `EquipoVisitante` (`idEquipoVisitante`),
+  ADD KEY `Liga` (`idLigas`);
 
 --
 -- Indices de la tabla `detallecompentencia`
 --
 ALTER TABLE `detallecompentencia`
-  ADD PRIMARY KEY (`idDetalleCompentencia`,`idCompeticion`);
+  ADD PRIMARY KEY (`idDetalleCompentencia`),
+  ADD KEY `Estrategia` (`idEstrategia`),
+  ADD KEY `Competicion` (`idCompeticion`);
 
 --
 -- Indices de la tabla `equipos`
@@ -486,25 +519,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `competencias`
 --
 ALTER TABLE `competencias`
-  MODIFY `idCompeticiones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idCompeticiones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `detallecompentencia`
 --
 ALTER TABLE `detallecompentencia`
-  MODIFY `idDetalleCompentencia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idDetalleCompentencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `equipos`
 --
 ALTER TABLE `equipos`
-  MODIFY `idEquipos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idEquipos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `estrategias`
 --
 ALTER TABLE `estrategias`
-  MODIFY `idEstrategia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idEstrategia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `ligas`
@@ -533,6 +566,21 @@ ALTER TABLE `usuarios`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `competencias`
+--
+ALTER TABLE `competencias`
+  ADD CONSTRAINT `EquipoLoca` FOREIGN KEY (`idEquipoLocal`) REFERENCES `equipos` (`idEquipos`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `EquipoVisitante` FOREIGN KEY (`idEquipoVisitante`) REFERENCES `equipos` (`idEquipos`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Liga` FOREIGN KEY (`idLigas`) REFERENCES `ligas` (`idLigas`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `detallecompentencia`
+--
+ALTER TABLE `detallecompentencia`
+  ADD CONSTRAINT `Competicion` FOREIGN KEY (`idCompeticion`) REFERENCES `competencias` (`idCompeticiones`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Estrategia` FOREIGN KEY (`idEstrategia`) REFERENCES `estrategias` (`idEstrategia`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `equipos`
