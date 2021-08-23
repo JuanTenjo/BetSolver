@@ -62,14 +62,27 @@ model.erase = async (idLigas) => {
     }
 }
 
-model.leagues = async (ID) => {
+model.leagues = async (codiPais = null) => {
     try {
 
-        let query = `SELECT * FROM ligas`
+        if(codiPais){
+            
+            let query = `SELECT * FROM ligas WHERE codiPais = '${codiPais}'`
 
-        const Users = await pool.query(query);
+            const Ligas  = await pool.query(query);
+    
+            return Ligas;
 
-        return Users;
+        }else{
+            
+            let query = `SELECT * FROM ligas`
+
+            const Ligas  = await pool.query(query);
+    
+            return Ligas;
+
+        }
+
 
     } catch (err) {
         return {

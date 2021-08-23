@@ -136,11 +136,15 @@ controller.erase = async function (req, res) {
 
 };
 
+
 controller.leagues = async function (req, res) {
 
     if (req.user[0].idRol === 3) {
 
-        const estado = await leagues();
+
+        let codiPais = req.params.codiPais;
+
+        const estado = await leagues(codiPais);
 
         if (estado.error || estado === false) {
 
@@ -157,6 +161,7 @@ controller.leagues = async function (req, res) {
     }
 
 };
+
 
 
 

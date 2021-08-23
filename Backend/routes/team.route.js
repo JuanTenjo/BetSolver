@@ -15,4 +15,8 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), erase
 //Traer 
 router.get('/', passport.authenticate('jwt', { session: false }), teams);
 
+//TraerConFiltro
+router.get('/:idLiga', passport.authenticate('jwt', { session: false }), teams);
+
+
 module.exports = router;

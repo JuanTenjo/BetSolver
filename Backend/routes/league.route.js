@@ -15,4 +15,8 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), erase
 //Traer 
 router.get('/', passport.authenticate('jwt', { session: false }), leagues);
 
+
+router.get('/:codiPais', passport.authenticate('jwt', { session: false }), leagues);
+
+
 module.exports = router;

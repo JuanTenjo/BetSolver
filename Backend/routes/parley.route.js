@@ -1,4 +1,4 @@
-const {register, update, erase} = require('../controllers/competition.controller');
+const {register, update, erase} = require('../controllers/parley.controller');
 const passport  = require('passport');
 
 const router = require('express').Router();

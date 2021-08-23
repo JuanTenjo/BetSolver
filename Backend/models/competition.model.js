@@ -25,8 +25,8 @@ model.validarCompetition = async (params) => {
 model.register = async (params) => {
     try {
 
-        let query = `INSERT INTO competencias(idLigas,idEquipoLocal,idEquipoVisitante,fechaCompeticion,horaCompeticion)
-        Values('${params.idLigas}','${params.idEquipoLocal}','${params.idEquipoVisitante}','${params.fechaCompeticion}','${params.horaCompeticion}')`
+        let query = `INSERT INTO competencias(idLigas,idEquipoLocal,idEquipoVisitante,fechaCompeticion,horaCompeticion,habiliParley)
+        Values(${params.idLigas},${params.idEquipoLocal},${params.idEquipoVisitante},'${params.fechaCompeticion}','${params.horaCompeticion}',${params.habiliParley})`
 
         const InsertCompetition = await pool.query(query);
 
@@ -64,8 +64,8 @@ model.traerUltimoID = async () => {
 model.registerEstrategias = async (estrategias,IDCompeticion) => {
     try {
 
-        let query = `INSERT INTO detallecompentencia(idCompeticion,idEstrategia,PorceLocal,PorceVisitante)
-        Values('${IDCompeticion}','${estrategias.idEstrategia}','${estrategias.PorceLocal}','${estrategias.PorceVisitante}')`
+        let query = `INSERT INTO detallecompentencia(idCompeticion,idEstrategia,PorceLocal,PorceVisitante,PorceEmpate,cuotaLocal,cuotaVisitante,cuotaEmpate)
+        Values('${IDCompeticion}','${estrategias.idEstrategia}','${estrategias.PorceLocal}','${estrategias.PorceVisitante}','${estrategias.PorceEmpate}','${estrategias.cuotaLocal}','${estrategias.cuotaVisitante}','${estrategias.cuotaEmpate}')`
 
         const InsertDetail = await pool.query(query);
 
@@ -105,7 +105,8 @@ model.deleteEstrategias = async (idCompeticiones) => {
 model.update = async (params) => {
     try {
 
-        let query = `UPDATE competencias SET idLigas = '${params.idLigas}', idEquipoLocal = '${params.idEquipoLocal}', idEquipoVisitante = '${params.idEquipoVisitante}', fechaCompeticion = '${params.fechaCompeticion}', horaCompeticion = '${params.horaCompeticion}' WHERE idCompeticiones = ${params.idCompeticiones}`
+        let query = `UPDATE competencias SET idLigas = ${params.idLigas}, idEquipoLocal = ${params.idEquipoLocal}, idEquipoVisitante = ${params.idEquipoVisitante}, golesLocal = '${params.golesLocal}', golesVisitante = '${params.golesVisitante}',
+        fechaCompeticion = '${params.fechaCompeticion}', horaCompeticion = '${params.horaCompeticion}', habilitado = ${params.habilitado}, habiliParley = ${params.habiliParley} WHERE idCompeticiones = ${params.idCompeticiones}`
    
         const UpdateCompeticion = await pool.query(query);
 

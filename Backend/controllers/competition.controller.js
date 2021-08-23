@@ -54,18 +54,21 @@ controller.register = async function (req, res) {
 
                 if(IDCompeticion){
 
-                    const estadoDetalle = await registerDetalle(params.estrategias,IDCompeticion)
+                    if(params.estrategias){
+                        const estadoDetalle = await registerDetalle(params.estrategias,IDCompeticion)
 
-                    if(estadoDetalle.error){
-
-                        res.status(400).json({ "message": `Se registro la competencia pero quedo sin estrategias. Motivo:${estadoDetalle.error}`});
-                        
+                        if(estadoDetalle.error){
+    
+                            res.status(400).json({ "message": `Se registro la competencia pero quedo sin estrategias. Motivo:${estadoDetalle.error}`});
+                            
+                        }else{
+        
+                            res.status(200).json({ "message": "Registro Exitoso" });
+        
+                        }
                     }else{
-    
-                        res.status(200).json({ "message": "Registro Exitoso" });
-    
+                        res.status(200).json({ "message": "Registro exitoso" });
                     }
-
                 }
 
             }
@@ -76,7 +79,6 @@ controller.register = async function (req, res) {
         res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta peticion" });
     }
 };
-
 
 const registerDetalle = async function (estrategias, IDCompeticion) {
 
@@ -96,12 +98,26 @@ const registerDetalle = async function (estrategias, IDCompeticion) {
 
         }
 
-        estrategiasRow.PorceLocal.toString().length > 2 || estrategiasRow.PorceVisitante.toString().length > 2 ? ErroresValidacion.push(" Se espera un numero entero de dos digitos") : false;
+        estrategiasRow.PorceLocal.toString().length > 2 || estrategiasRow.PorceVisitante.toString().length > 2 || estrategiasRow.PorceEmpate.toString().length > 2  ? ErroresValidacion.push(" Se espera un numero entero de dos digitos") : false;
         estrategiasRow.idEstrategia == null ? ErroresValidacion.push(" Una de las estrategias esta vacia") : false;
         estrategiasRow.PorceLocal == null || estrategiasRow.PorceLocal == "" ? ErroresValidacion.push(" Uno de las porcentajes del local esta vacio") : false;
+        estrategiasRow.PorceEmpate == null || estrategiasRow.PorceEmpate == "" ? ErroresValidacion.push("Uno de las porcentajes de empate esta vacio") : false  ;
+
+        if(estrategiasRow.cuotaLocal){
+            estrategiasRow.cuotaLocal.length > 4 ? ErroresValidacion.push("Una o algunas de las cuotas de mercado locales tiene mas de 4 caracteres") : false;
+        }
+        if(estrategiasRow.cuotaVisitante){
+            estrategiasRow.cuotaVisitante.length > 4 ? ErroresValidacion.push("Una o algunas de las cuotas de mercado visitantes tiene mas de 4 caracteres") : false;
+        }
+        if(estrategiasRow.cuotaEmpate){
+            estrategiasRow.cuotaEmpate.length > 4 ? ErroresValidacion.push("Una o algunas de las cuotas de mercado de empate tiene mas de 4 caracteres") : false;
+        }
+
+
         estrategiasRow.PorceVisitante == null || estrategiasRow.PorceVisitante == "" ? ErroresValidacion.push(" Una de las porcentajes del visitante esta vacio") : false;
         Number.isInteger(estrategiasRow.PorceVisitante) == false ? ErroresValidacion.push(" Se esperara un numero entero en porce visitante") : false;
         Number.isInteger(estrategiasRow.PorceLocal) == false ? ErroresValidacion.push(" Se esperara un numero entero en porce local") : false;
+        Number.isInteger(estrategiasRow.PorceEmpate) == false ? ErroresValidacion.push(" Se esperara un numero entero en porce empate") : false;
 
     });
 
@@ -137,7 +153,6 @@ const registerDetalle = async function (estrategias, IDCompeticion) {
     }
 };
 
-
 controller.update = async function (req, res) {
 
     if (req.user[0].idRol === 3) {
@@ -157,6 +172,17 @@ controller.update = async function (req, res) {
         await ValidaIDLiga(params) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
         await ValidaIDTeam(params.idEquipoLocal) == false ? ErroresValidacion.push(`El equipo local ingresado ya no existe o esta desabilitado`) : true;
         await ValidaIDTeam(params.idEquipoVisitante) == false ? ErroresValidacion.push(`El equipo visitante ingresado ya no existe o esta desabilitado`) : true;
+
+        if(params.golesLocal){
+            Number.isInteger(params.golesLocal) == false  ? ErroresValidacion.push("Se esperara un numero entero en el marcador del local") : false;
+            params.golesLocal.toString().length > 2 ? ErroresValidacion.push("Se esperaba un marcador de uno o maximo dos digitos del local") : false;
+            params.golesLocal < 0 ? ErroresValidacion.push("Se esperaba un marcador del local mayor o igual a 0") : false;
+        }
+        if(params.golesVisitante){
+            Number.isInteger(params.golesVisitante) == false ? ErroresValidacion.push("Se esperara un numero entero en el marcador del visitante") : false;
+            params.golesVisitante.toString().length > 2 ? ErroresValidacion.push("Se esperaba un marcador de uno o maximo dos del visitante") : false;
+            params.golesVisitante < 0 ? ErroresValidacion.push("Se esperaba un marcador del visitante mayor o igual a 0") : false;
+        }
 
         params.idEquipoLocal === params.idEquipoVisitante ?  ErroresValidacion.push(`No puede actualizar una competición con el mismo equipo`) : true;
 
@@ -184,23 +210,34 @@ controller.update = async function (req, res) {
 
             } else {
 
-                const stateDeleteStrategy = await deleteEstrategias(params.idCompeticiones);
 
-                if(stateDeleteStrategy){
-
-                    const estadoDetalle = await registerDetalle(params.estrategias,params.idCompeticiones)
-
-                    if(estadoDetalle.error){
-    
-                        res.status(400).json({ "message": `Se actualizo la competencia pero quedo sin estrategias. Motivo:${estadoDetalle.error}`});
-                        
-                    }else{
-    
-                        res.status(200).json({ "message": "Actualizacion Exitosa" });
-    
-                    }
+                if(params.estrategias){
                     
+                    const stateDeleteStrategy = await deleteEstrategias(params.idCompeticiones);
+
+                    if(stateDeleteStrategy){
+    
+    
+    
+                        const estadoDetalle = await registerDetalle(params.estrategias,params.idCompeticiones)
+    
+                        if(estadoDetalle.error){
+        
+                            res.status(400).json({ "message": `Se actualizo la competencia pero quedo sin estrategias. Motivo:${estadoDetalle.error}`});
+                            
+                        }else{
+        
+                            res.status(200).json({ "message": "Actualizacion Exitosa" });
+        
+                        }
+                        
+                    }
+
+                }else{
+                    res.status(200).json({ "message": "Actualizacion Exitosa" });
                 }
+
+
 
             }
 
@@ -248,27 +285,6 @@ controller.erase = async function (req, res) {
 
 };
 
-controller.teams = async function (req, res) {
-
-    if (req.user[0].idRol === 3) {
-
-        const estado = await teams();
-
-        if (estado.error || estado === false) {
-
-            res.status(400).json(estado);
-
-        } else {
-
-            res.status(200).json(estado);
-
-        }
-
-    } else {
-        res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta operacion" });
-    }
-
-};
 
 
 

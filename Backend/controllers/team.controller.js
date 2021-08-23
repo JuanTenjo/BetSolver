@@ -143,11 +143,15 @@ controller.erase = async function (req, res) {
 
 };
 
+
+
 controller.teams = async function (req, res) {
 
     if (req.user[0].idRol === 3) {
 
-        const estado = await teams();
+        let idLiga = req.params.idLiga;
+
+        const estado = await teams(idLiga);
 
         if (estado.error || estado === false) {
 
@@ -164,6 +168,7 @@ controller.teams = async function (req, res) {
     }
 
 };
+
 
 
 
