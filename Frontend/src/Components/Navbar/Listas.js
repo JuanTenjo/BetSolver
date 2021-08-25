@@ -5,9 +5,9 @@ import {
     ListItemIcon,
     ListItemText
 } from '@material-ui/core';
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-// import { useHistory } from "react-router-dom";
+import HomeIcon from '@material-ui/icons/Home';
+import PeopleIcon from '@material-ui/icons/People';
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import { withRouter } from "react-router-dom";
 
 const Listas = (props) => {
@@ -17,18 +17,33 @@ const Listas = (props) => {
     const itemsList = [
       {
         text: "Home",
-        icon: <InboxIcon />,
+        icon: <HomeIcon />,
         onClick: () => history.push("/Home") 
       },
       {
-        text: "GestionUser",
-        icon: <MailIcon />,
+        text: "Gestionar Usuarios",
+        icon: <PeopleIcon />,
         onClick: () => history.push("/gestionUser")
       },
       {
-        text: "Contact",
-        icon: <MailIcon />,
-        onClick: () => history.push("/contact")
+        text: "Gestionar Equipos",
+        icon: <PlaylistAddIcon />,
+        onClick: () => history.push("/gestionTeam")
+      },
+      {
+        text: "Gestionar Ligas",
+        icon: <PlaylistAddIcon />,
+        onClick: () => history.push("/gestionLeagues")
+      },
+      {
+        text: "Gestionar Competencias",
+        icon: <PlaylistAddIcon />,
+        onClick: () => history.push("/gestionCompetition")
+      },
+      {
+        text: "Gestionar Parleys",
+        icon: <PlaylistAddIcon />,
+        onClick: () => history.push("/gestionParleys")
       }
     ];
     

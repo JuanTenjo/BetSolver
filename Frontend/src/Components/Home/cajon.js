@@ -24,8 +24,6 @@ const useStyles = makeStyles(theme => ({
 const Cajon = ({variant,open,onClose,nombreUser}) => {
 
     const classes = useStyles();
-    console.log(nombreUser)
-
     return (    
         <Drawer
         className={classes.drawer} 

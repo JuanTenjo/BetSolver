@@ -1,4 +1,4 @@
-import { AppBar, Button, IconButton, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, IconButton, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import React from 'react';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -39,9 +39,9 @@ const NavBar = ({accionAbrir}) => {
                 <Typography variant="h6" className={styles.title}>
                     BetSolver
                 </Typography>
-                <Button variant="text" color="inherit">
+                {/* <Button variant="text" color="inherit">
                     Login
-                </Button>
+                </Button> */}
             </Toolbar>
         </AppBar>
     );

@@ -1,93 +1,84 @@
-const pool = require('../config/database')
+const pool = require("../config/database");
 
 const model = {};
 
 model.register = async (params) => {
-    try {
+  try {
 
-        let query = `INSERT INTO equipos(idLigas,nombreEquipo) Values('${params.idLigas}','${params.nombreEquipo}')`
+    let query = `INSERT INTO parleys(competencia1,competencia2,competencia3,competencia4,cuotaTotal) Values('${params.competencia1}','${params.competencia2}','${params.competencia3}','${params.competencia4}','${params.cuotaTotal}')`;
 
-        const InsertLiga = await pool.query(query);
+    const InsertParley = await pool.query(query);
 
-        let estado = InsertLiga.affectedRows > 0 ?  true : false
-        
-        return estado;
+    let estado = InsertParley.affectedRows > 0 ? true : false;
 
-    } catch (err) {
-        return {
-            error: true,
-            mensaje: `Hubo un error al insertar el quipo en el Model: team.model, en la funcion: register. ERROR: ${err.sqlMessage} `,
-            respuesta: false
-        };
-    }
-}
+    return estado;
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: `Hubo un error al insertar el parley: parley.model, en la funcion: register. ERROR: ${err.sqlMessage} `,
+      respuesta: false,
+    };
+  }
+};
 
 model.update = async (params) => {
-    try {
+  try {
+    let query = `UPDATE parleys SET competencia1 = '${params.competencia1}', competencia2 = '${params.competencia2}', competencia3 = '${params.competencia3}',competencia4 = '${params.competencia4}',cuotaTotal = '${params.cuotaTotal}' WHERE idparleys  = ${params.idparleys}`;
 
-        let query = `UPDATE equipos SET idLigas = '${params.idLigas}', nombreEquipo = '${params.nombreEquipo}', habilitado = '${params.habilitado}' WHERE idEquipos  = ${params.idEquipos}`
+    const UpdateParley = await pool.query(query);
 
-        const UpdateLiga = await pool.query(query);
+    let estado = UpdateParley.affectedRows > 0 ? true : false;
 
-        let estado = UpdateLiga.affectedRows > 0 ?  true : false
-        
-        return estado;
-
-    } catch (err) {
-        return {
-            error: true,
-            mensaje: `Hubo un error al actualizar la liga en el Model: team.model, en la funcion: update. ERROR: ${err.sqlMessage} `,
-            respuesta: false
-        };
-    }
-}
+    return estado;
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: `Hubo un error al actualizar la liga en el Model: parley.model, en la funcion: update. ERROR: ${err.sqlMessage} `,
+      respuesta: false,
+    };
+  }
+};
 
 model.erase = async (idEquipos) => {
-    try {
+  try {
+    let query = `UPDATE equipos SET habilitado = 0 WHERE idEquipos = ${idEquipos}`;
 
-        let query = `UPDATE equipos SET habilitado = 0 WHERE idEquipos = ${idEquipos}`
+    const DeleteEquipo = await pool.query(query);
 
-        const DeleteEquipo = await pool.query(query);
+    let estado = DeleteEquipo.affectedRows > 0 ? true : false;
 
-        let estado = DeleteEquipo.affectedRows > 0 ?  true : false
-        
-        return estado;
-
-    } catch (err) {
-        return {
-            error: true,
-            mensaje: `Hubo un error al desabilitar el equipo en el Model: team.model, en la funcion: erase. ERROR: ${err.sqlMessage} `,
-            respuesta: false
-        };
-    }
-}
+    return estado;
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: `Hubo un error al desabilitar el equipo en el Model: team.model, en la funcion: erase. ERROR: ${err.sqlMessage} `,
+      respuesta: false,
+    };
+  }
+};
 
 model.teams = async (idLiga = null) => {
-    try {  
+  try {
+    if (idLiga) {
+      let query = `SELECT * FROM equipos WHERE idLigas = ${idLiga}`;
 
-        if(idLiga){
+      const Teams = await pool.query(query);
 
-            let query = `SELECT * FROM equipos WHERE idLigas = ${idLiga}`;
+      return Teams;
+    } else {
+      let query = `SELECT * FROM equipos`;
 
-            const Teams = await pool.query(query);
-    
-            return Teams;
-            
-        }else{
-            let query = `SELECT * FROM equipos`
+      const Teams = await pool.query(query);
 
-            const Teams = await pool.query(query);
-    
-            return Teams;          
-        }
-
-    } catch (err) {
-        return {
-            error: true,
-            mensaje: `Hubo un error al traer las ligas en el Model: league.model, en la funcion: leagues. ERROR: ${err.sqlMessage} `,
-            respuesta: false
-        };
+      return Teams;
     }
-}
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: `Hubo un error al traer las ligas en el Model: league.model, en la funcion: leagues. ERROR: ${err.sqlMessage} `,
+      respuesta: false,
+    };
+  }
+};
 
 module.exports = model;

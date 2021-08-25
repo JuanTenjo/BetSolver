@@ -1,6 +1,5 @@
 import { useState } from "react";
 // import Axios from "axios";
-import { useHistory } from "react-router-dom";
 import Axios from 'axios';
 
 const UseForm = (initialForm, validateForm) => {
@@ -12,7 +11,7 @@ const UseForm = (initialForm, validateForm) => {
   const [response, setResponse] = useState(null);
   const [color, setColor] = useState(null);
   const [success, setSuccess] = useState(false);
-  let history = useHistory();
+
 
   const handleChange = (e) => {
     const { name, value } = e.target; //Es otra forma de hacerlo

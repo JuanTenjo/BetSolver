@@ -11,7 +11,6 @@ auth = true;
 const PrivateRoute = (props) => {
 
     const user = window.localStorage.getItem('LoggedAppUser');
-    console.log(user)
     user ? auth = true : auth = false
     
     return (
