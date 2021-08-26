@@ -8,6 +8,7 @@ import axios from "axios";
 import Home from "../Pages/PageHome";
 import PageLogin from "../Pages/PageLogin";
 import PageUser from "../Pages/PageUser";
+import PageLeague from "../Pages/PageLeague";
 
 
 const useStyle = makeStyles((theme) => ({
@@ -45,6 +46,7 @@ const RoutesLogged = ({ nombreUser }) => {
 
       <Switch>
         <Route exact path="/gestionUser" component={PageUser} />
+        <Route exact path="/gestionLeague" component={PageLeague} />
         {/* <Route exact path="/gestionUser" render={props => <GestionUserApp {...props} />} /> */}
         <PrivateRoute exact path="/" component={Home} />
         {/* <Route exact path="/IniciarSesion" component={LoginApp} />

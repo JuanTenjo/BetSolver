@@ -33,7 +33,7 @@ const Listas = (props) => {
       {
         text: "Gestionar Ligas",
         icon: <PlaylistAddIcon />,
-        onClick: () => history.push("/gestionLeagues")
+        onClick: () => history.push("/gestionLeague")
       },
       {
         text: "Gestionar Competencias",

@@ -1,8 +1,8 @@
 import { useState } from "react";
-// import Axios from "axios";
+import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
 import Axios from 'axios';
 
-const UseForm = (initialForm, validateForm) => {
+const UseForm = (initialForm, validateForm, URL) => {
 
 
   const [form, setForm] = useState(initialForm);
@@ -20,22 +20,55 @@ const UseForm = (initialForm, validateForm) => {
       [name]: value,
     });
   };
+
   const handleBlur = (e) => {
-    handleChange(e);
+    handleChange(e); //Lama a handleChange para guardar los cambios de form
     setError(validateForm(form));
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
+
     e.preventDefault();
+
     setError(validateForm(form));
 
     //Se valida que el objeto error venga vacio
     if (Object.keys(error).length === 0) {
 
-      
+      setLoading(true);
+
+      let config = {
+        'data': form
+      };
+
+      const res = await helpHttpAxios().post(URL, config)
+
+      console.log(res);
+
+      setLoading(false);
+
+      //  if(!res.err){
+
+      //   setResponse(res.message);
+      //   setColor("#0CA842");
+      //   setTimeout(() => {           
+      //     setResponse(false);
+      //   },1000)
+
+      //  }else{
+
+      //   setResponse(res.message)
+      //   setColor("#BF1010");
+      //   setTimeout(() => {
+      //     setResponse(false);
+      //   }, 3000);
+
+
 
     } else {
       return;
     }
+
   };
 
   const handleSubmitLogin = async (e) => {
@@ -45,44 +78,44 @@ const UseForm = (initialForm, validateForm) => {
       setError(validateForm(form));
 
       if (Object.keys(error).length === 0) {
-  
-          const BaseUrl = "http://localhost:4000/auth/login";
-  
-          setLoading(true)
-  
-          const {data} = await Axios.post(BaseUrl,form);
-              
-          setLoading(false)
-  
-          if(data){
-            if(data.rol === 3){
 
-              window.localStorage.setItem("LoggedAppUser", JSON.stringify(data.token))
-              
-              setResponse(data.msg)
-              setColor("#0CA842")
-              setTimeout(() => {           
-                setResponse(false)
-                setSuccess(true)
-              },1000)
+        const BaseUrl = "http://localhost:4000/auth/login";
 
-              
+        setLoading(true)
 
-            }else{
-              setResponse("Lo siento pero no tiene permisos de administrador");
-              setColor("#BF1010");
-              setTimeout(() => {
-                setResponse(false);
-              }, 3000);
-            }   
+        const { data } = await Axios.post(BaseUrl, form);
+
+        setLoading(false)
+
+        if (data) {
+          if (data.rol === 3) {
+
+            window.localStorage.setItem("LoggedAppUser", JSON.stringify(data.token))
+
+            setResponse(data.msg)
+            setColor("#0CA842")
+            setTimeout(() => {
+              setResponse(false)
+              setSuccess(true)
+            }, 1000)
+
+
+
+          } else {
+            setResponse("Lo siento pero no tiene permisos de administrador");
+            setColor("#BF1010");
+            setTimeout(() => {
+              setResponse(false);
+            }, 3000);
           }
-        
+        }
+
       } else {
         return;
       }
 
     } catch (err) {
-      if(err.response){
+      if (err.response) {
         window.localStorage.removeItem('LoggedAppUser')
         setResponse(err.response.data);
         setColor("#BF1010");
@@ -106,7 +139,7 @@ const UseForm = (initialForm, validateForm) => {
     handleChange,
     handleBlur,
     handleSubmit,
-    handleSubmitLogin,   
+    handleSubmitLogin,
   };
 };
 

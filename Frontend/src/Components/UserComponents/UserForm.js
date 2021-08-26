@@ -31,7 +31,7 @@ const useStyle = makeStyles((theme) => ({
 
 const UserForm = () => {
 
-    const api = helpHttpAxios();
+    //const api = helpHttpAxios();
 
     let classes = useStyle();
 
@@ -43,13 +43,13 @@ const UserForm = () => {
 
         const traerPais = async () => {
 
-            const data = await api.get(urlPaises)
+            const data = await helpHttpAxios().get(urlPaises)
             console.log(data);
         }
 
         traerPais();
 
-    },[]);
+    },[urlPaises]);
 
 
 

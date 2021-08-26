@@ -31,7 +31,7 @@ export const helpHttpAxios = () => {
 
 
     //Al body lo convertimos en cadena
-    options.data = JSON.stringify(options.data) || false;
+   // options.data = JSON.stringify(options.data) || false;
 
     //Si no trae body, elimina la propiedad body del objeto options. delele elimina para eliminar algo dentro de un objeto
     if (!options.data) delete options.data;
@@ -43,7 +43,7 @@ export const helpHttpAxios = () => {
     try {
 
       const res = await axios(options);
-      return res;
+      return res.data;
 
     } catch (err) {
       if(err.response){
