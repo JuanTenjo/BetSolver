@@ -50,7 +50,7 @@ export const helpHttpAxios = () => {
         return{
           err: true,
           status: err.status || "00",
-          message: err.response.data || "Ocurrió un error",
+          message: err.response.data.message || "Ocurrió un error",
         }
       }
     

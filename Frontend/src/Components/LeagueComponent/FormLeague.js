@@ -3,6 +3,8 @@ import { helpHttpAxios } from '../../Helpers/helpHttpsAxios'
 import Loader from '../Necesarios/Loader'
 import Message from '../Necesarios/Message'
 import UserForm from '../../Hooks/useForm';
+import Alert from '@material-ui/lab/Alert';
+import Box from '@material-ui/core/Box';
 
 import {
     Grid,
@@ -45,22 +47,22 @@ const initialForm = {
 //Validaciones
 const validationForm = (form) => {
     let error = {};
-  
+
     let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/; //Validacion para nombre
-  
+
     //Trim se hace para bloquear que no se termine ni empiece con un caracter especial o un espacio en blanco
     if (!form.nombreLiga.trim()) {
-      error.nombreLiga = "El campo nombre liga es requerido"
-    }else if(!regexName.test(form.nombreLiga.trim())){
-      error.nombreLiga = "El campo nombre liga solo acepta letras y espacios en blanco"
+        error.nombreLiga = "El campo nombre liga es requerido"
+    } else if (!regexName.test(form.nombreLiga.trim())) {
+        error.nombreLiga = "El campo nombre liga solo acepta letras y espacios en blanco"
     }
 
-    if (!form.codiPais.trim() ) {
+    if (!form.codiPais.trim()) {
         error.codiPais = "El codigo del pais es requerido"
     }
 
     return error;
-  };
+};
 
 
 const FormLeague = () => {
@@ -68,7 +70,7 @@ const FormLeague = () => {
     let classes = useStyle();
     let urlPaises = "http://localhost:4000/country";
     let urlRegisLiga = "http://localhost:4000/league/register";
- 
+
     const {
         form,
         error,
@@ -80,7 +82,7 @@ const FormLeague = () => {
     } = UserForm(initialForm, validationForm, urlRegisLiga);
 
 
-  
+
 
     const [dataPaises, setDataPaises] = useState();
 
@@ -132,7 +134,7 @@ const FormLeague = () => {
                                     </Select>
                                 </FormControl>
 
-                                {error.codiPais && <p>{error.codiPais}</p>}
+                                {error.codiPais && <Alert severity="warning">{error.codiPais}</Alert>}
 
                             </Grid>
                             <Grid item xs={6}>
@@ -149,23 +151,29 @@ const FormLeague = () => {
 
                                 />
 
-                                {error.nombreLiga && <p>{error.nombreLiga}</p>}
+                                {error.nombreLiga && <Alert severity="warning">{error.nombreLiga}</Alert>}
 
                             </Grid>
                         </Grid>
                         <Grid container justifyContent="center" spacing={1}>
+
                             <Button variant="outlined" type='submit' color="primary" className={classes.boton}>Enviar</Button>
+
+                            {loading && <Loader />}
+
+                            <Box m={0.3} />
+
+                            {error.errores && error.errores.map((el) => {
+                                return (
+                                    <Message key={el} msg={el} estado={false} />
+                                );
+                            })}
+
+                            {response && <Message msg={response} estado={true} />}
+
                         </Grid>
-
                     </form>
-
-                    {loading && <Loader/>}
-                    {response && <Message msg="El correo se envio correctamente" bgColor="#198754"/>}
-
-
                 </Grid>
-
-
             </div>
         </div>
     );

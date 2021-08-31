@@ -42,10 +42,27 @@ const UseForm = (initialForm, validateForm, URL) => {
       };
 
       const res = await helpHttpAxios().post(URL, config)
-
-      console.log(res);
-
+      
       setLoading(false);
+
+      if(!res.err){
+        setResponse(res.message)
+        setTimeout(() => {
+          setResponse(false);
+        }, 5000)
+      }else{
+        let errores = {'errores':res.message}
+        setError(errores); 
+        setTimeout(() => {
+          setError(false);
+        }, 9000)
+      }
+
+      // if(res.err){
+      //   console.log(res.message);
+      // }else{
+      //   console.log(res);
+      // } 
 
       //  if(!res.err){
 
