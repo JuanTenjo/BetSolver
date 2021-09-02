@@ -14,11 +14,18 @@ const UseForm = (initialForm, validateForm, URL) => {
 
 
   const handleChange = (e) => {
-    const { name, value } = e.target; //Es otra forma de hacerlo
+    // const { name, value } = e.target; //Es otra forma de hacerlo
+    // setForm({
+    //   ...form,
+    //   [name]: value,
+    // });
+
     setForm({
       ...form,
-      [name]: value,
+      [e.target.name]: e.target.value,  //IMPORTATE: Esto hace: Coge lo que tenga inicial mente form, luego e.target.name hace referencia al name del imput que es igual a la llave del objeto form y le pasa el target.value dentro del setform para que lo actualice
     });
+
+    
   };
 
   const handleBlur = (e) => {
@@ -29,6 +36,8 @@ const UseForm = (initialForm, validateForm, URL) => {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+
+    handleChange(e);
 
     setError(validateForm(form));
 
@@ -42,45 +51,21 @@ const UseForm = (initialForm, validateForm, URL) => {
       };
 
       const res = await helpHttpAxios().post(URL, config)
-      
+
       setLoading(false);
 
-      if(!res.err){
+      if (!res.err) {
         setResponse(res.message)
         setTimeout(() => {
           setResponse(false);
         }, 5000)
-      }else{
-        let errores = {'errores':res.message}
-        setError(errores); 
+      } else {
+        let errores = { 'errores': res.message }
+        setError(errores);
         setTimeout(() => {
           setError(false);
         }, 9000)
       }
-
-      // if(res.err){
-      //   console.log(res.message);
-      // }else{
-      //   console.log(res);
-      // } 
-
-      //  if(!res.err){
-
-      //   setResponse(res.message);
-      //   setColor("#0CA842");
-      //   setTimeout(() => {           
-      //     setResponse(false);
-      //   },1000)
-
-      //  }else{
-
-      //   setResponse(res.message)
-      //   setColor("#BF1010");
-      //   setTimeout(() => {
-      //     setResponse(false);
-      //   }, 3000);
-
-
 
     } else {
       return;

@@ -37,8 +37,8 @@ const Cajon = ({variant,open,onClose,nombreUser}) => {
         >
         <div className={classes.toolbar}>
             <center>
-              <img src={logo} alt="Logo Bet Solver" width="80%" />
-              <h2>{nombreUser}</h2>
+              <img src={logo} alt="Logo Bet Solver" width="60%" />
+              <h3>{nombreUser}</h3>
             </center>
         </div>
         <Divider/>

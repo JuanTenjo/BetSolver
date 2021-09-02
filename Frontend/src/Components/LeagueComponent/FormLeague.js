@@ -18,11 +18,6 @@ import {
 
 //Estilos
 const useStyle = makeStyles((theme) => ({
-    toolbar: theme.mixins.toolbar,
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-    },
     text: {
         marginTop: theme.spacing(1),
         width: '100%'
@@ -35,7 +30,6 @@ const useStyle = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
         width: '100%'
     },
-
 }));
 //Formulario Inicial
 const initialForm = {
@@ -65,7 +59,7 @@ const validationForm = (form) => {
 };
 
 
-const FormLeague = () => {
+const FormLeague = ({ dataToEdit }) => {
 
     let classes = useStyle();
     let urlPaises = "http://localhost:4000/country";
@@ -86,6 +80,7 @@ const FormLeague = () => {
 
     const [dataPaises, setDataPaises] = useState();
 
+
     useEffect(() => {
 
         const traerPais = async () => {
@@ -101,81 +96,79 @@ const FormLeague = () => {
 
 
     return (
+        <>
+            <Grid container justifyContent="center" >
+                <h3>{dataToEdit ? "Actualizar Liga" : "Ingresar Liga"}</h3>
+            </Grid>
 
-        <div className={classes.content}>
-            <div className={classes.toolbar}>
-                <Grid container>
-                    <Grid container justifyContent="center" >
+            <form onSubmit={handleSubmit}>
+                <Grid container justifyContent="center" spacing={1}>
 
-                        <h1>Registrar League</h1>
+                    <Grid item xs={6}>
+
+                        <FormControl variant="outlined" className={classes.formControl} size="small">
+                            <InputLabel htmlFor="outlined-age-native-simple">Pais</InputLabel>
+                            <Select
+                                native
+                                defaultValue={form.codiPais}
+                                onChange={handleChange}
+                                label="Pais"
+                                onBlur={handleBlur}
+                                name="codiPais"
+                            >
+                                <option aria-label="None" value="" />
+                                {dataPaises && dataPaises.map((el) => {
+                                    return <option key={el.codiPais} value={el.codiPais}>{el.nombrePais}</option>
+                                })}
+
+                            </Select>
+                        </FormControl>
+
+                        {error.codiPais && <Alert severity="warning">{error.codiPais}</Alert>}
 
                     </Grid>
-                    <form onSubmit={handleSubmit}>
+                    <Grid item xs={6}>
 
+                        <TextField
+                            defaultValue={form.nombreLiga}
+                            type="text"
+                            name="nombreLiga"
+                            label="Nombre Liga"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={classes.text}
+                            variant="outlined"
+                            size="small"
 
-                        <Grid container justifyContent="center" spacing={1}>
-                            <Grid item xs={6}>
+                        />
 
-                                <FormControl variant="outlined" className={classes.formControl}>
-                                    <InputLabel htmlFor="outlined-age-native-simple">Pais</InputLabel>
-                                    <Select
-                                        native
-                                        value={form.codiPais}
-                                        onChange={handleChange}
-                                        label="Pais"
-                                        onBlur={handleBlur}
-                                        name="codiPais"
-                                    >
-                                        <option aria-label="None" value="" />
-                                        {dataPaises && dataPaises.map((el) => {
-                                            return <option key={el.codiPais} value={el.codiPais}>{el.nombrePais}</option>
-                                        })}
+                        {error.nombreLiga && <Alert severity="warning">{error.nombreLiga}</Alert>}
 
-                                    </Select>
-                                </FormControl>
-
-                                {error.codiPais && <Alert severity="warning">{error.codiPais}</Alert>}
-
-                            </Grid>
-                            <Grid item xs={6}>
-
-                                <TextField
-                                    defaultValue={form.nombreLiga}
-                                    type="text"
-                                    name="nombreLiga"
-                                    label="Nombre Liga"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    className={classes.text}
-                                    variant="outlined"
-
-                                />
-
-                                {error.nombreLiga && <Alert severity="warning">{error.nombreLiga}</Alert>}
-
-                            </Grid>
-                        </Grid>
-                        <Grid container justifyContent="center" spacing={1}>
-
-                            <Button variant="outlined" type='submit' color="primary" className={classes.boton}>Enviar</Button>
-
-                            {loading && <Loader />}
-
-                            <Box m={0.3} />
-
-                            {error.errores && error.errores.map((el) => {
-                                return (
-                                    <Message key={el} msg={el} estado={false} />
-                                );
-                            })}
-
-                            {response && <Message msg={response} estado={true} />}
-
-                        </Grid>
-                    </form>
+                    </Grid>
                 </Grid>
-            </div>
-        </div>
+                <Grid container justifyContent="center" spacing={1}>
+                    <Grid item xs={6}>
+                        <Button variant="outlined" type='submit' color="primary" className={classes.boton}>Limpiar</Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button variant="outlined" type='submit' color="primary" className={classes.boton}>Enviar</Button>
+                    </Grid>
+
+                    {loading && <Loader />}
+
+                    <Box m={0.3} />
+
+                    {error.errores && error.errores.map((el) => {
+                        return (
+                            <Message key={el} msg={el} estado={false} />
+                        );
+                    })}
+
+                    {response && <Message msg={response} estado={true} />}
+
+                </Grid>
+            </form>
+        </>
     );
 
 }

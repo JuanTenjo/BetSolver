@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FormLeague from '../Components/LeagueComponent/FormLeague';
 import TableLeague from '../Components/LeagueComponent/TableLeague';
 
@@ -10,34 +10,30 @@ const useStyle = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
-    },
-    marginTopContainer: {
-        marginTop: 12,
+        marginTop :theme.spacing(3),
     }
 }));
 
 const PageLeague = () => {
 
     let classes = useStyle();
+    const [dataToEdit, setDataToEdit] = useState(false);
 
     return (
         <div className={classes.content}>
             <div className={classes.toolbar}>
                 <Grid
-                    container className={classes.marginTopContainer} direction="row"
-                    justifyContent="center"
-                    alignItems="center"
+                    container direction="row"
                 >
+                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
-                    <Grid item xs={12} sm={12} md={12} lg={5} xl={5}>
-
-                        <FormLeague />
+                        <FormLeague dataToEdit={dataToEdit} />
 
                     </Grid>
 
-                    <Grid item xs={12} sm={12} md={12} lg={7} xl={7}>
+                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
-                        <TableLeague />
+                        <TableLeague setdataToEdit={setDataToEdit} />
 
                     </Grid>
 
