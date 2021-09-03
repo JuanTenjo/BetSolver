@@ -67,7 +67,7 @@ model.leagues = async (codiPais = null) => {
 
         if(codiPais){
             
-            let query = `SELECT ligas.*, paises.logoPais, paises.nombrePais FROM ligas inner join paises on ligas.codiPais = paises.codiPais WHERE codiPais = '${codiPais}'`
+            let query = `SELECT ligas.*, paises.logoPais, paises.nombrePais FROM ligas inner join paises on ligas.codiPais = paises.codiPais WHERE ligas.codiPais = '${codiPais}' ORDER BY ligas.nombreLiga ASC'`
 
             const Ligas  = await pool.query(query);
     
@@ -75,7 +75,7 @@ model.leagues = async (codiPais = null) => {
 
         }else{
             
-            let query = `SELECT ligas.*, paises.logoPais, paises.nombrePais FROM ligas inner join paises on ligas.codiPais = paises.codiPais`
+            let query = `SELECT ligas.*, paises.logoPais, paises.nombrePais FROM ligas inner join paises on ligas.codiPais = paises.codiPais ORDER BY ligas.nombreLiga ASC`
 
             const Ligas  = await pool.query(query);
     

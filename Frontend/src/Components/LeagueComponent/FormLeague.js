@@ -36,8 +36,9 @@ const initialForm = {
     codiPais: '',
     nombreLiga: '',
     habilitada: '',
-    idLigas: '',
+    idLigas: null,
 }
+
 //Validaciones
 const validationForm = (form) => {
     let error = {};
@@ -59,14 +60,17 @@ const validationForm = (form) => {
 };
 
 
-const FormLeague = ({ dataToEdit }) => {
+const FormLeague = ({ dataToEdit,setDataToEdit }) => {
 
     let classes = useStyle();
-    let urlPaises = "http://localhost:4000/country";
+   // let urlPaises = "http://localhost:4000/country";
     let urlRegisLiga = "http://localhost:4000/league/register";
+    
+    const [dataPaises, setDataPaises] = useState();
 
     const {
         form,
+        setForm,
         error,
         loading,
         response,
@@ -76,23 +80,34 @@ const FormLeague = ({ dataToEdit }) => {
     } = UserForm(initialForm, validationForm, urlRegisLiga);
 
 
+    useEffect(() => { //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
 
+        dataToEdit ? setForm(dataToEdit) : setForm(initialForm);
 
-    const [dataPaises, setDataPaises] = useState();
-
-
+    },[dataToEdit,setForm]);
     useEffect(() => {
-
         const traerPais = async () => {
-
-            const data = await helpHttpAxios().get(urlPaises)
-            setDataPaises(data)
-
+            const data = await helpHttpAxios().get("http://localhost:4000/country");
+            setDataPaises(data);
         }
-
         traerPais();
+    }, []);
 
-    }, [urlPaises]);
+
+    const handleSubmitForm = async (e) => {
+
+        e.preventDefault();
+
+        if (Object.keys(error).length === 0) {
+            if(form.idLigas === null){
+                handleSubmit(e);
+            }else{
+                console.log("Deberia Actualizar");
+            }
+        }
+        setDataToEdit(initialForm);
+        setForm(initialForm);
+    }
 
 
     return (
@@ -101,7 +116,7 @@ const FormLeague = ({ dataToEdit }) => {
                 <h3>{dataToEdit ? "Actualizar Liga" : "Ingresar Liga"}</h3>
             </Grid>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmitForm}>
                 <Grid container justifyContent="center" spacing={1}>
 
                     <Grid item xs={6}>
@@ -110,11 +125,12 @@ const FormLeague = ({ dataToEdit }) => {
                             <InputLabel htmlFor="outlined-age-native-simple">Pais</InputLabel>
                             <Select
                                 native
-                                defaultValue={form.codiPais}
+                                value={form.codiPais}
                                 onChange={handleChange}
                                 label="Pais"
                                 onBlur={handleBlur}
                                 name="codiPais"
+                                id="codiPais"
                             >
                                 <option aria-label="None" value="" />
                                 {dataPaises && dataPaises.map((el) => {
@@ -130,16 +146,19 @@ const FormLeague = ({ dataToEdit }) => {
                     <Grid item xs={6}>
 
                         <TextField
-                            defaultValue={form.nombreLiga}
+                            value={form.nombreLiga}
                             type="text"
                             name="nombreLiga"
                             label="Nombre Liga"
                             onChange={handleChange}
+                            InputProps={{
+                                readOnly: false,
+                            }}
                             onBlur={handleBlur}
                             className={classes.text}
                             variant="outlined"
                             size="small"
-
+                            id="nombreLiga"
                         />
 
                         {error.nombreLiga && <Alert severity="warning">{error.nombreLiga}</Alert>}

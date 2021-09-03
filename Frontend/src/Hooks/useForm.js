@@ -130,9 +130,9 @@ const UseForm = (initialForm, validateForm, URL) => {
 
   };
 
-
   return {
     form,
+    setForm,
     error,
     loading,
     response,
@@ -141,7 +141,7 @@ const UseForm = (initialForm, validateForm, URL) => {
     handleChange,
     handleBlur,
     handleSubmit,
-    handleSubmitLogin,
+    handleSubmitLogin
   };
 };
 

@@ -3,11 +3,13 @@ import "./Loader.css";
 //rfc   
 
 const Loader = () => {
-    return ( 
+    return (
         <div>
-            <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+            <center>
+                <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+            </center>
         </div>
-     );
+    );
 }
- 
+
 export default Loader;
