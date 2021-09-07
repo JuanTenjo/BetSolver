@@ -62,10 +62,12 @@ controller.update = async function (req, res) {
 
         const ErroresValidacion = [];
 
+        console.log(params);
+
         await validarNulo(params.codiPais) ? ErroresValidacion.push("Codigo del pais no puede estar vacio") : true;
         await ValidarPais(params.codiPais) == false ? ErroresValidacion.push("Codigo del pais invalido") : true;
         await ValidaNombreLiga(params) ? ErroresValidacion.push(`La liga con nombre: ${params.nombreLiga} no esta disponible`) : true;
-        await validarNulo(params.habilitada) ? ErroresValidacion.push("El estado Habilitado no puede estar vacio") : true;
+        await validarNulo(params.habilitada) ? ErroresValidacion.push("El estado del la liga no puede estar vacio") : true;
         await validarNulo(params.idLigas) ? ErroresValidacion.push("El ID de la liga no puede estar vacio") : true;
         
         if (params.nombreLiga) {
@@ -120,11 +122,11 @@ controller.erase = async function (req, res) {
 
             if (estado.error || estado === false) {
 
-                res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se desabilito" });
+                res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se ejecuto ningun cambio" });
 
             } else {
 
-                res.status(200).json({ "message": `De desabilito la liga Exitosamente` });
+                res.status(200).json({ "message": `Proceso Exitoso` });
 
             }
 

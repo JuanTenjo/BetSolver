@@ -6,7 +6,7 @@ const UseForm = (initialForm, validateForm, URL) => {
 
 
   const [form, setForm] = useState(initialForm);
-  const [error, setError] = useState({});
+  const [error, setError] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [color, setColor] = useState(null);
@@ -14,18 +14,10 @@ const UseForm = (initialForm, validateForm, URL) => {
 
 
   const handleChange = (e) => {
-    // const { name, value } = e.target; //Es otra forma de hacerlo
-    // setForm({
-    //   ...form,
-    //   [name]: value,
-    // });
-
     setForm({
       ...form,
       [e.target.name]: e.target.value,  //IMPORTATE: Esto hace: Coge lo que tenga inicial mente form, luego e.target.name hace referencia al name del imput que es igual a la llave del objeto form y le pasa el target.value dentro del setform para que lo actualice
     });
-
-    
   };
 
   const handleBlur = (e) => {
@@ -128,12 +120,15 @@ const UseForm = (initialForm, validateForm, URL) => {
     }
 
 
+
+
   };
 
   return {
     form,
     setForm,
     error,
+    setError,
     loading,
     response,
     color,

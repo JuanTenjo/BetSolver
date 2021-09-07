@@ -1,68 +1,165 @@
-import React, { useState, useEffect } from 'react';
-import Loader from '../Components/Necesarios/Loader'
-import FormLeague from '../Components/LeagueComponent/FormLeague';
-import TableLeague from '../Components/LeagueComponent/TableLeague';
-import { helpHttpAxios } from '../Helpers/helpHttpsAxios'
-
+import React, { useState, useEffect } from "react";
+import Loader from "../Components/Necesarios/Loader";
+import Message from "../Components/Necesarios/Message";
+import FormLeague from "../Components/LeagueComponent/FormLeague";
+import TableLeague from "../Components/LeagueComponent/TableLeague";
+import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
 
 import { makeStyles, Grid } from "@material-ui/core";
 
 const useStyle = makeStyles((theme) => ({
-    toolbar: theme.mixins.toolbar,
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        marginTop: theme.spacing(3),
-    }
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    marginTop: theme.spacing(3),
+  },
 }));
 
 const PageLeague = () => {
+  let classes = useStyle();
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState({});
+  const [dataToEdit, setDataToEdit] = useState(false);
+  const [dataLigas, setDataLigas] = useState(null);
 
-    let classes = useStyle();
+  useEffect(() => {
+    traerLigas();
+  },[]);
+  
+  const traerLigas = async () => {
+    setLoading(true);
+    const data = await helpHttpAxios().get("http://localhost:4000/league");                                                                                                                         
+    setDataLigas(data);
+    setLoading(false);
+  };
 
-    const [dataToEdit, setDataToEdit] = useState(false);
-    const [dataLigas, setDataLigas] = useState(null);
-    const [loading, setLoading] = useState(false);
 
-    let urlLigas = "http://localhost:4000/league";
+  const createData = async (data) => {
+    setLoading(true);
 
+    let URL = "http://localhost:4000/league/register";
 
+    let config = {
+      data: data,
+    };
 
-    useEffect(() => {
+    const res = await helpHttpAxios().post(URL, config);
 
-        const traerLigas = async () => {
-            setLoading(true)
-            const data = await helpHttpAxios().get(urlLigas)
-            setDataLigas(data)
-            setLoading(false)
-        }
+    if (!res.err) {
+      setResponse(res.message);
+      setTimeout(() => {
+        setResponse(false);
+      }, 5000);
+    } else {
+      let errores = { errores: res.message };
+      setError(errores);
+      setTimeout(() => {
+        setError(false);
+      }, 9000);
+    }
 
-        traerLigas();
+    setLoading(false);
 
-    }, [dataToEdit]);
+    traerLigas();
 
-    return (
-        <div className={classes.content}>
-            <div className={classes.toolbar}>
-                <Grid
-                    container direction="row"
-                >
-                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+  };
+  const updateData = async (data) => {
+    setLoading(true);
 
-                        <FormLeague dataToEdit={dataToEdit} setDataToEdit={setDataToEdit} />
+    let URL = "http://localhost:4000/league/update";
 
-                    </Grid>
+    let config = {
+      data: data,
+    };
 
-                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+    const res = await helpHttpAxios().put(URL, config);
 
-                        {loading ? <Loader /> : <TableLeague dataLigas={dataLigas} setdataToEdit={setDataToEdit} />}
+    if (!res.err) {
+      setResponse(res.message);
+      setTimeout(() => {
+        setResponse(false);
+      }, 5000);
+    } else {
+      let errores = { errores: res.message };
+      setError(errores);
+      setTimeout(() => {
+        setError(false);
+      }, 9000);
+    }
 
-                    </Grid>
+    setLoading(false);
 
-                </Grid>
-            </div>
-        </div>
-    );
-}
+    traerLigas();
+  };
+  const deleteData = async (idLigas) => {
+
+    setLoading(true);
+
+    let URL = "http://localhost:4000/league/delete";
+
+    let config = {
+      data: {'idLigas':idLigas},
+    };
+
+    const res = await helpHttpAxios().del(URL, config);
+
+    if (!res.err) {
+      setResponse(res.message);
+      setTimeout(() => {
+        setResponse(false);
+      }, 5000);
+    } else {
+      let errores = { errores: res.message };
+      setError(errores);
+      setTimeout(() => {
+        setError(false);
+      }, 9000);
+    }
+
+    setLoading(false);
+
+    traerLigas();
+
+  };
+
+  return (
+    <div className={classes.content}>
+      <div className={classes.toolbar}>
+        <Grid container direction="row">
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <FormLeague
+              createData={createData}
+              updateData={updateData}
+              dataToEdit={dataToEdit}
+              setDataToEdit={setDataToEdit}
+            />
+
+            {error.errores &&
+              error.errores.map((el) => {
+                return <Message key={el} msg={el} estado={false} />;
+              })}
+
+            {response && <Message msg={response} estado={true} />}
+
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            {loading ? (
+              <Loader />
+            ) : (
+              <TableLeague
+                dataLigas={dataLigas}
+                setdataToEdit={setDataToEdit}
+                deleteData={deleteData}
+              />
+            )}
+          </Grid>
+        </Grid>
+      </div>
+    </div>
+  );
+};
 
 export default PageLeague;

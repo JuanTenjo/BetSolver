@@ -1,7 +1,10 @@
-import React from 'react';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { yellow, red } from '@material-ui/core/colors';
+import React, { useState } from 'react';
+import { yellow, red, green } from '@material-ui/core/colors';
 import UpdateIcon from '@material-ui/icons/Update';
+import ClearIcon from '@material-ui/icons/Clear';
+import Dialogo from '../Necesarios/Dialogo'
+import CheckIcon from '@material-ui/icons/Check';
+
 import {
     makeStyles,
     Grid,
@@ -12,8 +15,9 @@ import {
     TableHead,
     TableRow,
     Paper,
-    IconButton
+    IconButton,
 } from '@material-ui/core'
+
 //Estilos
 const useStyle = makeStyles((theme) => ({
     table: {
@@ -21,8 +25,35 @@ const useStyle = makeStyles((theme) => ({
     },
 }));
 
+const initalDialog = {
+    tipo: '', 
+    funcion: false,
+    operacion: ''
+};
 
-const UserTable = ({ setdataToEdit, dataLigas }) => {
+const UserTable = ({ setdataToEdit,dataLigas,deleteData}) => {
+
+    
+  const [open, setOpen] = useState(false);
+//   const [tipo, setTipo] = useState('');
+//   const [IdRegitro, SetIdRegitro] = useState(false);
+  const [InfoDialog, SetInfoDialog] = useState(initalDialog);
+
+    const handleUpdate = (data) => {
+        setdataToEdit(data);
+    }
+
+    const handleDialog = (operacion,ID) => {
+        setOpen(!open);
+        SetInfoDialog({
+            tipo: 'Liga', 
+            funcion: deleteData,
+            operacion,
+            ID,
+        });
+   
+    }
+
 
     let classes = useStyle();
 
@@ -39,7 +70,7 @@ const UserTable = ({ setdataToEdit, dataLigas }) => {
                             <TableCell align="center">Liga</TableCell>
                             <TableCell align="center">Habilitada</TableCell>
                             <TableCell align="center">Editar</TableCell>
-                            <TableCell align="center">Eliminar</TableCell>
+                            <TableCell align="center">Habilitado</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -53,20 +84,32 @@ const UserTable = ({ setdataToEdit, dataLigas }) => {
                                 <TableCell align="center">{row.nombreLiga}</TableCell>
                                 <TableCell align="center">{row.habilitada === 1 ? 'Si' : 'No'}</TableCell>
                                 <TableCell align="center">
-                                    <IconButton aria-label="UpdateIcon" onClick={() => setdataToEdit(row)}>
+                                    <IconButton aria-label="UpdateIcon" onClick={() => handleUpdate(row)}>
                                         <UpdateIcon style={{ color: yellow[700] }} fontSize="small" />
                                     </IconButton>
                                 </TableCell>
+                                {row.habilitada === 0 ?
                                 <TableCell align="center">
-                                    <IconButton aria-label="delete">
-                                        <DeleteIcon style={{ color: red[700] }} fontSize="small" />
+                                    <IconButton aria-label="delete"  onClick={() => handleDialog('habilitar',row.idLigas)}>
+                                        <ClearIcon style={{ color: red[700] }} fontSize="small" />
                                     </IconButton>
                                 </TableCell>
+                                :
+                                <TableCell align="center">
+                                    <IconButton aria-label="delete" onClick={() => handleDialog('desabilitar',row.idLigas)}>
+                                        <CheckIcon style={{ color: green[700] }} fontSize="small" />
+                                    </IconButton>
+                                </TableCell>                            
+                                }
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            {open ? <Dialogo handleDialog={handleDialog} InfoDialog={InfoDialog} /> : null } 
+
+
         </Grid>
     );
 }

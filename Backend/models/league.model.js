@@ -45,7 +45,7 @@ model.update = async (params) => {
 model.erase = async (idLigas) => {
     try {
 
-        let query = `UPDATE ligas SET habilitada = 0 WHERE idLigas = ${idLigas}`
+        let query = `UPDATE ligas SET habilitada = !habilitada WHERE idLigas = ${idLigas}`
 
         const DeleteUser = await pool.query(query);
 
