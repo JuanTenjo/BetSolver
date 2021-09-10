@@ -31,93 +31,81 @@ const useStyle = makeStyles((theme) => ({
 
 //Inicial Form
 const initialForm = {
-  codiPais: "",
-  nombreLiga: "",
-  habilitada: true,
-  idLigas: null,
+  habilitado: true,
+  idEquipos: null,
+  nombreEquipo: "",
+  idLigas: "",
 };
 
 //Validaciones
 const validationForm = (form) => {
+
   let error = {};
 
   //let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/; //Validacion para nombre
 
   //Trim se hace para bloquear que no se termine ni empiece con un caracter especial o un espacio en blanco
-  if (!form.nombreLiga.trim()) {
-    error.nombreLiga = "El campo nombre liga es requerido";
+  if (!form.nombreEquipo.trim()) {
+    error.nombreEquipo = "El campo nombre del equipo es requerido";
   }
 
-  if (!form.codiPais.trim()) {
-    error.codiPais = "El codigo del pais es requerido";
+  if (!form.idLigas.trim()) {
+    error.idLigas = "El codigo de la liga es requerido";
   }
 
   return error;
 };
 
-//Componente
-const FormLeague = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
-
+const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
   let classes = useStyle();
 
+  const [dataLigas, setDataLigas] = useState();
 
-  const [dataPaises, setDataPaises] = useState();
+    //Hood Personalizado para valizado
+    const {
+        form,
+        setForm,
+        error,
+        setError,
+        handleChange,
+        handleBlur,
+      } = UserForm(initialForm, validationForm);
 
-  //Hood Personalizado para valizado
-  const {
-    form,
-    setForm,
-    error,
-    setError,
-    handleChange,
-    handleBlur,
-  } = UserForm(initialForm, validationForm);
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError(validationForm(form));
+        if (Object.keys(error).length === 0) {
+          if (form.idLigas === null) {
+            createData(form);
+          } else {
+            console.log(form);
+            updateData(form);
+          }
+          handleReset();
+        }
+      };
+    
+      const handleReset = () => {
+        setForm(initialForm);
+        setDataToEdit(null);
+      };
 
-  useEffect(() => {
-    //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
-
-    if (dataToEdit) {
-      setForm(dataToEdit);
-      setError(validationForm(dataToEdit));
-    } else {
-      setForm(initialForm);
-    }
-  }, [dataToEdit,setForm,setError]);
-
-  useEffect(() => {
-    //Se trae el options de paises
-    const traerPais = async () => {
-      const data = await helpHttpAxios().get("http://localhost:4000/country");
-      setDataPaises(data);
-    };
-    traerPais();
-  }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(validationForm(form));
-    if (Object.keys(error).length === 0) {
-      if (form.idLigas === null) {
-        createData(form);
-      } else {
-        console.log(form);
-        updateData(form);
-      }
-      handleReset();
-    }
-  };
-
-  const handleReset = () => {
-    setForm(initialForm);
-    setDataToEdit(null);
-  };
+      useEffect(() => {
+        //Se trae el options de paises
+        const traerLigas = async () => {
+          const data = await helpHttpAxios().get("http://localhost:4000/league");
+          setDataLigas(data);
+        };
+        traerLigas();
+      }, []);
+    
+    
 
   return (
-    <>
+    <div>
       <Grid container justifyContent="center">
-        <h3>{dataToEdit ? "Actualizar Liga" : "Ingresar Liga"}</h3>
+        <h3>{dataToEdit ? "Actualizar Equipo" : "Ingresar Equipo"}</h3>
       </Grid>
-
       <form onSubmit={handleSubmit}>
         <Grid container justifyContent="center" spacing={1}>
           <Grid item xs={6}>
@@ -126,37 +114,39 @@ const FormLeague = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
               className={classes.formControl}
               size="small"
             >
-              <InputLabel htmlFor="outlined-age-native-simple">Pais</InputLabel>
+              <InputLabel htmlFor="outlined-age-native-simple">Ligas</InputLabel>
               <Select
                 native
-                value={form.codiPais}
+                value={form.idLigas}
                 onChange={handleChange}
                 label="Pais"
                 onBlur={handleBlur}
-                name="codiPais"
+                name="idLigas"
               >
                 <option aria-label="None" value="" />
-                {dataPaises &&
-                  dataPaises.map((el) => {
+                {dataLigas &&
+                    dataLigas.map((el) => {
                     return (
-                      <option key={el.codiPais} value={el.codiPais}>
-                        {el.nombrePais}
+                      <option key={el.idLigas} value={el.idLigas}>
+                        {el.nombreLiga}
                       </option>
                     );
                   })}
               </Select>
             </FormControl>
 
-            {error.codiPais && (
-              <Alert severity="warning">{error.codiPais}</Alert>
+            {error.idLigas && (
+              <Alert severity="warning">{error.idLigas}</Alert>
             )}
+
+
           </Grid>
           <Grid item xs={6}>
             <TextField
               type="text"
-              name="nombreLiga"
-              label="Nombre Liga"
-              value={form.nombreLiga}
+              name="nombreEquipo"
+              label="Nombre Equipo"
+              value={form.nombreEquipo}
               onChange={handleChange}
               onBlur={handleBlur}
               className={classes.text}
@@ -164,8 +154,8 @@ const FormLeague = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
               size="small"
             />
 
-            {error.nombreLiga && (
-              <Alert severity="warning">{error.nombreLiga}</Alert>
+            {error.nombreEquipo && (
+              <Alert severity="warning">{error.nombreEquipo}</Alert>
             )}
           </Grid>
         </Grid>
@@ -201,8 +191,8 @@ const FormLeague = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
                     {response && <Message msg={response} estado={true} />} */}
         </Grid>
       </form>
-    </>
+    </div>
   );
 };
 
-export default FormLeague;
+export default FormTeam;
