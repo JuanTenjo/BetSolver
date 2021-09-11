@@ -67,6 +67,7 @@ const TableTeam = ({ setdataToEdit,dataEquipos,deleteData}) => {
               <TableCell style={{ display: "none" }} align="center">
                 ID
               </TableCell>
+              <TableCell align="center">Liga</TableCell>
               <TableCell align="center">Equipo</TableCell>
               <TableCell align="center">Habilitada</TableCell>
               <TableCell align="center">Editar</TableCell>
@@ -87,7 +88,8 @@ const TableTeam = ({ setdataToEdit,dataEquipos,deleteData}) => {
                     <img src={row.logoPais} width="40px" alt={row.nombrePais} />
                     <p style={{ margin: 3 }}>{row.nombrePais}</p>
                   </TableCell> */}
-                  <TableCell align="center">{row.NombreEquipo}</TableCell>
+                  <TableCell align="center">{row.nombreLiga}</TableCell>
+                  <TableCell align="center">{row.nombreEquipo}</TableCell>
                   <TableCell align="center">
                     {row.habilitado === 1 ? "Si" : "No"}
                   </TableCell>

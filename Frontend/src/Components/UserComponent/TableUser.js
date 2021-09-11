@@ -14,7 +14,7 @@ const useStyle = makeStyles((theme) => ({
     }
 }));
 
-const UserTable = ({setdataToEdit}) => {
+const TableUser = ({setdataToEdit}) => {
     let classes = useStyle();
     return (
         <div className={classes.content}>
@@ -28,4 +28,4 @@ const UserTable = ({setdataToEdit}) => {
     );
 }
 
-export default UserTable;
+export default TableUser;

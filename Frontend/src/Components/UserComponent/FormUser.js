@@ -1,35 +1,46 @@
-import React, { useState, useEffect } from 'react';
-// import { useAxios } from '../../Hooks/useAxios';
-import { helpHttpAxios } from '../../Helpers/helpHttpsAxios'
+import React, { useState, useEffect } from "react";
+import { helpHttpAxios } from "../../Helpers/helpHttpsAxios";
+import UserForm from "../../Hooks/useForm";
+import Alert from "@material-ui/lab/Alert";
+
 import {
-    Grid,
-    TextField,
-    makeStyles,
-    Button,
-    InputLabel,
-    FormControl,
-    Select
-} from '@material-ui/core'
+  Grid,
+  TextField,
+  makeStyles,
+  Button,
+  InputLabel,
+  FormControl,
+  Select,
+} from "@material-ui/core";
 
 const useStyle = makeStyles((theme) => ({
-    toolbar: theme.mixins.toolbar,
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-    },
     text: {
         marginTop: theme.spacing(1),
-        width: '100%'
-    },
-    formControl: {
+        width: "100%",
+      },
+      boton: {
+        marginTop: theme.spacing(2),
+        width: "100%",
+      },
+      formControl: {
         marginTop: theme.spacing(1),
-        width: '100%'
-    },
-
+        width: "100%",
+      },
 }));
 
 
-const UserForm = () => {
+//Inicial Form
+const initialForm = {
+    idUsuarios: null,
+    idRol: null,
+    CodiPais: "",
+    idLigas: "",
+    nombreLiga: "",
+  };
+  
+
+
+const FormUser = () => {
 
     //const api = helpHttpAxios();
 
@@ -69,8 +80,7 @@ const UserForm = () => {
     };
     return (
 
-        <div className={classes.content}>
-            <div className={classes.toolbar}>
+        <div>
                 <Grid container>
                     <Grid container justifyContent="center" >
 
@@ -196,9 +206,9 @@ const UserForm = () => {
 
 
             </div>
-        </div>
+     
     );
 
 }
 
-export default UserForm;
+export default FormUser;

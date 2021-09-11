@@ -95,7 +95,7 @@ controller.updateUser = async function(req, res) {
         (params.apellidos.length > 45 || params.apellidos.length < 4) ? ErroresValidacion.push("El campo apellido es mayor a 45 caracteres o menor 4 caracteres") : true;
         (params.genero == "Masculino" || params.genero == "Femenino") ? true : ErroresValidacion.push("El campo genero solo acepta Masculino o Femenino");
         await validarNulo(params.idRol) ?  ErroresValidacion.push('El Rol del usuario no puede estar vacio') : true;  
-        await validarNulo(params.id) == false ? ErroresValidacion.push("El ID del usuario no puede estar vacio") : true;
+        await validarNulo(params.idUsuarios) == false ? ErroresValidacion.push("El ID del usuario no puede estar vacio") : true;
         await ValidarPais(params.CodiPais) == false ? ErroresValidacion.push("Codigo del pais invalido") : true;
         await patternString(params.nombre) == false ? ErroresValidacion.push("El campo nombre solo acepta letras") : true;
         await patternString(params.apellidos) == false ? ErroresValidacion.push("El campo apellido solo acepta letras") : true;
@@ -130,7 +130,7 @@ controller.deleteUser = async function(req, res) {
 
     if(req.user[0].idRol === 3){
 
-        const idUser = req.body.id; 
+        const idUser = req.body.idUsuarios; 
     
         const ErroresValidacion = [];
 

@@ -6,7 +6,6 @@ import {
     ListItemText
 } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
-import PeopleIcon from '@material-ui/icons/People';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import { withRouter } from "react-router-dom";
 
@@ -22,7 +21,7 @@ const Listas = (props) => {
       },
       {
         text: "Gestionar Usuarios",
-        icon: <PeopleIcon />,
+        icon: <PlaylistAddIcon />,
         onClick: () => history.push("/gestionUser")
       },
       {

@@ -35,6 +35,7 @@ const initialForm = {
   idEquipos: null,
   nombreEquipo: "",
   idLigas: "",
+  nombreLiga: "",
 };
 
 //Validaciones
@@ -48,10 +49,10 @@ const validationForm = (form) => {
   if (!form.nombreEquipo.trim()) {
     error.nombreEquipo = "El campo nombre del equipo es requerido";
   }
-
-  if (!form.idLigas.trim()) {
+  if(form.idLigas === "" || form.idLigas === null){
     error.idLigas = "El codigo de la liga es requerido";
   }
+
 
   return error;
 };
@@ -75,10 +76,9 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
         e.preventDefault();
         setError(validationForm(form));
         if (Object.keys(error).length === 0) {
-          if (form.idLigas === null) {
+          if (form.idEquipos === null) {
             createData(form);
           } else {
-            console.log(form);
             updateData(form);
           }
           handleReset();
@@ -98,6 +98,17 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
         };
         traerLigas();
       }, []);
+
+      useEffect(() => {
+        //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
+        if (dataToEdit) {
+          setForm(dataToEdit);
+          setError(validationForm(dataToEdit));
+        } else {
+          setForm(initialForm);
+        }
+      }, [dataToEdit,setForm,setError]);
+    
     
     
 

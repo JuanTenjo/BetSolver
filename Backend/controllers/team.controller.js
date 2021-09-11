@@ -131,7 +131,7 @@ controller.erase = async function (req, res) {
 
             } else {
 
-                res.status(200).json({ "message": `De desabilito el equipo Exitosamente` });
+                res.status(200).json({ "message": `Proceso Exitoso` });
 
             }
 

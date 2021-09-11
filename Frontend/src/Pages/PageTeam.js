@@ -3,7 +3,6 @@ import Loader from "../Components/Necesarios/Loader";
 import Message from "../Components/Necesarios/Message";
 import FormTeam from "../Components/TeamComponent/FormTeam";
 import TableTeam from "../Components/TeamComponent/TableTeam";
-
 import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
 
 import { makeStyles, Grid } from "@material-ui/core";
@@ -27,10 +26,10 @@ const PageTeam = () => {
   const [dataEquipos, setdataEquipos] = useState(null);
 
   useEffect(() => {
-    traerLigas();
+    traerEquipos();
   },[]);
   
-  const traerLigas = async () => {
+  const traerEquipos = async () => {
     setLoading(true);
     const data = await helpHttpAxios().get("http://localhost:4000/team");                                                                                                                         
     setdataEquipos(data);
@@ -41,7 +40,7 @@ const PageTeam = () => {
   const createData = async (data) => {
     setLoading(true);
 
-    let URL = "http://localhost:4000/league/register";
+    let URL = "http://localhost:4000/team/register";
 
     let config = {
       data: data,
@@ -64,13 +63,13 @@ const PageTeam = () => {
 
     setLoading(false);
 
-    traerLigas();
+    traerEquipos();
 
   };
   const updateData = async (data) => {
     setLoading(true);
 
-    let URL = "http://localhost:4000/league/update";
+    let URL = "http://localhost:4000/team/update";
 
     let config = {
       data: data,
@@ -93,16 +92,16 @@ const PageTeam = () => {
 
     setLoading(false);
 
-    traerLigas();
+    traerEquipos();
   };
   const deleteData = async (idLigas) => {
 
     setLoading(true);
 
-    let URL = "http://localhost:4000/league/delete";
+    let URL = "http://localhost:4000/team/delete";
 
     let config = {
-      data: {'idLigas':idLigas},
+      data: {'idEquipos':idLigas},
     };
 
     const res = await helpHttpAxios().del(URL, config);
@@ -122,7 +121,7 @@ const PageTeam = () => {
 
     setLoading(false);
 
-    traerLigas();
+    traerEquipos();
 
   };
 

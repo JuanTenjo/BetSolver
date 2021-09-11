@@ -45,7 +45,7 @@ model.update = async (params) => {
 model.erase = async (idEquipos) => {
     try {
 
-        let query = `UPDATE equipos SET habilitado = 0 WHERE idEquipos = ${idEquipos}`
+        let query = `UPDATE equipos SET habilitado = !habilitado WHERE idEquipos = ${idEquipos}`
 
         const DeleteEquipo = await pool.query(query);
 
@@ -67,14 +67,14 @@ model.teams = async (idLiga = null) => {
 
         if(idLiga){
 
-            let query = `SELECT * FROM equipos WHERE idLigas = ${idLiga}`;
+            let query = `SELECT p.*, l.nombreLiga FROM equipos as p, ligas as l WHERE p.idLigas = l.idLigas and p.idLigas = ${idLiga} order by nombreLiga, NombreEquipo`;
 
             const Teams = await pool.query(query);
     
             return Teams;
             
         }else{
-            let query = `SELECT * FROM equipos`
+            let query = `SELECT p.*, l.nombreLiga FROM equipos as p, ligas as l where p.idLigas = l.idLigas order by nombreLiga, NombreEquipo`
 
             const Teams = await pool.query(query);
     
