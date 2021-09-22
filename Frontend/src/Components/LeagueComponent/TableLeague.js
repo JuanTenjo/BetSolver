@@ -68,7 +68,6 @@ const UserTable = ({ setdataToEdit,dataLigas,deleteData}) => {
                             <TableCell style={{ display: 'none', }} align="center">ID</TableCell>
                             <TableCell align="center">Pais</TableCell>
                             <TableCell align="center">Liga</TableCell>
-                            <TableCell align="center">Habilitada</TableCell>
                             <TableCell align="center">Editar</TableCell>
                             <TableCell align="center">Habilitado</TableCell>
                         </TableRow>
@@ -82,7 +81,6 @@ const UserTable = ({ setdataToEdit,dataLigas,deleteData}) => {
                                 <TableCell style={{ display: 'none', }} align="center">{row.idLigas}</TableCell>
                                 <TableCell align="center"><img src={row.logoPais} width="40px" alt={row.nombrePais}/><p style={{margin:3}}>{row.nombrePais}</p></TableCell>
                                 <TableCell align="center">{row.nombreLiga}</TableCell>
-                                <TableCell align="center">{row.habilitada === 1 ? 'Si' : 'No'}</TableCell>
                                 <TableCell align="center">
                                     <IconButton aria-label="UpdateIcon" onClick={() => handleUpdate(row)}>
                                         <UpdateIcon style={{ color: yellow[700] }} fontSize="small" />

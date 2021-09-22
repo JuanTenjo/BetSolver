@@ -5,7 +5,7 @@ const model = {};
 model.registerUser = async (params) => {
     try {
 
-        let query = `INSERT INTO usuarios(CodiPais,nombre,apellidos,email,password,genero,celular) Values('${params.CodiPais}','${params.nombre}','${params.apellidos}','${params.email}','${params.password}','${params.genero}','${params.celular}')`
+        let query = `INSERT INTO usuarios(idRol,codiPais,nombre,apellidos,email,password,genero,celular) Values('${params.idRol}','${params.codiPais}','${params.nombre}','${params.apellidos}','${params.email}','${params.password}','${params.genero}','${params.celular}')`
 
         const InsertUser = await pool.query(query);
 
@@ -16,7 +16,7 @@ model.registerUser = async (params) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al insertar el usuario en el Model: user.model, en la funcion: registerUser. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al insertar el usuario en el Model: user.model, en la funcion: registerUser. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -25,8 +25,8 @@ model.registerUser = async (params) => {
 model.updateUser = async (params) => {
     try {
 
-        let query = `UPDATE usuarios SET CodiPais = '${params.CodiPais}', idRol = '${params.idRol}', nombre = '${params.nombre}', apellidos = '${params.apellidos}'
-        , genero = '${params.genero}', celular = '${params.celular}' WHERE idUsuarios = ${params.id}`
+        let query = `UPDATE usuarios SET codiPais = '${params.codiPais}', idRol = '${params.idRol}', nombre = '${params.nombre}', email = '${params.email}', apellidos = '${params.apellidos}'
+        , genero = '${params.genero}', celular = '${params.celular}' WHERE idUsuarios = ${params.idUsuarios}`
 
         const UpdateUser = await pool.query(query);
 
@@ -37,7 +37,7 @@ model.updateUser = async (params) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al actualizar el usuario en el Model: user.model, en la funcion: updateUser. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al actualizar el usuario en el Model: user.model, en la funcion: updateUser. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -46,7 +46,7 @@ model.updateUser = async (params) => {
 model.deleteUser = async (ID) => {
     try {
 
-        let query = `DELETE FROM usuarios WHERE idUsuarios = ${ID}`
+        let query = `UPDATE usuarios SET habilitado = !habilitado WHERE idUsuarios = ${ID}`
 
         const DeleteUser = await pool.query(query);
 
@@ -57,7 +57,7 @@ model.deleteUser = async (ID) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al eliminar el usuario en el Model: user.model, en la funcion: deleteUser. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al desabilitar el usuario en el Model: user.model, en la funcion: deleteUser. ERROR: ${err.sqlMessage}`],
             respuesta: false
         };
     }
@@ -66,7 +66,8 @@ model.deleteUser = async (ID) => {
 model.users = async (ID) => {
     try {
 
-        let query = `SELECT idUsuarios, usuarios.idRol, roles.Nombre as NombreRol, CodiPais, usuarios.nombre, apellidos, email, genero, usuario, celular FROM usuarios inner join roles on usuarios.idRol = roles.idRol`
+        let query = `SELECT idUsuarios, usuarios.idRol, roles.Nombre as NombreRol, usuarios.CodiPais, paises.nombrePais, usuarios.nombre, apellidos, email, genero, usuario, celular, usuarios.habilitado 
+		FROM usuarios inner join roles on usuarios.idRol = roles.idRol inner join paises on paises.codiPais = usuarios.CodiPais  `
 
         const Users = await pool.query(query);
 
@@ -75,7 +76,26 @@ model.users = async (ID) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al traer los usuarios en el Model: user.model, en la funcion: users. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al traer los usuarios en el Model: user.model, en la funcion: users. ERROR: ${err.sqlMessage} `],
+            respuesta: false
+        };
+    }
+}
+
+
+model.roles = async (ID) => {
+    try {
+
+        let query = `SELECT * FROM roles`
+
+        const Roles = await pool.query(query);
+
+        return Roles;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje: [`Hubo un error al traer los roles en el Model: user.model, en la funcion: users. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }

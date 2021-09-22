@@ -6,7 +6,7 @@ const model = {};
 model.validarCompetition = async (params) => {
     try {
 
-        let query = `SELECT * FROM competencias WHERE (idLigas = '${params.idLigas}' and idEquipoLocal = '${params.idEquipoLocal}' and idEquipoVisitante = '${params.idEquipoVisitante}'
+        let query = `SELECT * FROM competencias WHERE (idLigaLocal = '${params.idLigaLocal}' and idLigaVisitante = '${params.idLigaVisitante}' and idEquipoLocal = '${params.idEquipoLocal}' and idEquipoVisitante = '${params.idEquipoVisitante}'
         and fechaCompeticion = '${params.fechaCompeticion}' and horaCompeticion = '${params.horaCompeticion}')`
 
         const validar = await pool.query(query);
@@ -16,7 +16,7 @@ model.validarCompetition = async (params) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al insertar el quipo en el Model: comptetition.model, en la funcion: register. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al insertar el quipo en el Model: comptetition.model, en la funcion: register. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -25,8 +25,8 @@ model.validarCompetition = async (params) => {
 model.register = async (params) => {
     try {
 
-        let query = `INSERT INTO competencias(idLigas,idEquipoLocal,idEquipoVisitante,fechaCompeticion,horaCompeticion,habiliParley)
-        Values(${params.idLigas},${params.idEquipoLocal},${params.idEquipoVisitante},'${params.fechaCompeticion}','${params.horaCompeticion}',${params.habiliParley})`
+        let query = `INSERT INTO competencias(idLigaLocal,idLigaVisitante,idEquipoLocal,idEquipoVisitante,fechaCompeticion,horaCompeticion,habiliParley)
+        Values(${params.idLigaLocal},${params.idLigaVisitante},${params.idEquipoLocal},${params.idEquipoVisitante},'${params.fechaCompeticion}','${params.horaCompeticion}',${params.habiliParley})`
 
         const InsertCompetition = await pool.query(query);
 
@@ -37,7 +37,7 @@ model.register = async (params) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al insertar el quipo en el Model: comptetition.model, en la funcion: register. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al insertar el quipo en el Model: comptetition.model, en la funcion: register. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -55,7 +55,7 @@ model.traerUltimoID = async () => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al insertar el quipo en el Model: comptetition.model, en la funcion: traerUltimoID. ERROR: ${err.sqlMessage} `,
+            mensaje:[ `Hubo un error al insertar el quipo en el Model: comptetition.model, en la funcion: traerUltimoID. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -76,7 +76,7 @@ model.registerEstrategias = async (estrategias,IDCompeticion) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al insertar el detalle de la competicion en el Model: comptetition.model, en la funcion: registerEstrategias. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al insertar el detalle de la competicion en el Model: comptetition.model, en la funcion: registerEstrategias. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -96,7 +96,7 @@ model.deleteEstrategias = async (idCompeticiones) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al actualizar el detalle de la competicion en el Model: comptetition.model, en la funcion: deleteEstrategias. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al actualizar el detalle de la competicion en el Model: comptetition.model, en la funcion: deleteEstrategias. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -105,7 +105,7 @@ model.deleteEstrategias = async (idCompeticiones) => {
 model.update = async (params) => {
     try {
 
-        let query = `UPDATE competencias SET idLigas = ${params.idLigas}, idEquipoLocal = ${params.idEquipoLocal}, idEquipoVisitante = ${params.idEquipoVisitante}, golesLocal = '${params.golesLocal}', golesVisitante = '${params.golesVisitante}',
+        let query = `UPDATE competencias SET idLigaLocal = ${params.idLigaLocal}, idLigaVisitante = ${params.idLigaVisitante}, idEquipoLocal = ${params.idEquipoLocal}, idEquipoVisitante = ${params.idEquipoVisitante}, golesLocal = '${params.golesLocal}', golesVisitante = '${params.golesVisitante}',
         fechaCompeticion = '${params.fechaCompeticion}', horaCompeticion = '${params.horaCompeticion}', habilitado = ${params.habilitado}, habiliParley = ${params.habiliParley} WHERE idCompeticiones = ${params.idCompeticiones}`
    
         const UpdateCompeticion = await pool.query(query);
@@ -117,7 +117,7 @@ model.update = async (params) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al actualizar el enfrentamiento, en el Model: competition.model, en la funcion: update. ERROR: ${err.sqlMessage} `,
+            mensaje:[`Hubo un error al actualizar el enfrentamiento, en el Model: competition.model, en la funcion: update. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -137,7 +137,7 @@ model.erase = async (idCompeticiones) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al desabilitar el equipo en el Model: competition.model, en la funcion: erase. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al desabilitar el equipo en el Model: competition.model, en la funcion: erase. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -155,7 +155,7 @@ model.teams = async () => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al traer las ligas en el Model: league.model, en la funcion: leagues. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al traer las ligas en el Model: league.model, en la funcion: leagues. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }

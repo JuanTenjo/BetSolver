@@ -35,18 +35,19 @@ const TableTeam = ({ setdataToEdit,dataEquipos,deleteData}) => {
   let classes = useStyle();
 
   const [open, setOpen] = useState(false);
-  //   const [tipo, setTipo] = useState('');
-  //   const [IdRegitro, SetIdRegitro] = useState(false);
   const [InfoDialog, SetInfoDialog] = useState(initalDialog);
 
   const handleUpdate = (data) => {
+
+    
+
     setdataToEdit(data);
   };
 
   const handleDialog = (operacion, ID) => {
     setOpen(!open);
     SetInfoDialog({
-      tipo: "Liga",
+      tipo: "Equipo",
       funcion: deleteData,
       operacion,
       ID,
@@ -69,7 +70,6 @@ const TableTeam = ({ setdataToEdit,dataEquipos,deleteData}) => {
               </TableCell>
               <TableCell align="center">Liga</TableCell>
               <TableCell align="center">Equipo</TableCell>
-              <TableCell align="center">Habilitada</TableCell>
               <TableCell align="center">Editar</TableCell>
               <TableCell align="center">Habilitado</TableCell>
             </TableRow>
@@ -84,15 +84,8 @@ const TableTeam = ({ setdataToEdit,dataEquipos,deleteData}) => {
                   <TableCell style={{ display: "none" }} align="center">
                     {row.idEquipos}
                   </TableCell>
-                  {/* <TableCell align="center">
-                    <img src={row.logoPais} width="40px" alt={row.nombrePais} />
-                    <p style={{ margin: 3 }}>{row.nombrePais}</p>
-                  </TableCell> */}
                   <TableCell align="center">{row.nombreLiga}</TableCell>
                   <TableCell align="center">{row.nombreEquipo}</TableCell>
-                  <TableCell align="center">
-                    {row.habilitado === 1 ? "Si" : "No"}
-                  </TableCell>
                   <TableCell align="center">
                     <IconButton
                       aria-label="UpdateIcon"

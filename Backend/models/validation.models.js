@@ -35,7 +35,7 @@ model.ValidarUser = async function (email) {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al validar el usuario en el Model: ModelLogin, en la funcion: ValidaUser. ERROR: ${err.sqlMessage} `,
+      message: [`Hubo un error al validar el usuario en el Model: ModelLogin, en la funcion: ValidaUser. ERROR: ${err.sqlMessage} `],
     };
   }
 };
@@ -62,15 +62,15 @@ model.ValidaLiga = async function (params) {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaLiga. ERROR: ${err.sqlMessage} `,
+      mensaje: [`Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaLiga. ERROR: ${err.sqlMessage} `],
     };
   }
 };
 
-model.ValidaIDLiga = async function (params) {
+model.ValidaIDLiga = async function (IDLiga) {
   try {
 
-    const sql = `Select count(idLigas) as Existe FROM ligas WHERE idLigas = '${params.idLigas}' and habilitada = 1`;
+    const sql = `Select count(idLigas) as Existe FROM ligas WHERE idLigas = '${IDLiga}' and habilitada = 1`;
 
     const result = await pool.query(sql);
 
@@ -83,7 +83,7 @@ model.ValidaIDLiga = async function (params) {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaIDLiga. ERROR: ${err.sqlMessage} `,
+      mensaje: [`Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaIDLiga. ERROR: ${err.sqlMessage} `],
     };
   }
 };
@@ -104,7 +104,7 @@ model.ValidaNombreLiga = async function (params) {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaNombreLiga. ERROR: ${err.sqlMessage} `,
+      mensaje: [`Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaNombreLiga. ERROR: ${err.sqlMessage} `],
     };
   }
 };
@@ -125,7 +125,7 @@ model.ValidaTeam = async function (params) {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaTeam. ERROR: ${err.sqlMessage} `,
+      mensaje: [`Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaTeam. ERROR: ${err.sqlMessage} `],
     };
   }
 };
@@ -146,7 +146,7 @@ model.ValidaNameTeam = async function (params) {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaNameTeam. ERROR: ${err.sqlMessage} `,
+      mensaje: [`Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaNameTeam. ERROR: ${err.sqlMessage} `],
     };
   }
 };
@@ -167,7 +167,7 @@ model.ValidaIDTeam = async function (idEquipo) {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaIDTeam. ERROR: ${err.sqlMessage} `,
+      mensaje: [`Hubo un error al validar la liga en el Model: Validation Model, en la funcion: ValidaIDTeam. ERROR: ${err.sqlMessage} `],
     };
   }
 };

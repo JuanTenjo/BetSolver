@@ -130,7 +130,7 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
                 native
                 value={form.idLigas}
                 onChange={handleChange}
-                label="Pais"
+                label="Ligas"
                 onBlur={handleBlur}
                 name="idLigas"
               >
@@ -192,14 +192,6 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
               Enviar
             </Button>
           </Grid>
-          {/* 
-                    {error.errores && error.errores.map((el) => {
-                        return (
-                            <Message key={el} msg={el} estado={false} />
-                        );
-                    })}
-
-                    {response && <Message msg={response} estado={true} />} */}
         </Grid>
       </form>
     </div>

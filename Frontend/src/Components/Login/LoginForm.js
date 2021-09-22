@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../../assets/Logo.png';
-import Message from '../Necesarios/Message';
+import Alert from "@material-ui/lab/Alert";
 import {
     Grid,
     TextField,
@@ -8,8 +8,8 @@ import {
     makeStyles,
     Button
 } from '@material-ui/core'
-import UseForm from '../../Hooks/useForm'
 
+import UseForm from '../../Hooks/useForm'
 
 const useStyles = makeStyles(() => ({
     text: {
@@ -55,29 +55,31 @@ const validationForm = (form) => {
 
   };
 
-
-
-const LoginForm = ({Auth}) => {
+const LoginForm = ({handleSubmit}) => {
 
     const styles = useStyles();
 
     const {
         form,
         error,
-        response,
-        color,
-        success,
+        setError,
         handleChange,
         handleBlur,
-        handleSubmitLogin
       } = UseForm(initialForm, validationForm);
 
+    const Login = async (e) => {
 
+      e.preventDefault();
 
-    const AuthPrueba = () => {
-      return Auth()
-    }
-      
+      setError(validationForm(form));
+
+      if (Object.keys(error).length === 0) {
+  
+        handleSubmit(form);
+    
+      }
+
+    };
 
     return (
       <div>
@@ -93,7 +95,7 @@ const LoginForm = ({Auth}) => {
               Iniciar Sesion
             </Typography>
 
-            <form onSubmit={handleSubmitLogin} className={styles.form}>
+            <form onSubmit={Login} className={styles.form}>
               <TextField
                 type="email"
                 name="email"
@@ -104,7 +106,11 @@ const LoginForm = ({Auth}) => {
                 label="Email"
                 variant="outlined"
               />
-              {error.email && <p>{error.email}</p>}
+           
+              {error.email && (
+                <Alert severity="warning">{error.email}</Alert>
+              )}
+
               <TextField
                 autoComplete="on"
                 type="password"
@@ -116,7 +122,10 @@ const LoginForm = ({Auth}) => {
                 label="Contraseña"
                 variant="outlined"
               />
-             {error.password && <p>{error.password}</p>}
+             {error.password && (
+                <Alert severity="warning">{error.password}</Alert>
+              )}
+
               <Button
                 className={styles.boton}
                 type="submit"
@@ -126,11 +135,7 @@ const LoginForm = ({Auth}) => {
                 Ingresar
               </Button>
             </form>
-            
-            {response &&  <Message msg={response} bgColor={color}/>}
-
-            {success && AuthPrueba()}
-            
+               
           </Grid>
         </Grid>
       </div>

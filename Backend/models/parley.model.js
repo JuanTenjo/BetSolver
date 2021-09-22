@@ -15,7 +15,7 @@ model.register = async (params) => {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al insertar el parley: parley.model, en la funcion: register. ERROR: ${err.sqlMessage} `,
+      mensaje:[ `Hubo un error al insertar el parley: parley.model, en la funcion: register. ERROR: ${err.sqlMessage} `],
       respuesta: false,
     };
   }
@@ -33,7 +33,7 @@ model.update = async (params) => {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al actualizar la liga en el Model: parley.model, en la funcion: update. ERROR: ${err.sqlMessage} `,
+      mensaje: [`Hubo un error al actualizar la liga en el Model: parley.model, en la funcion: update. ERROR: ${err.sqlMessage} `],
       respuesta: false,
     };
   }
@@ -51,7 +51,7 @@ model.erase = async (idEquipos) => {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al desabilitar el equipo en el Model: team.model, en la funcion: erase. ERROR: ${err.sqlMessage} `,
+      mensaje: [`Hubo un error al desabilitar el equipo en el Model: team.model, en la funcion: erase. ERROR: ${err.sqlMessage} `],
       respuesta: false,
     };
   }
@@ -75,7 +75,7 @@ model.teams = async (idLiga = null) => {
   } catch (err) {
     return {
       error: true,
-      mensaje: `Hubo un error al traer las ligas en el Model: league.model, en la funcion: leagues. ERROR: ${err.sqlMessage} `,
+      mensaje: [`Hubo un error al traer las ligas en el Model: league.model, en la funcion: leagues. ERROR: ${err.sqlMessage} `],
       respuesta: false,
     };
   }

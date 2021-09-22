@@ -1,4 +1,4 @@
-const {registerUser, updateUser, deleteUser, users} = require('../controllers/user.controller');
+const {registerUser, updateUser, deleteUser, users, roles} = require('../controllers/user.controller');
 const passport  = require('passport');
 
 const router = require('express').Router();
@@ -14,5 +14,8 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), delet
 
 //Traer Usuarios
 router.get('/', passport.authenticate('jwt', { session: false }), users);
+
+//Traer Roles
+router.get('/roles', passport.authenticate('jwt', { session: false }), roles);
 
 module.exports = router;

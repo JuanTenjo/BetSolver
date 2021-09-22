@@ -13,13 +13,15 @@ controller.register = async function (req, res) {
         const params = req.body;
 
         const ErroresValidacion = [];
-   
-        await validarNulo(params.idLigas) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true; 
+
+        await validarNulo(params.idLigaLocal) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true; 
+        await validarNulo(params.idLigaVisitante) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true; 
         await validarNulo(params.idEquipoLocal) ? ErroresValidacion.push("No se selecciono un equipo local") : true;    
         await validarNulo(params.idEquipoVisitante) ? ErroresValidacion.push("No se selecciono un equipo visitante") : true;   
         await validarNulo(params.horaCompeticion) ? ErroresValidacion.push("No se ingreso la hora de la competicion") : true;      
         await validarNulo(params.fechaCompeticion) ? ErroresValidacion.push("No se ingreso la fecha de la competicion") : true;     
-        await ValidaIDLiga(params) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
+        await ValidaIDLiga(params.idLigaLocal) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
+        await ValidaIDLiga(params.idLigaVisitante) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
         await ValidaIDTeam(params.idEquipoLocal) == false ? ErroresValidacion.push(`El equipo local ingresado ya no existe o esta desabilitado`) : true;
         await ValidaIDTeam(params.idEquipoVisitante) == false ? ErroresValidacion.push(`El equipo visitante ingresado ya no existe o esta desabilitado`) : true;
         await validarCompetition(params) ? ErroresValidacion.push(`Esta competición ya existe`) : true;
@@ -157,19 +159,21 @@ controller.update = async function (req, res) {
 
     if (req.user[0].idRol === 3) {
 
-        //Acepta idCompeticion, idLigas, idEquipoLocal, idEquipoVisitante, fechaCompeticion, hora competicion
+        //Acepta idCompeticion, idLigaLocal,idLigaVisitante, idEquipoLocal, idEquipoVisitante, fechaCompeticion, hora competicion
 
         const params = req.body;
 
         const ErroresValidacion = [];
    
         await validarNulo(params.idCompeticiones) ? ErroresValidacion.push("Codigo de la competicion no puede estar vacio") : true; 
-        await validarNulo(params.idLigas) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true; 
+        await validarNulo(params.idLigaLocal) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true; 
+        await validarNulo(params.idLigaVisitante) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true; 
         await validarNulo(params.idEquipoLocal) ? ErroresValidacion.push("No se selecciono un equipo local") : true;    
         await validarNulo(params.idEquipoVisitante) ? ErroresValidacion.push("No se selecciono un equipo visitante") : true;   
         await validarNulo(params.horaCompeticion) ? ErroresValidacion.push("No se ingreso la hora de la competicion") : true;      
         await validarNulo(params.fechaCompeticion) ? ErroresValidacion.push("No se ingreso la fecha de la competicion") : true;     
-        await ValidaIDLiga(params) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
+        await ValidaIDLiga(params.idLigaLocal) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
+        await ValidaIDLiga(params.idLigaVisitante) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
         await ValidaIDTeam(params.idEquipoLocal) == false ? ErroresValidacion.push(`El equipo local ingresado ya no existe o esta desabilitado`) : true;
         await ValidaIDTeam(params.idEquipoVisitante) == false ? ErroresValidacion.push(`El equipo visitante ingresado ya no existe o esta desabilitado`) : true;
 

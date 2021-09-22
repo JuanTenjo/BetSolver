@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import FormUser from '../Components/UserComponent/FormUser';
-import TableUser from '../Components/UserComponent/TableUser';
+import FormCompetition from '../Components/CompetitionComponent/FormCompetition';
+import TableCompetition from '../Components/CompetitionComponent/TableCompetition';
 import Loader from "../Components/Necesarios/Loader";
 import Message from "../Components/Necesarios/Message";
 import { makeStyles, Grid } from "@material-ui/core";
@@ -16,7 +16,7 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 
-const PageUser = () => {
+const PageCompetition = () => {
 
   let classes = useStyle();
   const [loading, setLoading] = useState(false);
@@ -138,7 +138,7 @@ const PageUser = () => {
 
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
-            <FormUser 
+            <FormCompetition 
               createData={createData}
               updateData={updateData}
               dataToEdit={dataToEdit}
@@ -160,7 +160,7 @@ const PageUser = () => {
           {loading ? (
               <Loader />
             ) : (
-              <TableUser
+              <TableCompetition
                 dataUsuarios={dataUsuarios}
                 setdataToEdit={setDataToEdit}
                 deleteData={deleteData}
@@ -175,4 +175,4 @@ const PageUser = () => {
 
 }
 
-export default PageUser;
+export default PageCompetition;

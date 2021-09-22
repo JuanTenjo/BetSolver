@@ -14,7 +14,7 @@ model.countries = async () => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al traer los paises en el Model: country, en la funcion: countries. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al traer los paises en el Model: country, en la funcion: countries. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }

@@ -32,7 +32,7 @@ const useStyle = makeStyles((theme) => ({
   };
   
 
-const TableUser = ({setdataToEdit,dataUsuarios,deleteData}) => {
+const TableCompetition = ({setdataToEdit,dataUsuarios,deleteData}) => {
 
     
     let classes = useStyle();
@@ -75,7 +75,7 @@ const TableUser = ({setdataToEdit,dataUsuarios,deleteData}) => {
 
     return (
         <Grid container justifyContent="center">
-        <h3>Lista de Usuarios</h3>
+        <h3>Lista de Competiciones</h3>
         <TableContainer component={Paper}>
           <Table
             className={classes.table}
@@ -160,4 +160,4 @@ const TableUser = ({setdataToEdit,dataUsuarios,deleteData}) => {
     );
 }
 
-export default TableUser;
+export default TableCompetition;

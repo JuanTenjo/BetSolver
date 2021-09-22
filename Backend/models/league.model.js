@@ -16,7 +16,7 @@ model.register = async (params) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al insertar la liga en el Model: league.model, en la funcion: register. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al insertar la liga en el Model: league.model, en la funcion: register. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -36,7 +36,7 @@ model.update = async (params) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al actualizar la liga en el Model: league.model, en la funcion: update. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al actualizar la liga en el Model: league.model, en la funcion: update. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -56,7 +56,7 @@ model.erase = async (idLigas) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al desabilitar la liga en el Model: league.model, en la funcion: erase. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al desabilitar la liga en el Model: league.model, en la funcion: erase. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }
@@ -67,7 +67,7 @@ model.leagues = async (codiPais = null) => {
 
         if(codiPais){
             
-            let query = `SELECT ligas.*, paises.logoPais, paises.nombrePais FROM ligas inner join paises on ligas.codiPais = paises.codiPais WHERE ligas.codiPais = '${codiPais}' ORDER BY ligas.nombreLiga ASC'`
+            let query = `SELECT ligas.*, paises.logoPais, paises.nombrePais FROM ligas inner join paises on ligas.codiPais = paises.codiPais WHERE ligas.codiPais = '${codiPais}' ORDER BY ligas.nombreLiga ASC`
 
             const Ligas  = await pool.query(query);
     
@@ -87,7 +87,7 @@ model.leagues = async (codiPais = null) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: `Hubo un error al traer las ligas en el Model: league.model, en la funcion: leagues. ERROR: ${err.sqlMessage} `,
+            mensaje: [`Hubo un error al traer las ligas en el Model: league.model, en la funcion: leagues. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }

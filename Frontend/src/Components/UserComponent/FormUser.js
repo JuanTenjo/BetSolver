@@ -11,204 +11,404 @@ import {
   InputLabel,
   FormControl,
   Select,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@material-ui/core";
 
-const useStyle = makeStyles((theme) => ({
-    text: {
-        marginTop: theme.spacing(1),
-        width: "100%",
-      },
-      boton: {
-        marginTop: theme.spacing(2),
-        width: "100%",
-      },
-      formControl: {
-        marginTop: theme.spacing(1),
-        width: "100%",
-      },
-}));
 
+const useStyle = makeStyles((theme) => ({
+  text: {
+    marginTop: theme.spacing(1),
+    width: "100%",
+  },
+  boton: {
+    marginTop: theme.spacing(2),
+    width: "100%",
+  },
+  formControl: {
+    marginTop: theme.spacing(1),
+    width: "100%",
+  },
+  Label: {
+    textAlign: "center",
+  }
+}));
 
 //Inicial Form
 const initialForm = {
-    idUsuarios: null,
-    idRol: null,
-    CodiPais: "",
-    idLigas: "",
-    nombreLiga: "",
-  };
+  idUsuarios: null,
+  idRol: "",
+  codiPais: "",
+  nombre: "",
+  apellidos: "",
+  email: "",
+  password: "",
+  passwordConfirm: "",
+  genero: "",
+  celular: "",
+};
+
+const validationForm = (form) => {
+  let error = {};
+
+  //let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/; //Validacion para nombre
+
+  //Trim se hace para bloquear que no se termine ni empiece con un caracter especial o un espacio en blanco
+  if (!form.nombre.trim()) {
+    error.nombre = "El campo nombre es requerido";
+  }
+
+  if (!form.apellidos.trim()) {
+    error.apellidos = "El campo apellido es requerido";
+  }
+
+  if (form.idUsuarios === null) {
+
+    if (!form.password.trim()) {
+      error.password = "El campo password es requerido";
+    }else{  
   
-
-
-const FormUser = () => {
-
-    //const api = helpHttpAxios();
-
-    let classes = useStyle();
-
-    let urlPaises = "http://localhost:4000/country";
-
-    //const { data, isPending, error } = useAxios(urlPaises);
-
-    useEffect(() => {
-
-        const traerPais = async () => {
-
-            const data = await helpHttpAxios().get(urlPaises)
-            console.log(data);
+        if(form.password !== form.passwordConfirm){
+          error.password = "El campo password y confirme password no son iguales";
         }
+  
+    }
+    
+      if (!form.passwordConfirm.trim()) {
+        error.passwordConfirm = "Debes confirmar la password";
+      }
 
-        traerPais();
-
-    },[urlPaises]);
-
-
-
-    const [state, setState] = useState({
-        age: "",
-        name: "hai"
-    });
+  }
 
 
 
-    const handleChangeNative = (event) => {
-        const name = event.target.name;
-        setState({
-            ...state,
-            [name]: event.target.value
-        });
+  if (!form.email.trim()) {
+    error.email = "El campo email es requerido";
+  }
+  if (!form.genero.trim()) {
+    error.genero = "El campo genero es requerido";
+  }
+  if (!form.celular.trim()) {
+    error.celular = "El campo celular es requerido";
+  }
+
+  if (form.idRol === "" || form.idRol === null) {
+    error.idRol = "El permiso del usuario es requerido";
+  }
+
+  if (form.codiPais === "" || form.codiPais === null) {
+    error.codiPais = "El codigo del pais es requerido";
+  }
+
+  return error;
+};
+
+
+
+const FormUser = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
+  let classes = useStyle();
+
+  const [dataPaises, setDataPaises] = useState(null);
+  const [dataRoles, setDataRoles] = useState(null);
+
+  //Hood Personalizado para valizado
+  const { form, setForm, error, setError, handleChange, handleBlur } = UserForm(
+    initialForm,
+    validationForm
+  );
+
+  //const { data, isPending, error } = useAxios(urlPaises);
+
+
+
+  useEffect(() => {
+    const traerPais = async () => {
+      const data = await helpHttpAxios().get("http://localhost:4000/country");
+      setDataPaises(data);
     };
-    return (
 
-        <div>
-                <Grid container>
-                    <Grid container justifyContent="center" >
+    const traerRoles = async () => {
+      const data = await helpHttpAxios().get(
+        "http://localhost:4000/user/roles"
+      );
+      setDataRoles(data);
+    };
 
-                        <h1>Registrar Usuario</h1>
+    traerPais();
+    traerRoles();
+  }, []);
 
-                    </Grid>
+  useEffect(() => {
+    //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
+    if (dataToEdit) {
 
-                    <Grid container justifyContent="center" spacing={1}>
-                        <Grid item xs={6}>
+      document.getElementById("password").setAttribute("disabled","");
+      document.getElementById("passwordConfirm").setAttribute("disabled","");
 
-                            <TextField
-                                type="text"
-                                name="nombre"
-                                label="Nombre"
-                                className={classes.text}
-                                variant="outlined"
+      setForm(dataToEdit);
+      setError(validationForm(dataToEdit));
+    } else {
 
-                            />
+      document.getElementById("password").removeAttribute("disabled");
+      document.getElementById("passwordConfirm").removeAttribute("disabled");
 
-                        </Grid>
-                        <Grid item xs={6}>
+      setForm(initialForm);
+    }
+  }, [dataToEdit, setForm, setError]);
 
-                            <TextField
-                                type="text"
-                                name="apellidos"
-                                label="Apellidos"
-                                className={classes.text}
-                                variant="outlined"
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(validationForm(form));
+    if (Object.keys(error).length === 0) {
+      if (form.idUsuarios === null) {
+        createData(form);
+      } else {
+        updateData(form);
+      }
 
-                            />
+    }
+  };
 
-                        </Grid>
-                    </Grid>
+  const handleReset = () => {
+    setForm(initialForm);
+    setDataToEdit(null);
+  };
 
-                    <Grid container justifyContent="center" spacing={1}>
+  return (
+    <div>
+      <Grid container justifyContent="center">
+        <h3>{dataToEdit ? "Actualizar Usuario" : "Ingresar Usuario"}</h3>
+      </Grid>
+      <form onSubmit={handleSubmit}>
+        <Grid container justifyContent="center" spacing={1}>
+          <Grid item xs={6}>
+            <FormControl
+              variant="outlined"
+              className={classes.formControl}
+              size="small"
+            >
+              <InputLabel htmlFor="outlined-age-native-simple">Pais</InputLabel>
+              <Select
+                required
+                native
+                value={form.codiPais}
+                onChange={handleChange}
+                label="Pais"
+                onBlur={handleBlur}
+                name="codiPais"
+              >
+                <option aria-label="None" value="" />
+                {dataPaises &&
+                  dataPaises.map((el) => {
+                    return (
+                      <option key={el.codiPais} value={el.codiPais}>
+                        {el.nombrePais}
+                      </option>
+                    );
+                  })}
+              </Select>
+            </FormControl>
 
-                        <Grid item xs={6} >
+            {error.codiPais && (
+              <Alert severity="warning">{error.codiPais}</Alert>
+            )}
+          </Grid>
+          <Grid item xs={6}>
+            <FormControl
+              variant="outlined"
+              className={classes.formControl}
+              size="small"
+            >
+              <InputLabel htmlFor="outlined-age-native-simple">
+                Permiso
+              </InputLabel>
+              <Select
+                required
+                native
+                value={form.idRol}
+                onChange={handleChange}
+                label="Permiso"
+                onBlur={handleBlur}
+                name="idRol"
+              >
+                <option aria-label="None" value="" />
+                {dataRoles &&
+                  dataRoles.map((el) => {
+                    return (
+                      <option key={el.idRol} value={el.idRol}>
+                        {el.Nombre}
+                      </option>
+                    );
+                  })}
+              </Select>
+            </FormControl>
+            {error.idRol && <Alert severity="warning">{error.idRol}</Alert>}
+          </Grid>
+        </Grid>
 
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel htmlFor="outlined-age-native-simple">Pais</InputLabel>
-                                <Select
-                                    native
-                                    value={state.age}
-                                    onChange={handleChangeNative}
-                                    label="Age"
-                                    inputProps={{
-                                        name: "age",
-                                        id: "outlined-age-native-simple"
-                                    }}
-                                >
-                                    <option aria-label="None" value="" />
-                                    <option value={10}>Ten</option>
-                                    <option value={20}>Twasasdasddenty</option>
-                                    <option value={30}>Thirty</option>
-                                </Select>
-                            </FormControl>
+        <Grid container justifyContent="center" spacing={1}>
+          <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
+            <TextField
+              required
+              type="text"
+              name="nombre"
+              label="Nombres"
+              value={form.nombre}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={classes.text}
+              variant="outlined"
+              size="small"
+            />
 
-                        </Grid>
+            {error.nombre && <Alert severity="warning">{error.nombre}</Alert>}
+          </Grid>
+          <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
+            <TextField
+              required
+              type="text"
+              name="apellidos"
+              label="Apellidos"
+              value={form.apellidos}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={classes.text}
+              variant="outlined"
+              size="small"
+            />
 
-                        <Grid item xs={6}>
+            {error.apellidos && (
+              <Alert severity="warning">{error.apellidos}</Alert>
+            )}
+          </Grid>
+          <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
+            <TextField
+              required
+              type="Email"
+              name="email"
+              label="Email"
+              value={form.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={classes.text}
+              variant="outlined"
+              size="small"
+            />
 
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel htmlFor="outlined-age-native-simple">Rol</InputLabel>
-                                <Select
-                                    native
-                                    value={state.age}
-                                    onChange={handleChangeNative}
-                                    label="Age"
-                                    inputProps={{
-                                        name: "age",
-                                        id: "outlined-age-native-simple"
-                                    }}
-                                >
-                                    <option aria-label="None" value="" />
-                                    <option value={10}>Ten</option>
-                                    <option value={20}>Twasasdasddenty</option>
-                                    <option value={30}>Thirty</option>
-                                </Select>
-                            </FormControl>
+            {error.email && <Alert severity="warning">{error.email}</Alert>}
+          </Grid>
+          <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
+            <TextField
+              required
+              type="number"
+              name="celular"
+              label="Celular"
+              value={form.celular}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={classes.text}
+              variant="outlined"
+              size="small"
+            />
 
-                        </Grid>
+            {error.celular && <Alert severity="warning">{error.celular}</Alert>}
+          </Grid>
+        </Grid>
 
-                    </Grid>
+        <Grid container justifyContent="center" spacing={1}>
+          <Grid item xs={6}>
+            <TextField
+              value={form.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={classes.text}
+              name="password"
+              id="password"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+              variant="outlined"
+              size="small"
+            />
+            {error.password && <Alert severity="warning">{error.password}</Alert>}
+          </Grid>
 
-                    <Grid container >
+          <Grid item xs={6}>
+            <TextField
+              value={form.passwordConfirm}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={classes.text}
+              name="passwordConfirm"
+              id="passwordConfirm"
+              label="Confirme Password"
+              type="password"
+              autoComplete="current-password"
+              variant="outlined"
+              size="small"
+            />
+            {error.passwordConfirm && <Alert severity="warning">{error.passwordConfirm}</Alert>}
+          </Grid>
+        </Grid>
 
-                        <Grid item xs={12}>
-                            <TextField
-                                type="email"
-                                name="Email"
-                                label="Email"
-                                className={classes.text}
-                                variant="outlined"
-
-                            />
-
-                            <TextField
-                                type="password"
-                                name="Contrasena"
-                                label="Contrasena"
-                                className={classes.text}
-                                variant="outlined"
-                                autoComplete="on"
-                            />
-
-                            <TextField
-                                type="text"
-                                name="nombre"
-                                label="Nombre"
-                                className={classes.text}
-                                variant="outlined"
-
-                            />
-
-                        </Grid>
-
-                    </Grid>
-
-
-                    <Button>Enviar</Button>
-
-                </Grid>
-
-
+        <Grid container justifyContent="center" spacing={1}>
+          <Grid item>
+            <div className={classes.formControl}>
+              <RadioGroup
+                required
+                row
+                aria-label="gender"
+                name="genero"
+                value={form.genero}
+                onBlur={handleBlur}
+                onChange={handleChange}
+              >
+                <FormControlLabel
+                  labelPlacement="start"
+                  value="Masculino"
+                  control={<Radio />}
+                  label="Masculino"
+                />
+                <FormControlLabel
+                  labelPlacement="start"
+                  value="Femenino"
+                  control={<Radio />}
+                  label="Femenino"
+                />
+              </RadioGroup>
             </div>
-     
-    );
 
-}
+            {error.genero && <Alert severity="warning">{error.genero}</Alert>}
+          </Grid>
+        </Grid>
+
+        <Grid container justifyContent="center" spacing={1}>
+          <Grid item xs={6}>
+            <Button
+              variant="outlined"
+              onClick={handleReset}
+              type="button"
+              color="primary"
+              className={classes.boton}
+            >
+              Limpiar
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button
+              variant="outlined"
+              type="submit"
+              color="primary"
+              className={classes.boton}
+            >
+              Enviar
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </div>
+  );
+};
 
 export default FormUser;

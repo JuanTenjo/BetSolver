@@ -20,7 +20,7 @@ controller.register = async function (req, res) {
         await ValidaTeam(params) ? ErroresValidacion.push(`El equipo ya existe`) : true;
 
         await validarNulo(params.idLigas) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true;      
-        await ValidaIDLiga(params) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
+        await ValidaIDLiga(params.idLigas) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
 
        
 
@@ -53,7 +53,7 @@ controller.register = async function (req, res) {
         }
 
     } else {
-        res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta peticion" });
+        res.status(403).json({ "message": ["Lo siento pero no tiene los permisos necesarios para hacer esta peticion"] });
     }
 
 };
