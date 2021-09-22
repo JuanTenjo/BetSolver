@@ -68,7 +68,7 @@ const PageTeam = () => {
   };
   const updateData = async (data) => {
     setLoading(true);
-
+    console.log(data);
     let URL = "http://localhost:4000/team/update";
 
     let config = {

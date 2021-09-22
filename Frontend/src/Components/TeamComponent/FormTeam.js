@@ -88,6 +88,7 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
       };
     
       const handleReset = () => {
+        setCodiPais("");
         setForm(initialForm);
         setDataToEdit(null);
       };
@@ -114,6 +115,7 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
       useEffect(() => {
         //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
         if (dataToEdit) {
+          setCodiPais(dataToEdit.codiPais)
           setForm(dataToEdit);
           setError(validationForm(dataToEdit));
         } else {

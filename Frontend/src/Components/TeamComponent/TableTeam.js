@@ -38,9 +38,6 @@ const TableTeam = ({ setdataToEdit,dataEquipos,deleteData}) => {
   const [InfoDialog, SetInfoDialog] = useState(initalDialog);
 
   const handleUpdate = (data) => {
-
-    
-
     setdataToEdit(data);
   };
 

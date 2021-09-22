@@ -71,7 +71,7 @@ controller.update = async function (req, res) {
         await validarNulo(params.habilitado) ? ErroresValidacion.push("El estado habilitado del equipo no puede estar vacio") : true;      
         await validarNulo(params.idEquipos) ? ErroresValidacion.push("Codigo del equipo no puede estar vacio") : true;      
         await validarNulo(params.idLigas) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true;      
-        await ValidaIDLiga(params) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
+        await ValidaIDLiga(params.idLigas) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
        
         if (params.nombreEquipo) {   
             await ValidaNameTeam(params) ? ErroresValidacion.push(`El nombre del equipo ${params.nombreEquipo} no esta disponible`) : true;

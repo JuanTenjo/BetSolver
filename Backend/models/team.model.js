@@ -67,14 +67,14 @@ model.teams = async (idLiga = null) => {
 
         if(idLiga){
 
-            let query = `SELECT p.*, l.nombreLiga FROM equipos as p, ligas as l WHERE p.idLigas = l.idLigas and p.idLigas = ${idLiga} order by nombreLiga, NombreEquipo`;
+            let query = `SELECT p.*, l.nombreLiga, l.codiPais FROM equipos as p, ligas as l WHERE p.idLigas = l.idLigas and p.idLigas = ${idLiga} order by nombreLiga, NombreEquipo`;
 
             const Teams = await pool.query(query);
     
             return Teams;
             
         }else{
-            let query = `SELECT p.*, l.nombreLiga FROM equipos as p, ligas as l where p.idLigas = l.idLigas order by nombreLiga, NombreEquipo`
+            let query = `SELECT p.*, l.nombreLiga, l.codiPais FROM equipos as p, ligas as l where p.idLigas = l.idLigas order by nombreLiga, NombreEquipo`
 
             const Teams = await pool.query(query);
     

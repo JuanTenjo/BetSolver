@@ -8,9 +8,9 @@ import {
   Button,
   InputLabel,
   FormControl,
+  TextField,
   Select,
 } from "@material-ui/core";
-
 
 const useStyle = makeStyles((theme) => ({
   text: {
@@ -28,6 +28,11 @@ const useStyle = makeStyles((theme) => ({
   Label: {
     textAlign: "center",
   },
+  DatePicket: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  }
+  
 }));
 
 //Inicial Form
@@ -223,9 +228,6 @@ const FormCompetition = ({
   const handleSelectPaisVisi = (e) => {
     setCodiPaisVisitante(e.target.value);
   };
-
-
-
 
   return (
     <div>
@@ -427,9 +429,17 @@ const FormCompetition = ({
             </Grid>
             <Grid container justifyContent="center" spacing={1}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-
-
-
+                <TextField
+                  required={true}
+                  id="date"
+                  label="Fecha de la competencia"
+                  type="date"
+                  defaultValue="2017-05-24"
+                  className={classes.DatePicket}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </Grid>
             </Grid>
           </Grid>
