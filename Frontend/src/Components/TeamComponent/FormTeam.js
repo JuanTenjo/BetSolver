@@ -54,6 +54,7 @@ const validationForm = (form) => {
   }
 
 
+
   return error;
 };
 
@@ -61,7 +62,8 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
   let classes = useStyle();
 
   const [dataLigas, setDataLigas] = useState();
-
+  const [dataPaises, setDataPaises] = useState(null);
+  const [CodiPais, setCodiPais] = useState("");
     //Hood Personalizado para valizado
     const {
         form,
@@ -90,14 +92,24 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
         setDataToEdit(null);
       };
 
+      
+      const traerPais = async () => {
+        const data = await helpHttpAxios().get("http://localhost:4000/country");
+        setDataPaises(data);
+      };
+
+      useEffect(() => {
+        traerPais();
+      }, []);
+
       useEffect(() => {
         //Se trae el options de paises
         const traerLigas = async () => {
-          const data = await helpHttpAxios().get("http://localhost:4000/league");
+          const data = await helpHttpAxios().get(`http://localhost:4000/league/${CodiPais}`);
           setDataLigas(data);
         };
         traerLigas();
-      }, []);
+      }, [CodiPais]);
 
       useEffect(() => {
         //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
@@ -109,7 +121,9 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
         }
       }, [dataToEdit,setForm,setError]);
     
-    
+      const handleSelectPais = (e) => {
+        setCodiPais(e.target.value);
+      };
     
 
   return (
@@ -119,7 +133,37 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
       </Grid>
       <form onSubmit={handleSubmit}>
         <Grid container justifyContent="center" spacing={1}>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
+          <FormControl
+                  variant="outlined"
+                  className={classes.formControl}
+                  size="small"
+                >
+                  <InputLabel htmlFor="outlined-age-native-simple">
+                    Pais
+                  </InputLabel>
+                  <Select
+                    required
+                    native
+                    value={CodiPais}
+                    onChange={handleSelectPais}
+                    label="Pais"
+                    name="CodiPais"
+                  >
+                    <option aria-label="None" value="" />
+                    {dataPaises &&
+                      dataPaises.map((el) => {
+                        return (
+                          <option key={el.codiPais} value={el.codiPais}>
+                            {el.nombrePais}
+                          </option>
+                        );
+                      })}
+                  </Select>
+                </FormControl>
+
+          </Grid>
+          <Grid item xs={4}>
             <FormControl
               variant="outlined"
               className={classes.formControl}
@@ -152,7 +196,7 @@ const FormTeam = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
 
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <TextField
               type="text"
               name="nombreEquipo"

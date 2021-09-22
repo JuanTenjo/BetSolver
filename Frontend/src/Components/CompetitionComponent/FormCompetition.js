@@ -227,7 +227,6 @@ const FormCompetition = ({
 
 
 
-
   return (
     <div>
       <Grid container justifyContent="center">
@@ -428,19 +427,9 @@ const FormCompetition = ({
             </Grid>
             <Grid container justifyContent="center" spacing={1}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                {/* <KeyboardDatePicker
-                  disableToolbar
-                  variant="inline"
-                  format="MM/dd/yyyy"
-                  margin="normal"
-                  id="date-picker-inline"
-                  label="Date picker inline"
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                /> */}
+
+
+
               </Grid>
             </Grid>
           </Grid>
