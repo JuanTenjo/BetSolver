@@ -34,8 +34,10 @@ passport.use(passportMiddleware);
 
 app.set('appName', 'BETFOOBALL'); //De esta forma se crean variables
 app.set('port', process.env.PORT || 4000); //Asigna el puerto 4000 y si esta ocupado asigneme otro
-app.use(express.static(path.join(__dirname, 'public')));  //Siempre nuestros directorio publico va a hacer public
 
+// app.use(express.static(path.join(__dirname, 'public')));  //Siempre nuestros directorio publico va a hacer public
+
+app.use('/public', express.static(`${__dirname}/assets/images`));  //Para la ubicacion public siempre se van a utilizar los archivos estaticos en assets/images
 //------------------------------------------------ Fin Configuraciones -----------------------------------------------
 
 //------------------------------------------------ Routes -----------------------------------------------
