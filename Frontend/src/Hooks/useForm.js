@@ -16,6 +16,13 @@ const UseForm = (initialForm, validateForm) => {
     });
   };
 
+  const handleChangechecked = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.checked,
+    });
+  };
+
   const handleBlur = (e) => {
     handleChange(e); //Lama a handleChange para guardar los cambios de form
     setError(validateForm(form));
@@ -73,6 +80,7 @@ const UseForm = (initialForm, validateForm) => {
     handleChange,
     handleBlur,
     handleSubmit,
+    handleChangechecked,
   };
 };
 

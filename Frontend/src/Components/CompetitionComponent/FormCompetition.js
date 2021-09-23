@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { helpHttpAxios } from "../../Helpers/helpHttpsAxios";
 import UserForm from "../../Hooks/useForm";
-
+import { yellow } from "@material-ui/core/colors";
+import UpdateIcon from "@material-ui/icons/Update";
 import {
   Grid,
   makeStyles,
@@ -10,6 +11,16 @@ import {
   FormControl,
   TextField,
   Select,
+  Checkbox,
+  FormControlLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
 } from "@material-ui/core";
 
 const useStyle = makeStyles((theme) => ({
@@ -31,20 +42,24 @@ const useStyle = makeStyles((theme) => ({
   DatePicket: {
     width: "100%",
     marginTop: theme.spacing(1),
-  }
-  
+  },
+  InputTime: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  },
 }));
 
 //Inicial Form
 
 const estrategias = {
-  idEstrategia: "",
-  PorceLocal: "",
-  PorceVisitante: "",
-  PorceEmpate: "",
-  cuotaLocal: "",
-  cuotaVisitante: "",
-  cuotaEmpate: "",
+  idEstrategia: "1",
+  nombreEstrategia: "Prueba",
+  PorceLocal: "12",
+  PorceVisitante: "43",
+  PorceEmpate: "54",
+  cuotaLocal: "3.4",
+  cuotaVisitante: "3.2",
+  cuotaEmpate: "5.4",
 };
 
 const initialForm = {
@@ -55,59 +70,12 @@ const initialForm = {
   idEquipoVisitante: "",
   fechaCompeticion: "",
   horaCompeticion: "",
-  habiliParley: "",
+  habiliParley: false,
   estrategias: [estrategias],
 };
 
 const validationForm = (form) => {
   let error = {};
-
-  //let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/; //Validacion para nombre
-
-  //Trim se hace para bloquear que no se termine ni empiece con un caracter especial o un espacio en blanco
-  // if (!form.nombre.trim()) {
-  //   error.nombre = "El campo nombre es requerido";
-  // }
-
-  // if (!form.apellidos.trim()) {
-  //   error.apellidos = "El campo apellido es requerido";
-  // }
-
-  // if (form.idUsuarios === null) {
-
-  //   if (!form.password.trim()) {
-  //     error.password = "El campo password es requerido";
-  //   }else{
-
-  //       if(form.password !== form.passwordConfirm){
-  //         error.password = "El campo password y confirme password no son iguales";
-  //       }
-
-  //   }
-
-  //     if (!form.passwordConfirm.trim()) {
-  //       error.passwordConfirm = "Debes confirmar la password";
-  //     }
-
-  // }
-
-  // if (!form.email.trim()) {
-  //   error.email = "El campo email es requerido";
-  // }
-  // if (!form.genero.trim()) {
-  //   error.genero = "El campo genero es requerido";
-  // }
-  // if (!form.celular.trim()) {
-  //   error.celular = "El campo celular es requerido";
-  // }
-
-  // if (form.idRol === "" || form.idRol === null) {
-  //   error.idRol = "El permiso del usuario es requerido";
-  // }
-
-  // if (form.codiPais === "" || form.codiPais === null) {
-  //   error.codiPais = "El codigo del pais es requerido";
-  // }
 
   return error;
 };
@@ -129,10 +97,15 @@ const FormCompetition = ({
   const [CodiPaisLocal, setCodiPaisLocal] = useState("");
   const [CodiPaisVisitante, setCodiPaisVisitante] = useState("");
   //Hood Personalizado para valizado
-  const { form, setForm, error, setError, handleChange, handleBlur } = UserForm(
-    initialForm,
-    validationForm
-  );
+  const {
+    form,
+    setForm,
+    error,
+    setError,
+    handleChange,
+    handleBlur,
+    handleChangechecked,
+  } = UserForm(initialForm, validationForm);
 
   const traerPais = async () => {
     const data = await helpHttpAxios().get("http://localhost:4000/country");
@@ -227,6 +200,14 @@ const FormCompetition = ({
   };
   const handleSelectPaisVisi = (e) => {
     setCodiPaisVisitante(e.target.value);
+  };
+
+  // const handleChangeChek = (event) => {
+  //   setState({ ...state, [event.target.name]: event.target.checked });
+  // };
+
+  const handleUpdate = (data) => {
+    console.log(data);
   };
 
   return (
@@ -431,10 +412,11 @@ const FormCompetition = ({
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <TextField
                   required={true}
-                  id="date"
+                  name="fechaCompeticion"
+                  defaultValue={form.fechaCompeticion}
                   label="Fecha de la competencia"
+                  onChange={handleChange}
                   type="date"
-                  defaultValue="2017-05-24"
                   className={classes.DatePicket}
                   InputLabelProps={{
                     shrink: true,
@@ -442,10 +424,98 @@ const FormCompetition = ({
                 />
               </Grid>
             </Grid>
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+            >
+              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <TextField
+                  required={true}
+                  name="horaCompeticion"
+                  label="Hora de la competencia"
+                  onChange={handleChange}
+                  type="time"
+                  defaultValue={form.horaCompeticion}
+                  className={classes.InputTime}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  inputProps={{
+                    step: 300, // 5 min
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={form.habiliParley}
+                      onChange={handleChangechecked}
+                      name="habiliParley"
+                      color="primary"
+                    />
+                  }
+                  label="Habilita Parley"
+                />
+              </Grid>
+            </Grid>
           </Grid>
 
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-            <h1>Tabla Estrategias</h1>
+            <h3>Lista de estrategias</h3>
+            <TableContainer component={Paper}>
+              <Table
+                className={classes.table}
+                size="small"
+                aria-label="a dense table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell style={{ display: "none" }} align="center">
+                      ID
+                    </TableCell>
+                    <TableCell align="center">Estrategia</TableCell>
+                    <TableCell align="center">%Local</TableCell>
+                    <TableCell align="center">%Visitante</TableCell>
+                    <TableCell align="center">$Empate</TableCell>
+                    <TableCell align="center">Cuota Local</TableCell>
+                    <TableCell align="center">Cuota Visi</TableCell>
+                    <TableCell align="center">Cuota Empate</TableCell>
+                    <TableCell align="center">Eliminar</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {form.estrategias &&
+                    form.estrategias.map((row) => (
+                      <TableRow key={row.idEstrategia}>
+                        <TableCell style={{ display: "none" }} align="center">
+                          {row.idEstrategia}
+                        </TableCell>
+                        <TableCell align="center">{row.nombreEstrategia}</TableCell>
+                        <TableCell align="center">{row.PorceLocal}</TableCell>
+                        <TableCell align="center">{row.PorceVisitante}</TableCell>
+                        <TableCell align="center">{row.PorceEmpate}</TableCell>
+                        <TableCell align="center">{row.cuotaLocal}</TableCell>
+                        <TableCell align="center">{row.cuotaVisitante}</TableCell>
+                        <TableCell align="center">{row.cuotaEmpate}</TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            aria-label="UpdateIcon"
+                            onClick={() => handleUpdate(row)}
+                          >
+                            <UpdateIcon
+                              style={{ color: yellow[700] }}
+                              fontSize="small"
+                            />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
         </Grid>
 
