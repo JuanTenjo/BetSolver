@@ -47,6 +47,16 @@ const useStyle = makeStyles((theme) => ({
     width: "100%",
     marginTop: theme.spacing(1),
   },
+  botonStrategy: {
+    marginTop: theme.spacing(1),
+    backgroundColor: '#42B83A',
+    color: '#fff',
+    '&:hover': {
+      backgroundColor: '#3D8838'
+   },
+  }
+
+  
 }));
 
 //Inicial Form
@@ -89,6 +99,7 @@ const FormCompetition = ({
   let classes = useStyle();
 
   const [dataPaises, setDataPaises] = useState(null);
+  const [strategies, setStrategies] = useState(null);
   const [dataLigaLocal, setDataLigaLocal] = useState(null);
   const [dataLigaVisitante, setDataLigaVisitante] = useState(null);
   const [dataEquipoLocal, setDataEquipoLocal] = useState(null);
@@ -114,6 +125,17 @@ const FormCompetition = ({
 
   useEffect(() => {
     traerPais();
+  }, []);
+
+  useEffect(() => {
+    const traerEstrategias = async () => {
+      const data = await helpHttpAxios().get(
+        "http://localhost:4000/strategies"
+      );
+      setStrategies(data);
+    };
+
+    traerEstrategias();
   }, []);
 
   useEffect(() => {
@@ -315,6 +337,7 @@ const FormCompetition = ({
                   </FormControl>
                 )}
               </Grid>
+
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                 <p className={classes.Label}>Equipo Visitante</p>
                 <FormControl
@@ -408,6 +431,7 @@ const FormCompetition = ({
                 )}
               </Grid>
             </Grid>
+
             <Grid container justifyContent="center" spacing={1}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <TextField
@@ -424,6 +448,7 @@ const FormCompetition = ({
                 />
               </Grid>
             </Grid>
+
             <Grid
               container
               justifyContent="center"
@@ -446,6 +471,34 @@ const FormCompetition = ({
                     step: 300, // 5 min
                   }}
                 />
+
+                {/* <FormControl
+                  variant="outlined"
+                  className={classes.formControl}
+                  size="small"
+                >
+                  <InputLabel htmlFor="outlined-age-native-simple">
+                    Estrategias
+                  </InputLabel>
+                  <Select
+                    required
+                    native
+                    value={CodiPaisLocal}
+                    onChange={handleSelectPais}
+                    label="Estrategias"
+                    name="CodiPaisLocal"
+                  >
+                    <option aria-label="None" value="" />
+                    {strategies &&
+                      strategies.map((el) => {
+                        return (
+                          <option key={el.idEstrategia} value={el.idEstrategia}>
+                            {el.nombreEstrategia}
+                          </option>
+                        );
+                      })}
+                  </Select>
+                </FormControl> */}
               </Grid>
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                 <FormControlLabel
@@ -459,6 +512,20 @@ const FormCompetition = ({
                   }
                   label="Habilita Parley"
                 />
+              </Grid>
+            </Grid>
+
+            <Grid container justifyContent="center" spacing={1}>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Button
+                fullWidth
+                  variant="outlined"
+                  onClick={handleReset}        
+                  type="button"
+                  className={classes.botonStrategy}
+                >
+                  Agregar Estrategia
+                </Button>
               </Grid>
             </Grid>
           </Grid>
@@ -493,12 +560,18 @@ const FormCompetition = ({
                         <TableCell style={{ display: "none" }} align="center">
                           {row.idEstrategia}
                         </TableCell>
-                        <TableCell align="center">{row.nombreEstrategia}</TableCell>
+                        <TableCell align="center">
+                          {row.nombreEstrategia}
+                        </TableCell>
                         <TableCell align="center">{row.PorceLocal}</TableCell>
-                        <TableCell align="center">{row.PorceVisitante}</TableCell>
+                        <TableCell align="center">
+                          {row.PorceVisitante}
+                        </TableCell>
                         <TableCell align="center">{row.PorceEmpate}</TableCell>
                         <TableCell align="center">{row.cuotaLocal}</TableCell>
-                        <TableCell align="center">{row.cuotaVisitante}</TableCell>
+                        <TableCell align="center">
+                          {row.cuotaVisitante}
+                        </TableCell>
                         <TableCell align="center">{row.cuotaEmpate}</TableCell>
                         <TableCell align="center">
                           <IconButton

@@ -7,9 +7,10 @@ const path = require('path');
 const passport = require('passport');
 const passportMiddleware = require('./middlewares/passport.middleware');
 const indexRoutes = require('./routes/index.route'); //Trae la routes
-
-
+require('dotenv').config();
+const {appConfig} = require('./config');
 const app = express(); //instancias
+
 //----------------------------------------Fin Import & Require -----------------------------------------
 
 //------------------------------------------------ Inicio middleware -------------------------------------------------------
@@ -33,7 +34,7 @@ passport.use(passportMiddleware);
 //------------------------------------------------ Inicio Configuraciones -----------------------------------------------
 
 app.set('appName', 'BETFOOBALL'); //De esta forma se crean variables
-app.set('port', process.env.PORT || 4000); //Asigna el puerto 4000 y si esta ocupado asigneme otro
+app.set('port', appConfig.port || 4000); //Asigna el puerto que venga en config y si esta ocupado asigneme otro
 
 // app.use(express.static(path.join(__dirname, 'public')));  //Siempre nuestros directorio publico va a hacer public
 
@@ -49,6 +50,6 @@ app.use(indexRoutes);
 
 app.listen(app.get("port"), () => {
     console.log(app.get('appName'));
-    console.log('Aplicacion de BETSOLVER corriendo en el puerto 4000');
+    console.log('Aplicacion de BETSOLVER corriendo en el puerto '+ app.get("port"));
 })  
 

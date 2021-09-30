@@ -11,6 +11,7 @@ import PageUser from "../Pages/PageUser";
 import PageTeam from '../Pages/PageTeam'
 import PageLeague from "../Pages/PageLeague";
 import PageCompetition from "../Pages/PageCompetition";
+import PagePais from "../Pages/PagePais";
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -46,6 +47,7 @@ const RoutesLogged = ({ nombreUser }) => {
 
 
       <Switch>
+        <Route exact path="/gestionPais" component={PagePais} />
         <Route exact path="/gestionCompetition" component={PageCompetition} />
         <Route exact path="/gestionTeam" component={PageTeam} />
         <Route exact path="/gestionUser" component={PageUser} />
