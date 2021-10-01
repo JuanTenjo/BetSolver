@@ -1,5 +1,5 @@
 const { ValidaIDLiga, ValidaIDTeam, ValidaNameTeam } = require('../models/validation.models')
-const { register, update, erase, teams, validarCompetition, traerUltimoID, registerEstrategias, deleteEstrategias } = require('../models/competition.model')
+const { competition,detallecompetition, register, update, erase, teams, validarCompetition, traerUltimoID, registerEstrategias, deleteEstrategias } = require('../models/competition.model')
 const { validarNulo } = require('../utils/validationPatters')
 const controller = {};
 
@@ -289,7 +289,51 @@ controller.erase = async function (req, res) {
 
 };
 
+controller.competition = async function(req, res) {
 
+    if(req.user[0].idRol === 3){
+
+        const estado = await competition();
+
+        if(estado.error || estado === false){
+
+            res.status(400).json(estado);
+
+        }else{
+
+            res.status(200).json(estado);
+            
+        }    
+    
+    }else{
+        res.status(403).json({"message": "Lo siento pero no tiene los permisos necesarios para hacer esta operacion"});
+    }
+
+};
+
+controller.Detallecompetition = async function(req, res) {
+
+    if(req.user[0].idRol === 3){
+
+        let idCompetition = req.params.IdCompetition;
+
+        const estado = await detallecompetition(idCompetition);
+
+        if(estado.error || estado === false){
+
+            res.status(400).json(estado);
+
+        }else{
+
+            res.status(200).json(estado);
+            
+        }    
+    
+    }else{
+        res.status(403).json({"message": "Lo siento pero no tiene los permisos necesarios para hacer esta operacion"});
+    }
+
+};
 
 
 module.exports = controller;

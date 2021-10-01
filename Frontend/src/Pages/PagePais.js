@@ -4,7 +4,7 @@ import Message from "../Components/Necesarios/Message";
 import FormPais from "../Components/PaisComponent/FormPais";
 import TablePais from "../Components/PaisComponent/TablePais";
 import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
-
+import API from "../Utils/dominioBackend";
 import { makeStyles, Grid } from "@material-ui/core";
 
 const useStyle = makeStyles((theme) => ({
@@ -32,7 +32,7 @@ const PagePais = () => {
   
   const traerPais = async () => {
     setLoading(true);
-    const data = await helpHttpAxios().get("http://localhost:4000/country");                                                                                                                         
+    const data = await helpHttpAxios().get(`${API.URI}/country`);                                                                                                                         
     setDataPais(data);
     setLoading(false);
   };
@@ -49,7 +49,7 @@ const PagePais = () => {
       data.append('image', file[0], 'form-data');
     }
 
-    let URL = "http://localhost:4000/country/Register";
+    let URL = `${API.URI}/country/Register`;
 
 
     let config = {
@@ -91,7 +91,7 @@ const PagePais = () => {
     }
 
 
-    let URL = "http://localhost:4000/country/Update";
+    let URL = `${API.URI}/country/Update`;
 
 
     let config = {
@@ -123,7 +123,7 @@ const PagePais = () => {
 
     setLoading(true);
 
-    let URL = "http://localhost:4000/league/delete";
+    let URL = `${API.URI}/league/delete`;
 
     let config = {
       data: {'idLigas':idLigas},

@@ -4,6 +4,7 @@ import Message from "../Components/Necesarios/Message";
 import FormTeam from "../Components/TeamComponent/FormTeam";
 import TableTeam from "../Components/TeamComponent/TableTeam";
 import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
+import API from "../Utils/dominioBackend";
 
 import { makeStyles, Grid } from "@material-ui/core";
 
@@ -31,7 +32,7 @@ const PageTeam = () => {
   
   const traerEquipos = async () => {
     setLoading(true);
-    const data = await helpHttpAxios().get("http://localhost:4000/team");                                                                                                                         
+    const data = await helpHttpAxios().get(`${API.URI}/team`);                                                                                                                         
     setdataEquipos(data);
     setLoading(false);
   };
@@ -40,7 +41,7 @@ const PageTeam = () => {
   const createData = async (data) => {
     setLoading(true);
 
-    let URL = "http://localhost:4000/team/register";
+    let URL = `${API.URI}/team/register`;
 
     let config = {
       data: data,
@@ -69,7 +70,7 @@ const PageTeam = () => {
   const updateData = async (data) => {
     setLoading(true);
     console.log(data);
-    let URL = "http://localhost:4000/team/update";
+    let URL = `${API.URI}/team/update`;
 
     let config = {
       data: data,
@@ -98,7 +99,7 @@ const PageTeam = () => {
 
     setLoading(true);
 
-    let URL = "http://localhost:4000/team/delete";
+    let URL = `${API.URI}/team/delete`;
 
     let config = {
       data: {'idEquipos':idLigas},

@@ -4,6 +4,7 @@ import LoginForm from "../Components/Login/LoginForm";
 import Banner from "../assets/Banner.jpg";
 import Message from "../Components/Necesarios/Message";
 import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
+import API from "../Utils/dominioBackend";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -27,7 +28,7 @@ const PageLogin = ({ Auth }) => {
          data: data,
         };
 
-        const BaseUrl = "http://localhost:4000/auth/login";
+        const BaseUrl = `${API.URI}/auth/login`;
 
         const res = await helpHttpAxios().post(BaseUrl, config);
         console.log(res);

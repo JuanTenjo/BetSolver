@@ -161,4 +161,40 @@ model.teams = async () => {
     }
 }
 
+model.competition = async () => {
+    try {
+
+        let query = `SELECT * FROM competencias`
+
+        const Competition = await pool.query(query);
+
+        return Competition;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje: [`Hubo un error al traer las competiciones en el Model: comptetition.model, en la funcion: competition. ERROR: ${err.sqlMessage} `],
+            respuesta: false
+        };
+    }
+}
+
+model.detallecompetition = async (IdCompetition) => {
+    try {
+
+        let query = `SELECT * FROM detallecompentencia WHERE idCompeticion = ${IdCompetition}`
+
+        const detalleCompetition = await pool.query(query);
+
+        return detalleCompetition;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje: [`Hubo un error al traer las deralle de la competicion en el Model: comptetition.model, en la funcion: detallecompetition. ERROR: ${err.sqlMessage} `],
+            respuesta: false
+        };
+    }
+}
+
 module.exports = model;

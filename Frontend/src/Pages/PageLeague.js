@@ -4,7 +4,7 @@ import Message from "../Components/Necesarios/Message";
 import FormLeague from "../Components/LeagueComponent/FormLeague";
 import TableLeague from "../Components/LeagueComponent/TableLeague";
 import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
-
+import API from "../Utils/dominioBackend";
 import { makeStyles, Grid } from "@material-ui/core";
 
 const useStyle = makeStyles((theme) => ({
@@ -30,7 +30,7 @@ const PageLeague = () => {
   
   const traerLigas = async () => {
     setLoading(true);
-    const data = await helpHttpAxios().get("http://localhost:4000/league");                                                                                                                         
+    const data = await helpHttpAxios().get(`${API.URI}/league`);                                                                                                                         
     setDataLigas(data);
     setLoading(false);
   };
@@ -39,7 +39,7 @@ const PageLeague = () => {
   const createData = async (data) => {
     setLoading(true);
 
-    let URL = "http://localhost:4000/league/register";
+    let URL = `${API.URI}/league/register`;
 
     let config = {
       data: data,
@@ -68,7 +68,7 @@ const PageLeague = () => {
   const updateData = async (data) => {
     setLoading(true);
 
-    let URL = "http://localhost:4000/league/update";
+    let URL = `${API.URI}/league/update`;
 
     let config = {
       data: data,
@@ -97,7 +97,7 @@ const PageLeague = () => {
 
     setLoading(true);
 
-    let URL = "http://localhost:4000/league/delete";
+    let URL = `${API.URI}/league/delete`;
 
     let config = {
       data: {'idLigas':idLigas},

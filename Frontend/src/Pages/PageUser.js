@@ -4,6 +4,7 @@ import TableUser from '../Components/UserComponent/TableUser';
 import Loader from "../Components/Necesarios/Loader";
 import Message from "../Components/Necesarios/Message";
 import { makeStyles, Grid } from "@material-ui/core";
+import API from "../Utils/dominioBackend";
 import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
 
 const useStyle = makeStyles((theme) => ({
@@ -30,8 +31,8 @@ const PageUser = () => {
   },[]);
 
   const traerUsuarios = async () => {
-    setLoading(true);
-    const data = await helpHttpAxios().get("http://localhost:4000/user");                                                                                                                         
+    setLoading(true);       
+    const data = await helpHttpAxios().get(`${API.URI}/user`);                                                                                                                
     setDataUsuarios(data);
     setLoading(false);
   };
@@ -39,7 +40,7 @@ const PageUser = () => {
   const createData = async (data) => {
     setLoading(true);
 
-    let URL = "http://localhost:4000/user/register";
+    let URL = `${API.URI}/user/register`;
 
     let config = {
       data: data,
@@ -68,7 +69,7 @@ const PageUser = () => {
   const updateData = async (data) => {
     setLoading(true);
 
-    let URL = "http://localhost:4000/user/update";
+    let URL = `${API.URI}/user/update`;
 
     let config = {
       data: data,
@@ -101,7 +102,7 @@ const PageUser = () => {
 
     setLoading(true);
 
-    let URL = "http://localhost:4000/user/delete";
+    let URL = `${API.URI}/user/delete`;
 
     let config = {
       data: {'idUsuarios':idUsuarios},

@@ -5,6 +5,7 @@ import Loader from "../Components/Necesarios/Loader";
 import Message from "../Components/Necesarios/Message";
 import { makeStyles, Grid } from "@material-ui/core";
 import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
+import API from "../Utils/dominioBackend";
 
 const useStyle = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -24,22 +25,22 @@ const PageCompetition = () => {
   const [error, setError] = useState({});
   const [dataToEdit, setDataToEdit] = useState(false);
   const [dataUsuarios, setDataUsuarios] = useState(null);
-
+  const [dataCompetition, setDataCompetition] = useState(null);
   useEffect(() => {
-    traerUsuarios();
+    traerCompeticiones();
   },[]);
 
-  const traerUsuarios = async () => {
+  const traerCompeticiones = async () => {
     setLoading(true);
-    const data = await helpHttpAxios().get("http://localhost:4000/user");                                                                                                                         
-    setDataUsuarios(data);
+    const data = await helpHttpAxios().get(`${API.URI}/user`);                                                                                                                         
+    setDataCompetition(data);
     setLoading(false);
   };
 
   const createData = async (data) => {
     setLoading(true);
 
-    let URL = "http://localhost:4000/user/register";
+    let URL = `${API.URI}/user/register`;
 
     let config = {
       data: data,
@@ -62,13 +63,13 @@ const PageCompetition = () => {
 
     setLoading(false);
 
-    traerUsuarios();
+    traerCompeticiones();
 
   };
   const updateData = async (data) => {
     setLoading(true);
 
-    let URL = "http://localhost:4000/user/update";
+    let URL = `${API.URI}/user/update`;
 
     let config = {
       data: data,
@@ -93,7 +94,7 @@ const PageCompetition = () => {
 
     setLoading(false);
 
-    traerUsuarios();
+    traerCompeticiones();
 
   };
 
@@ -101,7 +102,7 @@ const PageCompetition = () => {
 
     setLoading(true);
 
-    let URL = "http://localhost:4000/user/delete";
+    let URL = `${API.URI}/user/delete`;
 
     let config = {
       data: {'idUsuarios':idUsuarios},
@@ -126,7 +127,7 @@ const PageCompetition = () => {
 
     setLoading(false);
 
-    traerUsuarios();
+    traerCompeticiones();
 
   };
 
@@ -161,7 +162,7 @@ const PageCompetition = () => {
               <Loader />
             ) : (
               <TableCompetition
-                dataUsuarios={dataUsuarios}
+                dataCompetition={dataCompetition}
                 setdataToEdit={setDataToEdit}
                 deleteData={deleteData}
               />

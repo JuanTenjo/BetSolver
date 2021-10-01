@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { helpHttpAxios } from "../../Helpers/helpHttpsAxios";
 import UserForm from "../../Hooks/useForm";
 import Alert from "@material-ui/lab/Alert";
-
+import API from "../../Utils/dominioBackend";
 import {
   Grid,
   TextField,
@@ -87,7 +87,7 @@ const FormLeague = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
   useEffect(() => {
     //Se trae el options de paises
     const traerPais = async () => {
-      const data = await helpHttpAxios().get("http://localhost:4000/country");
+      const data = await helpHttpAxios().get(`${API.URI}/country`);
       setDataPaises(data);
     };
     traerPais();
@@ -191,14 +191,6 @@ const FormLeague = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
               Enviar
             </Button>
           </Grid>
-          {/* 
-                    {error.errores && error.errores.map((el) => {
-                        return (
-                            <Message key={el} msg={el} estado={false} />
-                        );
-                    })}
-
-                    {response && <Message msg={response} estado={true} />} */}
         </Grid>
       </form>
     </>

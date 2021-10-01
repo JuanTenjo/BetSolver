@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { helpHttpAxios } from "../../Helpers/helpHttpsAxios";
 import UserForm from "../../Hooks/useForm";
 import Alert from "@material-ui/lab/Alert";
-
+import API from "../../Utils/dominioBackend";
 import {
   Grid,
   TextField,
@@ -124,13 +124,13 @@ const FormUser = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
   useEffect(() => {
     const traerPais = async () => {
-      const data = await helpHttpAxios().get("http://localhost:4000/country");
+      const data = await helpHttpAxios().get(`${API.URI}/country`);
       setDataPaises(data);
     };
 
     const traerRoles = async () => {
       const data = await helpHttpAxios().get(
-        "http://localhost:4000/user/roles"
+        `${API.URI}/user/roles`
       );
       setDataRoles(data);
     };

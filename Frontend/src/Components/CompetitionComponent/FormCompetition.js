@@ -3,6 +3,8 @@ import { helpHttpAxios } from "../../Helpers/helpHttpsAxios";
 import UserForm from "../../Hooks/useForm";
 import { yellow } from "@material-ui/core/colors";
 import UpdateIcon from "@material-ui/icons/Update";
+import ModalCompetition from './ModalCompetition';
+import API from "../../Utils/dominioBackend";
 import {
   Grid,
   makeStyles,
@@ -47,30 +49,9 @@ const useStyle = makeStyles((theme) => ({
     width: "100%",
     marginTop: theme.spacing(1),
   },
-  botonStrategy: {
-    marginTop: theme.spacing(1),
-    backgroundColor: '#42B83A',
-    color: '#fff',
-    '&:hover': {
-      backgroundColor: '#3D8838'
-   },
-  }
-
-  
 }));
 
 //Inicial Form
-
-const estrategias = {
-  idEstrategia: "1",
-  nombreEstrategia: "Prueba",
-  PorceLocal: "12",
-  PorceVisitante: "43",
-  PorceEmpate: "54",
-  cuotaLocal: "3.4",
-  cuotaVisitante: "3.2",
-  cuotaEmpate: "5.4",
-};
 
 const initialForm = {
   idCompeticiones: null,
@@ -81,7 +62,7 @@ const initialForm = {
   fechaCompeticion: "",
   horaCompeticion: "",
   habiliParley: false,
-  estrategias: [estrategias],
+  estrategias: [],
 };
 
 const validationForm = (form) => {
@@ -99,14 +80,13 @@ const FormCompetition = ({
   let classes = useStyle();
 
   const [dataPaises, setDataPaises] = useState(null);
-  const [strategies, setStrategies] = useState(null);
   const [dataLigaLocal, setDataLigaLocal] = useState(null);
   const [dataLigaVisitante, setDataLigaVisitante] = useState(null);
   const [dataEquipoLocal, setDataEquipoLocal] = useState(null);
   const [dataEquipoVisitante, setDataEquipoVisitante] = useState(null);
-
   const [CodiPaisLocal, setCodiPaisLocal] = useState("");
   const [CodiPaisVisitante, setCodiPaisVisitante] = useState("");
+  
   //Hood Personalizado para valizado
   const {
     form,
@@ -119,7 +99,7 @@ const FormCompetition = ({
   } = UserForm(initialForm, validationForm);
 
   const traerPais = async () => {
-    const data = await helpHttpAxios().get("http://localhost:4000/country");
+    const data = await helpHttpAxios().get(`${API.URI}/country`);
     setDataPaises(data);
   };
 
@@ -127,21 +107,12 @@ const FormCompetition = ({
     traerPais();
   }, []);
 
-  useEffect(() => {
-    const traerEstrategias = async () => {
-      const data = await helpHttpAxios().get(
-        "http://localhost:4000/strategies"
-      );
-      setStrategies(data);
-    };
 
-    traerEstrategias();
-  }, []);
 
   useEffect(() => {
     const traerLigaLocal = async () => {
       const data = await helpHttpAxios().get(
-        `http://localhost:4000/league/${CodiPaisLocal}`
+        `${API.URI}/league/${CodiPaisLocal}`
       );
       setDataLigaLocal(data);
     };
@@ -152,7 +123,7 @@ const FormCompetition = ({
   useEffect(() => {
     const traerLigaVisitante = async () => {
       const data = await helpHttpAxios().get(
-        `http://localhost:4000/league/${CodiPaisVisitante}`
+        `${API.URI}/league/${CodiPaisVisitante}`
       );
       setDataLigaVisitante(data);
     };
@@ -163,7 +134,7 @@ const FormCompetition = ({
   useEffect(() => {
     const traerEquipos = async () => {
       const data = await helpHttpAxios().get(
-        `http://localhost:4000/team/${form.idLigaLocal}`
+        `${API.URI}/team/${form.idLigaLocal}`
       );
       setDataEquipoLocal(data);
     };
@@ -174,7 +145,7 @@ const FormCompetition = ({
   useEffect(() => {
     const traerEquipos = async () => {
       const data = await helpHttpAxios().get(
-        `http://localhost:4000/team/${form.idLigaVisitante}`
+        `${API.URI}/team/${form.idLigaVisitante}`
       );
       setDataEquipoVisitante(data);
     };
@@ -231,6 +202,10 @@ const FormCompetition = ({
   const handleUpdate = (data) => {
     console.log(data);
   };
+
+  const handleSubmitDetalleStrategy = (data) => {
+    form.estrategias.push(data);
+  }
 
   return (
     <div>
@@ -345,6 +320,7 @@ const FormCompetition = ({
                   className={classes.formControl}
                   size="small"
                 >
+
                   <InputLabel htmlFor="outlined-age-native-simple">
                     Pais
                   </InputLabel>
@@ -515,17 +491,9 @@ const FormCompetition = ({
               </Grid>
             </Grid>
 
-            <Grid container justifyContent="center" spacing={1}>
+            <Grid container justifyContent="center" spacing={1}>        
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Button
-                fullWidth
-                  variant="outlined"
-                  onClick={handleReset}        
-                  type="button"
-                  className={classes.botonStrategy}
-                >
-                  Agregar Estrategia
-                </Button>
+                <ModalCompetition handleSubmitDetalleStrategy={handleSubmitDetalleStrategy} />
               </Grid>
             </Grid>
           </Grid>
