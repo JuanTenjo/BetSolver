@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import FormCompetition from '../Components/CompetitionComponent/FormCompetition';
-import TableCompetition from '../Components/CompetitionComponent/TableCompetition';
+import FormCompetition from "../Components/CompetitionComponent/FormCompetition";
+import TableCompetition from "../Components/CompetitionComponent/TableCompetition";
 import Loader from "../Components/Necesarios/Loader";
 import Message from "../Components/Necesarios/Message";
 import { makeStyles, Grid } from "@material-ui/core";
@@ -16,30 +16,30 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-
 const PageCompetition = () => {
-
   let classes = useStyle();
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState({});
   const [dataToEdit, setDataToEdit] = useState(false);
   const [dataCompetition, setDataCompetition] = useState(null);
+
   useEffect(() => {
     traerCompeticiones();
-  },[]);
+  }, []);
 
   const traerCompeticiones = async () => {
     setLoading(true);
-    const data = await helpHttpAxios().get(`${API.URI}/competition`);                                                                                                                         
+    const data = await helpHttpAxios().get(`${API.URI}/competition`);
     setDataCompetition(data);
     setLoading(false);
   };
 
   const createData = async (data) => {
+
     setLoading(true);
 
-    let URL = `${API.URI}/user/register`;
+    let URL = `${API.URI}/competition/register`;
 
     let config = {
       data: data,
@@ -63,52 +63,45 @@ const PageCompetition = () => {
     setLoading(false);
 
     traerCompeticiones();
-
   };
+
   const updateData = async (data) => {
 
-    return "Hola";
+    setLoading(true);
 
-    // setLoading(true);
+    let URL = `${API.URI}/competition/update`;
 
-    // let URL = `${API.URI}/user/update`;
+    let config = {
+      data: data,
+    };
 
-    // let config = {
-    //   data: data,
-    // };
+    const res = await helpHttpAxios().put(URL, config);
 
-    // const res = await helpHttpAxios().put(URL, config);
-
-    // if (!res.err) {
-    //   setResponse(res.message);
-    //   setTimeout(() => {
-    //     setResponse(false);
-    //   }, 5000);
-    // } else {
-    //   console.log(res);
-    //   let errores = { errores: res.message };
-    //   console.log(errores);
-    //   setError(errores);
-    //   setTimeout(() => {
-    //     setError(false);
-    //   }, 9000);
-
-    // setLoading(false);
-
-    // traerCompeticiones();
-
+    if (!res.err) {
+      setResponse(res.message);
+      setTimeout(() => {
+        setResponse(false);
+      }, 5000);
+    } else {
+      let errores = { errores: res.message };
+      setError(errores);
+      setTimeout(() => {
+        setError(false);
+      }, 9000);     
     }
 
+    setLoading(false);
 
+    traerCompeticiones();
+  };
 
   const deleteData = async (idUsuarios) => {
-
     setLoading(true);
 
     let URL = `${API.URI}/user/delete`;
 
     let config = {
-      data: {'idUsuarios':idUsuarios},
+      data: { idUsuarios: idUsuarios },
     };
 
     const res = await helpHttpAxios().del(URL, config);
@@ -131,18 +124,14 @@ const PageCompetition = () => {
     setLoading(false);
 
     traerCompeticiones();
-
   };
 
   return (
     <div className={classes.content}>
       <div className={classes.toolbar}>
-
         <Grid container direction="row">
-
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-
-            <FormCompetition 
+            <FormCompetition
               createData={createData}
               updateData={updateData}
               dataToEdit={dataToEdit}
@@ -155,13 +144,10 @@ const PageCompetition = () => {
               })}
 
             {response && <Message msg={response} estado={true} />}
-
-
           </Grid>
 
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-
-          {loading ? (
+            {loading ? (
               <Loader />
             ) : (
               <TableCompetition
@@ -175,8 +161,6 @@ const PageCompetition = () => {
       </div>
     </div>
   );
-
-
-}
+};
 
 export default PageCompetition;

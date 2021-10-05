@@ -25,18 +25,22 @@ controller.register = async function (req, res) {
         await ValidaIDTeam(params.idEquipoLocal) == false ? ErroresValidacion.push(`El equipo local ingresado ya no existe o esta desabilitado`) : true;
         await ValidaIDTeam(params.idEquipoVisitante) == false ? ErroresValidacion.push(`El equipo visitante ingresado ya no existe o esta desabilitado`) : true;
         await validarCompetition(params) ? ErroresValidacion.push(`Esta competición ya existe`) : true;
-
+        params.estrategias.length <= 0 ? ErroresValidacion.push(`La competencia ingresada no tiene estrategias, agregale para poder registrar`) : true;
         params.idEquipoLocal === params.idEquipoVisitante ?  ErroresValidacion.push(`No puede registrar una competición con el mismo equipo`) : true;
-
         const hoy = new Date();      
-
-        let fechaCompeticion =new Date(params.fechaCompeticion); // 2020/2/29 / 2021-08-18 / 18-08-2021
-
+        hoy.setUTCHours(0,0,0,0);
+        let fechaCompeticion = new Date(params.fechaCompeticion); // 2020/2/29 / 2021-08-18 / 18-08-2021
         if(isNaN(fechaCompeticion)){
             ErroresValidacion.push("Fecha de la competicion no tiene un formato valido por favor ingrese yyyy-MM-dd")
         }
+        fechaCompeticion < hoy ?  ErroresValidacion.push(`No puede registrar una competicion con una fecha anterior a hoy`) : true;
 
-        fechaCompeticion < hoy ?  ErroresValidacion.push(`No puede registrar una competicion con una fecha anteriora hoy`) : true;
+        
+        // const horaHoy = new Date();    
+        // horaHoy.setMinutes(horaHoy.getMinutes() - 90);     
+        // const horaActMenos90 = horaHoy.getHours() + ':' + horaHoy.getMinutes() + ':' + horaHoy.getSeconds();
+        // console.log(horaActMenos90);
+
 
         if (ErroresValidacion.length != 0) {
 
@@ -48,7 +52,7 @@ controller.register = async function (req, res) {
 
             if (estado.error || estado === false) {
 
-                res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se registro la competición" });
+                res.status(400).json({ "message": [estado.mensaje ? estado.mensaje : "No se registro la competición"] });
 
             } else {
          
@@ -57,11 +61,14 @@ controller.register = async function (req, res) {
                 if(IDCompeticion){
 
                     if(params.estrategias){
+
+
                         const estadoDetalle = await registerDetalle(params.estrategias,IDCompeticion)
+                        console.log("Si llega aqui");
 
                         if(estadoDetalle.error){
-    
-                            res.status(400).json({ "message": `Se registro la competencia pero quedo sin estrategias. Motivo:${estadoDetalle.error}`});
+
+                            res.status(403).json({ "message": [`Se registro la competencia pero quedo sin estrategias. Motivo:${estadoDetalle.error}`] });
                             
                         }else{
         
@@ -117,9 +124,10 @@ const registerDetalle = async function (estrategias, IDCompeticion) {
 
 
         estrategiasRow.PorceVisitante == null || estrategiasRow.PorceVisitante == "" ? ErroresValidacion.push(" Una de las porcentajes del visitante esta vacio") : false;
-        Number.isInteger(estrategiasRow.PorceVisitante) == false ? ErroresValidacion.push(" Se esperara un numero entero en porce visitante") : false;
-        Number.isInteger(estrategiasRow.PorceLocal) == false ? ErroresValidacion.push(" Se esperara un numero entero en porce local") : false;
-        Number.isInteger(estrategiasRow.PorceEmpate) == false ? ErroresValidacion.push(" Se esperara un numero entero en porce empate") : false;
+
+        // Number.isFloat(estrategiasRow.PorceVisitante) == false ? ErroresValidacion.push(" Se esperara un numero entero en porce visitante") : false;
+        // Number.isInteger(estrategiasRow.PorceLocal) == false ? ErroresValidacion.push(" Se esperara un numero entero en porce local") : false;
+        // Number.isInteger(estrategiasRow.PorceEmpate) == false ? ErroresValidacion.push(" Se esperara un numero entero en porce empate") : false;
 
     });
 
@@ -131,7 +139,7 @@ const registerDetalle = async function (estrategias, IDCompeticion) {
 
     } else {
 
-        let estado;
+        let estado = false;
 
         estrategias.forEach(estrategiasRow => {
 
@@ -176,6 +184,7 @@ controller.update = async function (req, res) {
         await ValidaIDLiga(params.idLigaVisitante) == false ? ErroresValidacion.push(`La liga ingresada es invalida o esta desabilitada`) : true;
         await ValidaIDTeam(params.idEquipoLocal) == false ? ErroresValidacion.push(`El equipo local ingresado ya no existe o esta desabilitado`) : true;
         await ValidaIDTeam(params.idEquipoVisitante) == false ? ErroresValidacion.push(`El equipo visitante ingresado ya no existe o esta desabilitado`) : true;
+        params.estrategias.length <= 0 ? ErroresValidacion.push(`La competencia ingresada no tiene estrategias, agregale para poder registrar`) : true;
 
         if(params.golesLocal){
             Number.isInteger(params.golesLocal) == false  ? ErroresValidacion.push("Se esperara un numero entero en el marcador del local") : false;
@@ -192,13 +201,15 @@ controller.update = async function (req, res) {
 
         const hoy = new Date();      
 
-        let fechaCompeticion =new Date(params.fechaCompeticion); // 2020/2/29 / 2021-08-18 / 18-08-2021
+        hoy.setUTCHours(0,0,0,0);
+
+        let fechaCompeticion = new Date(params.fechaCompeticion); // 2020/2/29 / 2021-08-18 / 18-08-2021
 
         if(isNaN(fechaCompeticion)){
             ErroresValidacion.push("Fecha de la competicion no tiene un formato valido por favor ingrese yyyy-MM-dd")
         }
 
-        fechaCompeticion < hoy ?  ErroresValidacion.push(`No puede actualizar una competicion con una fecha anterior a hoy`) : true;
+        fechaCompeticion < hoy ?  ErroresValidacion.push(`No puede actualizar la competicion con una fecha anterior a hoy`) : true;
 
         if (ErroresValidacion.length != 0) {
 

@@ -52,20 +52,42 @@ const initialForm = {
 };
 
 const validationForm = (form) => {
+  
   let error = {};
 
+  if (!form.idEstrategia.trim()) {
+    error.idEstrategia = "Debes seleccionar una estrategia";
+  }
+  if (!form.PorceLocal.trim()) {
+    error.PorceLocal = "Debes ingresar un porcentaje para local";
+  }
+  if (!form.PorceVisitante.trim()) {
+    error.PorceVisitante = "Debes ingresar un porcentaje para visitante";
+  }
+  if (!form.PorceEmpate.trim()) {
+    error.PorceEmpate = "Debes ingresar un porcentaje para empate";
+  }
+
   return error;
+
 };
 
 const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
-  const { form, setForm, handleChange, handleBlur } = UserForm(
+
+  const {error, setError, form, setForm, handleChange } = UserForm(
     initialForm,
     validationForm
   );
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    handleSubmitDetalleStrategy(form);
+  const handleSubmitModal = async () => {
+
+    setError(validationForm(form));
+
+    if (Object.keys(error).length === 0) {
+      handleSubmitDetalleStrategy(form);
+      setForm(initialForm);
+    }
+  
   };
 
   let classes = useStyle();
@@ -88,20 +110,20 @@ const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
   };
 
   const handleClose = () => {
+    setForm(initialForm);
     setOpen(false);
   };
 
   const handleInputSelect = (e) => {
-    let index = e.target.selectedIndex;
-    // console.log(e.target.options[index].text); // obtiene el texto de la opción seleccionada
-    // console.log(e.target.value);
 
+    let index = e.target.selectedIndex;
     form.nombreEstrategia = e.target.options[index].text;
+
+    setForm({nombreEstrategia: e.target.options[index].text})
     setForm({
       ...form,
       [e.target.name]: e.target.value, 
     });
-    
   }
 
   return (
@@ -121,7 +143,7 @@ const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Gestionar Estrategias</DialogTitle>
-        <form onSubmit={handleSubmit}>
+        <form>
           <DialogContent>
             <DialogContentText>
               Desde aqui podras agregar las estrategias, predicciones y
@@ -165,7 +187,6 @@ const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
               className={classes.textFields}
               value={form.PorceLocal}
               onChange={handleChange}
-              onBlur={handleBlur}
               name="PorceLocal"
               label="%Local"
               type="number"
@@ -184,7 +205,6 @@ const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
               className={classes.textFields}
               value={form.PorceVisitante}
               onChange={handleChange}
-              onBlur={handleBlur}
               name="PorceVisitante"
               label="%Visitante"
               type="number"
@@ -203,7 +223,6 @@ const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
               className={classes.textFields}
               value={form.PorceEmpate}
               onChange={handleChange}
-              onBlur={handleBlur}
               name="PorceEmpate"
               label="%Empate"
               type="number"
@@ -216,7 +235,6 @@ const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
               className={classes.textFields}
               value={form.cuotaLocal}
               onChange={handleChange}
-              onBlur={handleBlur}
               name="cuotaLocal"
               label="Cuota L"
               type="text"
@@ -229,7 +247,6 @@ const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
               className={classes.textFields}
               value={form.cuotaVisitante}
               onChange={handleChange}
-              onBlur={handleBlur}
               name="cuotaVisitante"
               label="Cuota V"
               type="text"
@@ -242,17 +259,35 @@ const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
               className={classes.textFields}
               value={form.cuotaEmpate}
               onChange={handleChange}
-              onBlur={handleBlur}
               name="cuotaEmpate"
               label="Cuota E"
               type="text"
             />
+
+            {error.idEstrategia && (
+              <small>{error.idEstrategia} </small>
+            )}
+
+            {error.PorceLocal && (
+              <small>{error.PorceLocal} </small>
+            )}
+
+            {error.PorceVisitante && (
+              <small>{error.PorceVisitante} </small>
+            )}
+
+            {error.PorceEmpate && (
+              <small>{error.PorceEmpate} </small>
+            )}
+            
+            
+            
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
               Cancelar
             </Button>
-            <Button type="submit" color="primary">
+            <Button onClick={() => handleSubmitModal()} type="button" color="primary">
               Agregar
             </Button>
           </DialogActions>

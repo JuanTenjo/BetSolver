@@ -106,7 +106,7 @@ model.update = async (params) => {
     try {
 
         let query = `UPDATE competencias SET idLigaLocal = ${params.idLigaLocal}, idLigaVisitante = ${params.idLigaVisitante}, idEquipoLocal = ${params.idEquipoLocal}, idEquipoVisitante = ${params.idEquipoVisitante}, golesLocal = '${params.golesLocal}', golesVisitante = '${params.golesVisitante}',
-        fechaCompeticion = '${params.fechaCompeticion}', horaCompeticion = '${params.horaCompeticion}', habilitado = ${params.habilitado}, habiliParley = ${params.habiliParley} WHERE idCompeticiones = ${params.idCompeticiones}`
+        fechaCompeticion = '${params.fechaCompeticion}', horaCompeticion = '${params.horaCompeticion}', habiliParley = ${params.habiliParley} WHERE idCompeticiones = ${params.idCompeticiones}`
    
         const UpdateCompeticion = await pool.query(query);
 

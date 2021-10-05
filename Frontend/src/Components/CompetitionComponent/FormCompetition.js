@@ -4,6 +4,7 @@ import UserForm from "../../Hooks/useForm";
 import {red} from "@material-ui/core/colors";
 import ModalCompetition from './ModalCompetition';
 import API from "../../Utils/dominioBackend";
+import Alert from "@material-ui/lab/Alert";
 import DeleteIcon from '@material-ui/icons/Delete';
 import {
   Grid,
@@ -68,6 +69,45 @@ const initialForm = {
 const validationForm = (form) => {
   let error = {};
 
+  if (!form.idLigaLocal.trim()) {
+    error.idLigaLocal = "Debes seleccionar una liga local";
+  }
+
+  if (!form.idLigaVisitante.trim()) {
+    error.idLigaVisitante = "Debes seleccionar una liga visitante";
+  }
+  if (!form.idEquipoLocal.trim()) {
+    error.idEquipoLocal = "Debes seleccionar un equipo local";
+  }
+  if (!form.idEquipoVisitante.trim()) {
+    error.idEquipoVisitante = "Debes seleccionar un equipo visitante";
+  }
+
+  if (!form.fechaCompeticion.trim()) {
+    error.fechaCompeticion = "Debes ingresar la fecha de la competencia";
+  }
+
+  const hoy = new Date();  
+  hoy.setUTCHours(0,0,0,0);
+  let fechaCompeticion = new Date(form.fechaCompeticion); 
+
+  if (fechaCompeticion < hoy) {
+    error.fechaCompeticion = "Debes seleccionar una fecha mayor a hoy";
+  }
+
+  if (!form.horaCompeticion.trim()) {
+    error.horaCompeticion = "Debes ingresar la hora de la competencia";
+  }
+
+
+  if (form.estrategias) {
+    if (form.estrategias.length <= 0) {
+      error.validacionStrategy = "No has ingresado ninguna estrategia para este partido";
+    }
+  }
+
+  
+
   return error;
 };
 
@@ -94,7 +134,6 @@ const FormCompetition = ({
     error,
     setError,
     handleChange,
-    handleBlur,
     handleChangechecked,
   } = UserForm(initialForm, validationForm);
 
@@ -106,11 +145,9 @@ const FormCompetition = ({
 
   useEffect(() => {
     if (dataToEdit) {
-
       setCodiPaisLocal(dataToEdit.codiPaisLocal);
       setCodiPaisVisitante(dataToEdit.codiPaisVisi);
       setForm(dataToEdit);
-      setError(validationForm(dataToEdit));
     } else {
       setForm(initialForm);
     }
@@ -164,34 +201,30 @@ const FormCompetition = ({
     traerEquipos();
   }, [form.idLigaVisitante]);
 
-  // useEffect(() => {
-  //   //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
-  //   if (dataToEdit) {
 
-  //     document.getElementById("password").setAttribute("disabled","");
-  //     document.getElementById("passwordConfirm").setAttribute("disabled","");
 
-  //     setForm(dataToEdit);
-  //     setError(validationForm(dataToEdit));
-  //   } else {
+  const handleSubmitData = async (e) => {
 
-  //     document.getElementById("password").removeAttribute("disabled");
-  //     document.getElementById("passwordConfirm").removeAttribute("disabled");
-
-  //     setForm(initialForm);
-  //   }
-  // }, [dataToEdit, setForm, setError]);
-
-  const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError(validationForm(form));
-    if (Object.keys(error).length === 0) {
-      if (form.idUsuarios === null) {
+
+    setTimeout(() => {
+      setError(initialForm);
+    }, 5000);
+
+    console.log(error);
+    
+    if (Number(Object.keys(error).length) === 0) {
+ 
+      if (form.idCompeticiones === null) {
         createData(form);
       } else {
-        updateData(form);
+        console.log("Actualizo");
+        //updateData(form);
       }
     }
+
   };
 
   const handleReset = () => {
@@ -206,21 +239,27 @@ const FormCompetition = ({
     setCodiPaisVisitante(e.target.value);
   };
 
-  // const handleChangeChek = (event) => {
-  //   setState({ ...state, [event.target.name]: event.target.checked });
-  // };
 
-  const handleUpdate = (data) => {
-    console.log(data);
+  const deteleStrategy = (idStrategy) => {
+    let newData = form.estrategias.filter((el) => el.idEstrategia !== idStrategy);
+    form.estrategias = newData;
+    //La siguiente linea la hago mas que todo para renderizar el componente
+    setForm({
+      ...form,
+    });
+
   };
 
   const handleSubmitDetalleStrategy = (data) => {
-    let newData = form.estrategias.filter((el) => el.idEstrategia === data.idEstrategia);
+    let newData = form.estrategias.filter((el) => Number(el.idEstrategia) === Number(data.idEstrategia));
     if(newData.length >= 1){
       window.alert("No puedes ingresar esta estrategia porque ya existe en esta competencia");
     }else{ 
       form.estrategias.push(data);
     }
+    setForm({
+      ...form,
+    });
   }
 
   return (
@@ -231,7 +270,7 @@ const FormCompetition = ({
         </h3>
       </Grid>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitData}>
         <Grid container justifyContent="center" spacing={1}>
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <Grid container justifyContent="center" spacing={1}>
@@ -281,7 +320,6 @@ const FormCompetition = ({
                       value={form.idLigaLocal}
                       onChange={handleChange}
                       label="Liga Local"
-                      onBlur={handleBlur}
                       name="idLigaLocal"
                     >
                       <option aria-label="None" value="" />
@@ -295,6 +333,10 @@ const FormCompetition = ({
                         })}
                     </Select>
                   </FormControl>
+                )}
+
+                {error.idLigaLocal && (
+                  <Alert severity="warning">{error.idLigaLocal}</Alert>
                 )}
 
                 {form.idLigaLocal && (
@@ -312,7 +354,6 @@ const FormCompetition = ({
                       value={form.idEquipoLocal}
                       onChange={handleChange}
                       label="Equipo Local"
-                      onBlur={handleBlur}
                       name="idEquipoLocal"
                     >
                       <option aria-label="None" value="" />
@@ -327,6 +368,11 @@ const FormCompetition = ({
                     </Select>
                   </FormControl>
                 )}
+
+                {error.idEquipoLocal && (
+                  <Alert severity="warning">{error.idEquipoLocal}</Alert>
+                )}
+
               </Grid>
 
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -375,7 +421,6 @@ const FormCompetition = ({
                       value={form.idLigaVisitante}
                       onChange={handleChange}
                       label="Liga Visitante"
-                      onBlur={handleBlur}
                       name="idLigaVisitante"
                     >
                       <option aria-label="None" value="" />
@@ -389,6 +434,10 @@ const FormCompetition = ({
                         })}
                     </Select>
                   </FormControl>
+                )}
+
+                {error.idLigaVisitante && (
+                  <Alert severity="warning">{error.idLigaVisitante}</Alert>
                 )}
 
                 {form.idLigaVisitante && (
@@ -406,7 +455,6 @@ const FormCompetition = ({
                       value={form.idEquipoVisitante}
                       onChange={handleChange}
                       label="Equipo Visitante"
-                      onBlur={handleBlur}
                       name="idEquipoVisitante"
                     >
                       <option aria-label="None" value="" />
@@ -420,6 +468,9 @@ const FormCompetition = ({
                         })}
                     </Select>
                   </FormControl>
+                )}
+                {error.idEquipoVisitante && (
+                  <Alert severity="warning">{error.idEquipoVisitante}</Alert>
                 )}
               </Grid>
             </Grid>
@@ -436,8 +487,11 @@ const FormCompetition = ({
                   className={classes.DatePicket}
                   InputLabelProps={{
                     shrink: true,
-                  }}
+                  }}         
                 />
+                {error.fechaCompeticion && (
+                  <Alert severity="warning">{error.fechaCompeticion}</Alert>
+                )}
               </Grid>
             </Grid>
 
@@ -463,7 +517,9 @@ const FormCompetition = ({
                     step: 300, // 5 min
                   }}
                 />
-
+                {error.horaCompeticion && (
+                  <Alert severity="warning">{error.horaCompeticion}</Alert>
+                )}
               </Grid>
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                 <FormControlLabel
@@ -482,7 +538,7 @@ const FormCompetition = ({
 
             <Grid container justifyContent="center" spacing={1}>        
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <ModalCompetition handleSubmitDetalleStrategy={handleSubmitDetalleStrategy} />
+                <ModalCompetition handleSubmitDetalleStrategy={handleSubmitDetalleStrategy} />      
               </Grid>
             </Grid>
           </Grid>
@@ -533,7 +589,7 @@ const FormCompetition = ({
                         <TableCell align="center">
                           <IconButton
                             aria-label="UpdateIcon"
-                            onClick={() => handleUpdate(row)}
+                            onClick={() => deteleStrategy(row.idEstrategia)}
                           >
                             <DeleteIcon
                               style={{ color: red[700] }}
@@ -545,7 +601,11 @@ const FormCompetition = ({
                     ))}
                 </TableBody>
               </Table>
+
             </TableContainer>
+            {error.validacionStrategy && (
+                <Alert severity="warning">{error.validacionStrategy}</Alert>
+            )}
           </Grid>
         </Grid>
 
@@ -566,6 +626,7 @@ const FormCompetition = ({
               variant="outlined"
               type="submit"
               color="primary"
+              onClick={handleSubmitData}
               className={classes.boton}
             >
               Enviar
