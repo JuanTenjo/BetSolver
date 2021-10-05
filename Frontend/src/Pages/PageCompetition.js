@@ -24,7 +24,6 @@ const PageCompetition = () => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState({});
   const [dataToEdit, setDataToEdit] = useState(false);
-  const [dataUsuarios, setDataUsuarios] = useState(null);
   const [dataCompetition, setDataCompetition] = useState(null);
   useEffect(() => {
     traerCompeticiones();
@@ -32,7 +31,7 @@ const PageCompetition = () => {
 
   const traerCompeticiones = async () => {
     setLoading(true);
-    const data = await helpHttpAxios().get(`${API.URI}/user`);                                                                                                                         
+    const data = await helpHttpAxios().get(`${API.URI}/competition`);                                                                                                                         
     setDataCompetition(data);
     setLoading(false);
   };
@@ -67,36 +66,40 @@ const PageCompetition = () => {
 
   };
   const updateData = async (data) => {
-    setLoading(true);
 
-    let URL = `${API.URI}/user/update`;
+    return "Hola";
 
-    let config = {
-      data: data,
-    };
+    // setLoading(true);
 
-    const res = await helpHttpAxios().put(URL, config);
+    // let URL = `${API.URI}/user/update`;
 
-    if (!res.err) {
-      setResponse(res.message);
-      setTimeout(() => {
-        setResponse(false);
-      }, 5000);
-    } else {
-      console.log(res);
-      let errores = { errores: res.message };
-      console.log(errores);
-      setError(errores);
-      setTimeout(() => {
-        setError(false);
-      }, 9000);
+    // let config = {
+    //   data: data,
+    // };
+
+    // const res = await helpHttpAxios().put(URL, config);
+
+    // if (!res.err) {
+    //   setResponse(res.message);
+    //   setTimeout(() => {
+    //     setResponse(false);
+    //   }, 5000);
+    // } else {
+    //   console.log(res);
+    //   let errores = { errores: res.message };
+    //   console.log(errores);
+    //   setError(errores);
+    //   setTimeout(() => {
+    //     setError(false);
+    //   }, 9000);
+
+    // setLoading(false);
+
+    // traerCompeticiones();
+
     }
 
-    setLoading(false);
 
-    traerCompeticiones();
-
-  };
 
   const deleteData = async (idUsuarios) => {
 

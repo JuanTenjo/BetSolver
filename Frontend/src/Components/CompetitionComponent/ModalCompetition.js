@@ -6,6 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import API from "../../Utils/dominioBackend";
+
 import {
   makeStyles,
   TextField,
@@ -56,20 +57,15 @@ const validationForm = (form) => {
   return error;
 };
 
-const ModalCompetition = ({handleSubmitDetalleStrategy}) => {
-
-  const { form, handleChange, handleBlur } = UserForm(
+const ModalCompetition = ({ handleSubmitDetalleStrategy }) => {
+  const { form, setForm, handleChange, handleBlur } = UserForm(
     initialForm,
     validationForm
   );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.idLigas === null) {
-      //createData(form);
-    } else {   
-       handleSubmitDetalleStrategy(form);
-    }
+    handleSubmitDetalleStrategy(form);
   };
 
   let classes = useStyle();
@@ -78,9 +74,7 @@ const ModalCompetition = ({handleSubmitDetalleStrategy}) => {
 
   useEffect(() => {
     const traerEstrategias = async () => {
-      const data = await helpHttpAxios().get(
-        `${API.URI}/strategies`
-      );
+      const data = await helpHttpAxios().get(`${API.URI}/strategies`);
       setStrategies(data);
     };
 
@@ -96,6 +90,19 @@ const ModalCompetition = ({handleSubmitDetalleStrategy}) => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleInputSelect = (e) => {
+    let index = e.target.selectedIndex;
+    // console.log(e.target.options[index].text); // obtiene el texto de la opción seleccionada
+    // console.log(e.target.value);
+
+    form.nombreEstrategia = e.target.options[index].text;
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value, 
+    });
+    
+  }
 
   return (
     <div>
@@ -129,7 +136,7 @@ const ModalCompetition = ({handleSubmitDetalleStrategy}) => {
                 required
                 native
                 value={form.idEstrategia}
-                onChange={handleChange}
+                onChange={handleInputSelect}
                 label="Estrategia"
                 name="idEstrategia"
               >

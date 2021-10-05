@@ -164,7 +164,19 @@ model.teams = async () => {
 model.competition = async () => {
     try {
 
-        let query = `SELECT * FROM competencias`
+        let query = `SELECT comp.idCompeticiones, 
+        l1.codiPais as codiPaisLocal, comp.idLigaLocal, l1.nombreLiga as ligaLocal,
+        l2.codiPais as codiPaisVisi, comp.idLigaVisitante, l2.nombreLiga as ligaVisitante, 
+        comp.idEquipoLocal, e1.nombreEquipo as equipoLocal,
+        comp.idEquipoVisitante, e2.nombreEquipo as equipoVisitante,  
+        DATE_FORMAT(comp.fechaCompeticion, "%Y-%m-%d") as fechaCompeticion, comp.horaCompeticion, comp.golesLocal,
+         comp.golesVisitante, comp.habiliParley, comp.habilitado
+        FROM competencias as comp 
+        INNER JOIN ligas l1 ON comp.idLigaLocal = l1.idLigas 
+        INNER JOIN ligas l2 ON comp.idLigaVisitante = l2.idLigas 
+        INNER JOIN equipos e1 ON comp.idEquipoLocal = e1.idEquipos 	
+        INNER JOIN equipos e2 ON comp.idEquipoVisitante = e2.idEquipos
+        order by comp.fechaCompeticion, comp.horaCompeticion`
 
         const Competition = await pool.query(query);
 
@@ -182,7 +194,7 @@ model.competition = async () => {
 model.detallecompetition = async (IdCompetition) => {
     try {
 
-        let query = `SELECT * FROM detallecompentencia WHERE idCompeticion = ${IdCompetition}`
+        let query = `SELECT detallecompentencia.*, estrategias.nombreEstrategia FROM detallecompentencia, estrategias WHERE detallecompentencia.idEstrategia = estrategias.idEstrategia and idCompeticion = ${IdCompetition}`
 
         const detalleCompetition = await pool.query(query);
 

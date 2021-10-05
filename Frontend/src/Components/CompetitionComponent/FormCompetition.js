@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { helpHttpAxios } from "../../Helpers/helpHttpsAxios";
 import UserForm from "../../Hooks/useForm";
-import { yellow } from "@material-ui/core/colors";
-import UpdateIcon from "@material-ui/icons/Update";
+import {red} from "@material-ui/core/colors";
 import ModalCompetition from './ModalCompetition';
 import API from "../../Utils/dominioBackend";
+import DeleteIcon from '@material-ui/icons/Delete';
 import {
   Grid,
   makeStyles,
@@ -103,11 +103,22 @@ const FormCompetition = ({
     setDataPaises(data);
   };
 
+
+  useEffect(() => {
+    if (dataToEdit) {
+
+      setCodiPaisLocal(dataToEdit.codiPaisLocal);
+      setCodiPaisVisitante(dataToEdit.codiPaisVisi);
+      setForm(dataToEdit);
+      setError(validationForm(dataToEdit));
+    } else {
+      setForm(initialForm);
+    }
+  }, [dataToEdit,setForm,setError]);
+
   useEffect(() => {
     traerPais();
   }, []);
-
-
 
   useEffect(() => {
     const traerLigaLocal = async () => {
@@ -204,7 +215,12 @@ const FormCompetition = ({
   };
 
   const handleSubmitDetalleStrategy = (data) => {
-    form.estrategias.push(data);
+    let newData = form.estrategias.filter((el) => el.idEstrategia === data.idEstrategia);
+    if(newData.length >= 1){
+      window.alert("No puedes ingresar esta estrategia porque ya existe en esta competencia");
+    }else{ 
+      form.estrategias.push(data);
+    }
   }
 
   return (
@@ -413,7 +429,7 @@ const FormCompetition = ({
                 <TextField
                   required={true}
                   name="fechaCompeticion"
-                  defaultValue={form.fechaCompeticion}
+                  value={form.fechaCompeticion}
                   label="Fecha de la competencia"
                   onChange={handleChange}
                   type="date"
@@ -438,7 +454,7 @@ const FormCompetition = ({
                   label="Hora de la competencia"
                   onChange={handleChange}
                   type="time"
-                  defaultValue={form.horaCompeticion}
+                  value={form.horaCompeticion}
                   className={classes.InputTime}
                   InputLabelProps={{
                     shrink: true,
@@ -448,39 +464,12 @@ const FormCompetition = ({
                   }}
                 />
 
-                {/* <FormControl
-                  variant="outlined"
-                  className={classes.formControl}
-                  size="small"
-                >
-                  <InputLabel htmlFor="outlined-age-native-simple">
-                    Estrategias
-                  </InputLabel>
-                  <Select
-                    required
-                    native
-                    value={CodiPaisLocal}
-                    onChange={handleSelectPais}
-                    label="Estrategias"
-                    name="CodiPaisLocal"
-                  >
-                    <option aria-label="None" value="" />
-                    {strategies &&
-                      strategies.map((el) => {
-                        return (
-                          <option key={el.idEstrategia} value={el.idEstrategia}>
-                            {el.nombreEstrategia}
-                          </option>
-                        );
-                      })}
-                  </Select>
-                </FormControl> */}
               </Grid>
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={form.habiliParley}
+                      checked={(Number(form.habiliParley) === 1 ? true : false)}
                       onChange={handleChangechecked}
                       name="habiliParley"
                       color="primary"
@@ -546,8 +535,8 @@ const FormCompetition = ({
                             aria-label="UpdateIcon"
                             onClick={() => handleUpdate(row)}
                           >
-                            <UpdateIcon
-                              style={{ color: yellow[700] }}
+                            <DeleteIcon
+                              style={{ color: red[700] }}
                               fontSize="small"
                             />
                           </IconButton>
