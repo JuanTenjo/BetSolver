@@ -72,7 +72,7 @@ const TableCompetition = ({setdataToEdit,dataCompetition,deleteData}) => {
     const handleDialog = (operacion, ID) => {
         setOpen(!open);
         SetInfoDialog({
-        tipo: "Usuario",
+        tipo: "Competicion",
         funcion: deleteData,
         operacion,
         ID,

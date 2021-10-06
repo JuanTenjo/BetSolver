@@ -126,7 +126,7 @@ model.update = async (params) => {
 model.erase = async (idCompeticiones) => {
     try {
 
-        let query = `DELETE FROM competencias WHERE idCompeticiones = ${idCompeticiones}`
+        let query = `update FROM competencias WHERE idCompeticiones = ${idCompeticiones}`
 
         const DeleteCompe = await pool.query(query);
 
@@ -137,7 +137,27 @@ model.erase = async (idCompeticiones) => {
     } catch (err) {
         return {
             error: true,
-            mensaje: [`Hubo un error al desabilitar el equipo en el Model: competition.model, en la funcion: erase. ERROR: ${err.sqlMessage} `],
+            mensaje: [`Hubo un error al eliminar la competencia en el Model: competition.model, en la funcion: erase. ERROR: ${err.sqlMessage} `],
+            respuesta: false
+        };
+    }
+}
+
+model.deshabilitar = async (idCompeticiones) => {
+    try {
+
+        let query = `update FROM competencias SET habilitado = !habilitado WHERE idCompeticiones = ${idCompeticiones}`
+
+        const DesaCompe = await pool.query(query);
+
+        let estado = DesaCompe.affectedRows > 0 ?  true : false
+        
+        return estado;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje: [`Hubo un error al deshabilitar la competition en el Model: competition.model, en la funcion: deshabilitar. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }

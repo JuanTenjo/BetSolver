@@ -1,5 +1,5 @@
 const { ValidaIDLiga, ValidaIDTeam, ValidaNameTeam } = require('../models/validation.models')
-const { competition,detallecompetition, register, update, erase, teams, validarCompetition, traerUltimoID, registerEstrategias, deleteEstrategias } = require('../models/competition.model')
+const { competition,detallecompetition, register, update, erase, deshabilitar, teams, validarCompetition, traerUltimoID, registerEstrategias, deleteEstrategias } = require('../models/competition.model')
 const { validarNulo } = require('../utils/validationPatters')
 const controller = {};
 
@@ -288,7 +288,7 @@ controller.erase = async function (req, res) {
 
             } else {
 
-                res.status(200).json({ "message": `De elimino la competicion y sus estrategias exitosamente` });
+                res.status(200).json({ "message": `Se elimino la competicion` });
 
             }
 
@@ -300,6 +300,41 @@ controller.erase = async function (req, res) {
 
 };
 
+controller.deshabilitar = async function (req, res) {
+
+    if (req.user[0].idRol === 3) {
+
+        const idCompeticiones = req.body.idCompeticiones;
+
+        const ErroresValidacion = [];
+
+        await validarNulo(idCompeticiones) ? ErroresValidacion.push('El ID de la competicion no puede estar vacio') : true;
+
+        if (ErroresValidacion.length != 0) {
+
+            res.status(400).json({ "message": ErroresValidacion });
+
+        } else {
+
+            const estado = await deshabilitar(idCompeticiones);
+
+            if (estado.error || estado === false) {
+
+                res.status(400).json({ "message": estado.mensaje ? estado.mensaje : "No se deshabilito" });
+
+            } else {
+
+                res.status(200).json({ "message": `Se deshabilitado la competicion` });
+
+            }
+
+        }
+
+    } else {
+        res.status(403).json({ "message": "Lo siento pero no tiene los permisos necesarios para hacer esta operacion" });
+    }
+
+};
 controller.competition = async function(req, res) {
 
     if(req.user[0].idRol === 3){

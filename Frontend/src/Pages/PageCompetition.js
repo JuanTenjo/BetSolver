@@ -95,13 +95,13 @@ const PageCompetition = () => {
     traerCompeticiones();
   };
 
-  const deleteData = async (idUsuarios) => {
+  const deleteData = async (idCompeticiones) => {
     setLoading(true);
 
-    let URL = `${API.URI}/user/delete`;
+    let URL = `${API.URI}/competition/delete`;
 
     let config = {
-      data: { idUsuarios: idUsuarios },
+      data: { idCompeticiones: idCompeticiones },
     };
 
     const res = await helpHttpAxios().del(URL, config);
