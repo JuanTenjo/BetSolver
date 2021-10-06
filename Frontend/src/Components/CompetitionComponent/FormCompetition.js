@@ -87,23 +87,23 @@ const validationForm = (form) => {
     error.fechaCompeticion = "Debes ingresar la fecha de la competencia";
   }
 
-  // const hoy = new Date();
-  // hoy.setUTCHours(0,0,0,0);
-  // let day = hoy.getDate()
-  // let month = hoy.getMonth() + 1
-  // let year = hoy.getFullYear()
-  // let hoyModi = new Date(year,month,day);
+  const hoy = new Date();
+  hoy.setUTCHours(0,0,0,0);
+  let day = hoy.getDate()
+  let month = hoy.getMonth() + 1
+  let year = hoy.getFullYear()
+  let hoyModi = new Date(year,month,day);
 
-  // let fechaCompeticion = new Date(form.fechaCompeticion); 
+  let fechaCompeticion = new Date(form.fechaCompeticion); 
 
-  // console.log(form.fechaCompeticion);
+  console.log(form.fechaCompeticion);
 
-  // console.log(hoyModi.toLocaleDateString());
-  // //console.log(hoy);
+  console.log(hoyModi.toLocaleDateString());
+  //console.log(hoy);
 
-  // if (fechaCompeticion < hoy) {
-  //   error.fechaCompeticion = "Debes seleccionar una fecha mayor a hoy";
-  // }
+  if (fechaCompeticion < hoy) {
+    error.fechaCompeticion = "Debes seleccionar una fecha mayor a hoy";
+  }
 
   if (!form.horaCompeticion.trim()) {
     error.horaCompeticion = "Debes ingresar la hora de la competencia";

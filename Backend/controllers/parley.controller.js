@@ -3,7 +3,7 @@ const {
   ValidaIDTeam,
   ValidaNameTeam,
 } = require("../models/validation.models");
-const { register, update, erase } = require("../models/parley.model");
+const { register, update, erase,teamsAvalible } = require("../models/parley.model");
 const { validarNulo } = require("../utils/validationPatters");
 const controller = {};
 
@@ -251,6 +251,34 @@ controller.erase = async function (req, res) {
       }
     }
   } else {
+    res
+      .status(403)
+      .json({
+        message:
+          "Lo siento pero no tiene los permisos necesarios para hacer esta operacion",
+      });
+  }
+};
+
+
+controller.teamAvailable = async function (req, res) {
+
+  if (req.user[0].idRol === 3) {
+
+    const estado = await teamsAvalible();
+
+    if(estado.error || estado === false){
+
+        res.status(400).json(estado);
+
+    }else{
+
+        res.status(200).json(estado);
+        
+    }    
+    
+
+  }else {
     res
       .status(403)
       .json({

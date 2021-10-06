@@ -42,7 +42,7 @@ const Listas = (props) => {
       {
         text: "Gestionar Parleys",
         icon: <PlaylistAddIcon />,
-        onClick: () => history.push("/gestionParleys")
+        onClick: () => history.push("/gestionParley")
       },
       {
         text: "Gestionar paises",

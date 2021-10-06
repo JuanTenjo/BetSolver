@@ -4,8 +4,6 @@ import UpdateIcon from "@material-ui/icons/Update";
 import ClearIcon from "@material-ui/icons/Clear";
 import Dialogo from "../Necesarios/Dialogo";
 import CheckIcon from "@material-ui/icons/Check";
-import { helpHttpAxios } from "../../Helpers/helpHttpsAxios";
-import API from "../../Utils/dominioBackend";
 
 import {
     makeStyles,
@@ -34,7 +32,7 @@ const useStyle = makeStyles((theme) => ({
   };
   
 
-const TableCompetition = ({setdataToEdit,dataCompetition,deleteData}) => {
+const TableParley = ({setdataToEdit,dataUsuarios,deleteData}) => {
 
     
     let classes = useStyle();
@@ -42,37 +40,31 @@ const TableCompetition = ({setdataToEdit,dataCompetition,deleteData}) => {
     const [open, setOpen] = useState(false);
     const [InfoDialog, SetInfoDialog] = useState(initalDialog);
 
-    const handleUpdate = async (data) => {
-
-      let IDCompetencia = data.idCompeticiones;
-
-      const DetalleCompetencia = await helpHttpAxios().get(
-        `${API.URI}/competition/detalleCompetencia/${IDCompetencia}`
-      );
-      
+    const handleUpdate = (data) => {
 
       const row = {
-        codiPaisLocal: data.codiPaisLocal,
-        codiPaisVisi: data.codiPaisVisi,
-        idCompeticiones: IDCompetencia,
-        idLigaLocal: data.idLigaLocal.toString(),
-        idLigaVisitante: data.idLigaVisitante.toString(),
-        idEquipoLocal: data.idEquipoLocal.toString(),
-        idEquipoVisitante: data.idEquipoVisitante.toString(),
-        fechaCompeticion: data.fechaCompeticion,
-        horaCompeticion: data.horaCompeticion,
-        habiliParley: data.habiliParley,
-        estrategias: DetalleCompetencia,
+        idUsuarios: data.idUsuarios,
+        idRol:  data.idRol,
+        codiPais:  data.CodiPais,
+        nombre:  data.nombre,
+        apellidos:  data.apellidos,
+        email:  data.email,
+        password: "",
+        passwordConfirm: "",
+        genero:  data.genero,
+        celular:  data.celular,
       };
       
+      
       setdataToEdit(row);
+
 
     };
 
     const handleDialog = (operacion, ID) => {
         setOpen(!open);
         SetInfoDialog({
-        tipo: "Competicion",
+        tipo: "Usuario",
         funcion: deleteData,
         operacion,
         ID,
@@ -83,7 +75,7 @@ const TableCompetition = ({setdataToEdit,dataCompetition,deleteData}) => {
 
     return (
         <Grid container justifyContent="center">
-        <h3>Lista de Competiciones</h3>
+        <h3>Lista de Usuarios</h3>
         <TableContainer component={Paper}>
           <Table
             className={classes.table}
@@ -95,32 +87,30 @@ const TableCompetition = ({setdataToEdit,dataCompetition,deleteData}) => {
                 <TableCell style={{ display: "none" }} align="center">
                   ID
                 </TableCell>
-                <TableCell align="center">Liga</TableCell>
-                <TableCell align="center">Equipo Local</TableCell>
-                <TableCell align="center">Liga</TableCell>
-                <TableCell align="center">Equipo Visitante</TableCell>
-                <TableCell align="center">Fecha</TableCell>
-                <TableCell align="center">Hora</TableCell>
-                <TableCell align="center">Gol Local</TableCell>
-                <TableCell align="center">Gol Visi</TableCell>
-                <TableCell align="center">Act</TableCell>
-                <TableCell align="center">habilitado</TableCell>
+                <TableCell align="center">Permiso</TableCell>
+                <TableCell align="center">Pais</TableCell>
+                <TableCell align="center">Nombre</TableCell>
+                <TableCell align="center">Apellido</TableCell>
+                <TableCell align="center">Email</TableCell>
+                <TableCell align="center">Genero</TableCell>
+                <TableCell align="center">Celular</TableCell>
+                <TableCell align="center">Actualizar</TableCell>
+                <TableCell align="center">Habilitado</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {dataCompetition &&
-                dataCompetition.map((row) => (
-                  <TableRow key={row.idCompeticiones}>
+              {dataUsuarios &&
+                dataUsuarios.map((row) => (
+                  <TableRow key={row.idUsuarios}>
 
-                    <TableCell style={{ display: "none" }} align="center">{row.idCompeticiones}</TableCell>
-                    <TableCell align="center">{row.ligaLocal}</TableCell>
-                    <TableCell align="center">{row.equipoLocal}</TableCell>
-                    <TableCell align="center">{row.ligaVisitante}</TableCell>
-                    <TableCell align="center">{row.equipoVisitante}</TableCell>
-                    <TableCell align="center">{row.fechaCompeticion}</TableCell>
-                    <TableCell align="center">{row.horaCompeticion}</TableCell>
-                    <TableCell align="center">{row.golesLocal}</TableCell>
-                    <TableCell align="center">{row.golesVisitante}</TableCell>
+                    <TableCell style={{ display: "none" }} align="center">{row.idUsuarios}</TableCell>
+                    <TableCell align="center">{row.NombreRol}</TableCell>
+                    <TableCell align="center">{row.nombrePais}</TableCell>
+                    <TableCell align="center">{row.nombre}</TableCell>
+                    <TableCell align="center">{row.apellidos}</TableCell>
+                    <TableCell align="center">{row.email}</TableCell>
+                    <TableCell align="center">{row.genero}</TableCell>
+                    <TableCell align="center">{row.celular}</TableCell>
                     <TableCell align="center">
                       <IconButton
                         aria-label="UpdateIcon"
@@ -136,7 +126,7 @@ const TableCompetition = ({setdataToEdit,dataCompetition,deleteData}) => {
                       <TableCell align="center">
                         <IconButton
                           aria-label="delete"
-                          onClick={() => handleDialog("habilitar", row.idCompeticiones)}
+                          onClick={() => handleDialog("habilitar", row.idUsuarios)}
                         >
                           <ClearIcon
                             style={{ color: red[700] }}
@@ -148,7 +138,7 @@ const TableCompetition = ({setdataToEdit,dataCompetition,deleteData}) => {
                       <TableCell align="center">
                         <IconButton
                           aria-label="delete"
-                          onClick={() => handleDialog("Eliminar", row.idCompeticiones)}
+                          onClick={() => handleDialog("desabilitar", row.idUsuarios)}
                         >
                           <CheckIcon
                             style={{ color: green[700] }}
@@ -170,4 +160,4 @@ const TableCompetition = ({setdataToEdit,dataCompetition,deleteData}) => {
     );
 }
 
-export default TableCompetition;
+export default TableParley;
