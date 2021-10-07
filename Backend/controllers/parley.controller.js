@@ -13,6 +13,8 @@ controller.register = async function (req, res) {
 
     const params = req.body;
 
+    console.log(req.body);
+
     const ErroresValidacion = [];
 
     let competenciasNulas = 0;

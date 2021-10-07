@@ -236,6 +236,7 @@ const FormCompetition = ({
   };
 
   const handleReset = () => {
+    form.estrategias = [];
     setForm(initialForm);
     setDataToEdit(null);
   };

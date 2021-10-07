@@ -40,7 +40,7 @@ const PageUser = () => {
   const createData = async (data) => {
     setLoading(true);
 
-    let URL = `${API.URI}/user/register`;
+    let URL = `${API.URI}/parley/register`;
 
     let config = {
       data: data,
@@ -66,6 +66,7 @@ const PageUser = () => {
     traerUsuarios();
 
   };
+  
   const updateData = async (data) => {
     setLoading(true);
 
