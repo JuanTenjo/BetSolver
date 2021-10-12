@@ -95,46 +95,42 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
       setError({
         "compeSelect": "Ingresa minimo dos competiciones para generar un parley",
       })
-    }
-
-    if(!parley.cuotaTotal){
-      setError({
-        "cuotaTotal": "Ingresa el porcentaje del parley",
-      })
-    }
-
-    if (Object.keys(error).length === 0) {
-      if(parley.idparleys){
-        console.log("Act");
-      }else{
-        createData(parley);
+    }else{ 
+      if(!parley.cuotaTotal){
+        setError({
+          "cuotaTotal": "Ingresa el porcentaje del parley",
+        })
+      }else{ 
+          if (Object.keys(error).length === 0) {
+            if(parley.idparleys){
+              console.log("Act");
+            }else{
+              createData(parley);
+            }
+          }
       }
+
     }
+
 
   }
 
 
-  // useEffect(() => {
+  useEffect(() => {
     
-  //   const Compe = {
-  //     "idparleys": parley.idparleys,
-  //     "competencia1": competitionSelect[0] ? competitionSelect[0].idCompeticiones : null,
-  //     "competencia2": competitionSelect[1] ? competitionSelect[1].idCompeticiones : null,
-  //     "competencia3": competitionSelect[2] ? competitionSelect[2].idCompeticiones : null,
-  //     "competencia4": competitionSelect[3] ? competitionSelect[3].idCompeticiones : null,
-  //     "cuotaTotal": parley.cuotaTotal,
-  //   };
-  //   // setParley({ 
-  //   //   ...parley,
-  //   //   {
-  //   //       ...style.font, // Spread the font object to preserve all values
-  //   //       align: event.target.value
-  //   //   }
-  // });
+    const Compe = {
+      "idparleys": parley.idparleys,
+      "competencia1": competitionSelect[0] ? competitionSelect[0].idCompeticiones : null,
+      "competencia2": competitionSelect[1] ? competitionSelect[1].idCompeticiones : null,
+      "competencia3": competitionSelect[2] ? competitionSelect[2].idCompeticiones : null,
+      "competencia4": competitionSelect[3] ? competitionSelect[3].idCompeticiones : null,
+      "cuotaTotal": parley.cuotaTotal,
+    };
 
-  //   setParley(Compe);
+    setParley(Compe);
+
     
-  // }, [competitionSelect]);
+  }, [competitionSelect,parley.idparleys,parley.cuotaTotal]);
 
 
   const addCompetitionParley = async (row) => {
