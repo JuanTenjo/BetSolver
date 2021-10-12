@@ -95,21 +95,23 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
       setError({
         "compeSelect": "Ingresa minimo dos competiciones para generar un parley",
       })
-    }
-
-    if(!parley.cuotaTotal){
-      setError({
-        "cuotaTotal": "Ingresa el porcentaje del parley",
-      })
-    }
-
-    if (Object.keys(error).length === 0) {
-      if(parley.idparleys){
-        console.log("Act");
-      }else{
-        createData(parley);
+    }else{ 
+      if(!parley.cuotaTotal){
+        setError({
+          "cuotaTotal": "Ingresa el porcentaje del parley",
+        })
+      }else{ 
+          if (Object.keys(error).length === 0) {
+            if(parley.idparleys){
+              console.log("Act");
+            }else{
+              createData(parley);
+            }
+          }
       }
+
     }
+
 
   }
 
@@ -126,8 +128,9 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
     };
 
     setParley(Compe);
+
     
-  }, [competitionSelect]);
+  }, [competitionSelect,parley.idparleys,parley.cuotaTotal]);
 
 
   const addCompetitionParley = async (row) => {
