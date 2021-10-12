@@ -34,7 +34,7 @@ const TableCompetition = ({addCompetitionParley, dataCompetition}) => {
 
     return (
         <Grid container justifyContent="center">
-        <h5>Competencias Habilitadas</h5>
+        <h5>Parleys Habilitados</h5>
         <TableContainer component={Paper}>
           <Table
             className={classes.table}
