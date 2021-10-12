@@ -114,20 +114,27 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
   }
 
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    const Compe = {
-      "idparleys": parley.idparleys,
-      "competencia1": competitionSelect[0] ? competitionSelect[0].idCompeticiones : null,
-      "competencia2": competitionSelect[1] ? competitionSelect[1].idCompeticiones : null,
-      "competencia3": competitionSelect[2] ? competitionSelect[2].idCompeticiones : null,
-      "competencia4": competitionSelect[3] ? competitionSelect[3].idCompeticiones : null,
-      "cuotaTotal": parley.cuotaTotal,
-    };
+  //   const Compe = {
+  //     "idparleys": parley.idparleys,
+  //     "competencia1": competitionSelect[0] ? competitionSelect[0].idCompeticiones : null,
+  //     "competencia2": competitionSelect[1] ? competitionSelect[1].idCompeticiones : null,
+  //     "competencia3": competitionSelect[2] ? competitionSelect[2].idCompeticiones : null,
+  //     "competencia4": competitionSelect[3] ? competitionSelect[3].idCompeticiones : null,
+  //     "cuotaTotal": parley.cuotaTotal,
+  //   };
+  //   // setParley({ 
+  //   //   ...parley,
+  //   //   {
+  //   //       ...style.font, // Spread the font object to preserve all values
+  //   //       align: event.target.value
+  //   //   }
+  // });
 
-    setParley(Compe);
+  //   setParley(Compe);
     
-  }, [competitionSelect]);
+  // }, [competitionSelect]);
 
 
   const addCompetitionParley = async (row) => {
