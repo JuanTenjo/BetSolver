@@ -3,16 +3,18 @@ const {
   ValidaIDTeam,
   ValidaNameTeam,
 } = require("../models/validation.models");
-const { register, update, erase,teamsAvalible, parleys } = require("../models/parley.model");
+const { register, update, erase,teamsAvalible, parleys,traerUltimoIDParley,registerDetalle } = require("../models/parley.model");
 const { validarNulo } = require("../utils/validationPatters");
 const controller = {};
 
 controller.register = async function (req, res) {
+  
   if (req.user[0].idRol === 3) {
     //Acepta idLigas, idEquipoLocal, idEquipoVisitante, fechaCompeticion, hora competicion
 
     const params = req.body;
 
+    let competencias = params.competencias;
     console.log(req.body);
 
     const ErroresValidacion = [];
@@ -20,79 +22,81 @@ controller.register = async function (req, res) {
     let competenciasNulas = 0;
     let competenciaRepet = 0;
 
-    if (params.competencia1) {
-      let value = params.competencia1;
+    // if (params.competencia1) {
+    //   let value = params.competencia1;
 
-      if (
-        value === params.competencia2 ||
-        value === params.competencia3 ||
-        value === params.competencia4
-      ) {
-        competenciaRepet += 1;
-      }
-    } else {
-      competenciasNulas += 1;
-    }
-    if (params.competencia2) {
-      let value = params.competencia2;
+    //   if (
+    //     value === params.competencia2 ||
+    //     value === params.competencia3 ||
+    //     value === params.competencia4
+    //   ) {
+    //     competenciaRepet += 1;
+    //   }
+    // } else {
+    //   competenciasNulas += 1;
+    // }
+    // if (params.competencia2) {
+    //   let value = params.competencia2;
 
-      if (
-        value === params.competencia1 ||
-        value === params.competencia3 ||
-        value === params.competencia4
-      ) {
-        competenciaRepet += 1;
-      }
-    } else {
-      competenciasNulas += 1;
-    }
-    if (params.competencia3) {
-      let value = params.competencia3;
+    //   if (
+    //     value === params.competencia1 ||
+    //     value === params.competencia3 ||
+    //     value === params.competencia4
+    //   ) {
+    //     competenciaRepet += 1;
+    //   }
+    // } else {
+    //   competenciasNulas += 1;
+    // }
+    // if (params.competencia3) {
+    //   let value = params.competencia3;
 
-      if (
-        value === params.competencia1 ||
-        value === params.competencia2 ||
-        value === params.competencia4
-      ) {
-        competenciaRepet += 1;
-      }
-    } else {
-      competenciasNulas += 1;
-    }
-    if (params.competencia4) {
-      let value = params.competencia4;
+    //   if (
+    //     value === params.competencia1 ||
+    //     value === params.competencia2 ||
+    //     value === params.competencia4
+    //   ) {
+    //     competenciaRepet += 1;
+    //   }
+    // } else {
+    //   competenciasNulas += 1;
+    // }
+    // if (params.competencia4) {
+    //   let value = params.competencia4;
 
-      if (
-        value === params.competencia1 ||
-        value === params.competencia2 ||
-        value === params.competencia3
-      ) {
-        competenciaRepet += 1;
-        ErroresValidacion.push(
-          "No puedes repetir una competencia en un parley"
-        );
-      }
-    } else {
-      competenciasNulas += 1;
-    }
+    //   if (
+    //     value === params.competencia1 ||
+    //     value === params.competencia2 ||
+    //     value === params.competencia3
+    //   ) {
+    //     competenciaRepet += 1;
+    //     ErroresValidacion.push(
+    //       "No puedes repetir una competencia en un parley"
+    //     );
+    //   }
+    // } else {
+    //   competenciasNulas += 1;
+    // }
 
-    competenciasNulas > 2
-      ? ErroresValidacion.push(
-          "En un parley se deben registrar minimo dos competencias"
-        )
-      : true;
-    competenciaRepet >= 1
-      ? ErroresValidacion.push("No puedes repetir una competencia en un parley")
-      : true;
+    // competenciasNulas > 2
+    //   ? ErroresValidacion.push(
+    //       "En un parley se deben registrar minimo dos competencias"
+    //     )
+    //   : true;
+    // competenciaRepet >= 1
+    //   ? ErroresValidacion.push("No puedes repetir una competencia en un parley")
+    //   : true;
 
     await validarNulo(params.cuotaTotal) ? ErroresValidacion.push("La cuota del parley no puede estar vacia") : true;
-
+    let estadoDetalle;
 
     if (ErroresValidacion.length != 0) {
-      res.status(400).json({ message: ErroresValidacion });
-    } else {
-      const estado = await register(params);
 
+         res.status(400).json({ message: ErroresValidacion });
+    } else {
+
+      const estado = await register(params);
+      
       if (estado.error || estado === false) {
         res
           .status(400)
@@ -102,8 +106,37 @@ controller.register = async function (req, res) {
               : "No se registro la competición",
           });
       } else {
-        res.status(200).json({ message: "Registro exitoso" });
+
+        const idenParley = await traerUltimoIDParley();
+
+        if(idenParley != null || idenParley != "") {
+  
+          competencias.forEach(competenciaRow => {
+  
+            estadoDetalle = registerDetalle(idenParley,competenciaRow);
+            
+          });
+  
+          if (estadoDetalle.error || estadoDetalle === false) {
+            res
+              .status(400)
+              .json({
+                message: estadoDetalle.mensaje
+                  ? estadoDetalle.mensaje
+                  : "No se registro la competición",
+              });
+          } else {
+            res.status(200).json({ message: "Registro exitoso" });
+          }
+  
+        }
+   
+
+
       }
+
+      
+
     }
   } else {
     res

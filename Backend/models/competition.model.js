@@ -55,7 +55,7 @@ model.traerUltimoID = async () => {
     } catch (err) {
         return {
             error: true,
-            mensaje:[ `Hubo un error al insertar el quipo en el Model: comptetition.model, en la funcion: traerUltimoID. ERROR: ${err.sqlMessage} `],
+            mensaje:[ `Hubo un error al traer el ultimo id del la competicion el Model: comptetition.model, en la funcion: traerUltimoID. ERROR: ${err.sqlMessage} `],
             respuesta: false
         };
     }

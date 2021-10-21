@@ -5,7 +5,7 @@ const model = {};
 model.register = async (params) => {
   try {
 
-    let query = `INSERT INTO parleys(competencia1,competencia2,competencia3,competencia4,cuotaTotal) Values('${params.competencia1}','${params.competencia2}','${params.competencia3}','${params.competencia4}','${params.cuotaTotal}')`;
+    let query = `INSERT INTO parleys(cuotaTotal) Values('${params.cuotaTotal}')`;
 
     const InsertParley = await pool.query(query);
 
@@ -16,6 +16,45 @@ model.register = async (params) => {
     return {
       error: true,
       mensaje:[ `Hubo un error al insertar el parley: parley.model, en la funcion: register. ERROR: ${err.sqlMessage} `],
+      respuesta: false,
+    };
+  }
+};
+
+
+model.traerUltimoIDParley = async () => {
+  try {
+
+      let query = `SELECT MAX(idparleys) AS MaxID FROM parleys`
+
+      const result = await pool.query(query);
+  
+      return result[0].MaxID;
+
+  } catch (err) {
+      return {
+          error: true,
+          mensaje:[ `Hubo un error trare el ultimo id de los parleys el Model: parley.model, en la funcion: traerUltimoIDParley. ERROR: ${err.sqlMessage} `],
+          respuesta: false
+      };
+  }
+}
+
+
+model.registerDetalle = async (idParley, idCompetencia) => {
+  try {
+
+    let query = `INSERT INTO detalleparley(idparleys,idCompeticiones) Values(${idParley},${idCompetencia})`;
+
+    const InsertParley = await pool.query(query);
+
+    let estado = InsertParley.affectedRows > 0 ? true : false;
+
+    return estado;
+  } catch (err) {
+    return {
+      error: true,
+      mensaje:[ `Hubo un error al insertar el detalle del parley: parley.model, en la funcion: registerDetalle. ERROR: ${err.sqlMessage} `],
       respuesta: false,
     };
   }
