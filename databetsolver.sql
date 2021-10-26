@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-09-2021 a las 03:28:52
+-- Tiempo de generación: 26-10-2021 a las 07:26:57
 -- Versión del servidor: 10.4.20-MariaDB
 -- Versión de PHP: 7.3.29
 
@@ -46,7 +46,8 @@ CREATE TABLE `competencias` (
 --
 
 INSERT INTO `competencias` (`idCompeticiones`, `idLigaLocal`, `idLigaVisitante`, `idEquipoLocal`, `idEquipoVisitante`, `golesLocal`, `golesVisitante`, `fechaCompeticion`, `horaCompeticion`, `habilitado`, `habiliParley`) VALUES
-(26, 38, 37, 6, 7, 0, 0, '2022-08-19 05:00:00', '11:00:00', 1, 1);
+(27, 38, 47, 8, 13, 0, 0, '2021-11-06 00:00:00', '23:15:00', 1, 1),
+(28, 38, 47, 8, 13, 0, 0, '2021-10-31 00:00:00', '23:17:00', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -66,13 +67,25 @@ CREATE TABLE `detallecompentencia` (
   `cuotaEmpate` varchar(4) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `detallecompentencia`
+-- Estructura de tabla para la tabla `detalleparley`
 --
 
-INSERT INTO `detallecompentencia` (`idDetalleCompentencia`, `idCompeticion`, `idEstrategia`, `PorceLocal`, `PorceVisitante`, `PorceEmpate`, `cuotaLocal`, `cuotaVisitante`, `cuotaEmpate`) VALUES
-(63, 26, 1, 43, 50, 50, '1.5', '1.4', '1.5'),
-(64, 26, 2, 23, 50, 50, '1.5', '1.4', '1.5');
+CREATE TABLE `detalleparley` (
+  `iddetalleParley` int(11) NOT NULL,
+  `idparleys` int(11) NOT NULL,
+  `idCompeticiones` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `detalleparley`
+--
+
+INSERT INTO `detalleparley` (`iddetalleParley`, `idparleys`, `idCompeticiones`) VALUES
+(6, 10, 28),
+(7, 10, 27);
 
 -- --------------------------------------------------------
 
@@ -92,8 +105,8 @@ CREATE TABLE `equipos` (
 --
 
 INSERT INTO `equipos` (`idEquipos`, `idLigas`, `nombreEquipo`, `habilitado`) VALUES
-(6, 37, 'Nacional', 1),
-(7, 39, 'Barcelona', 1),
+(6, 38, 'Nacional', 1),
+(7, 37, 'Barcelona', 1),
 (8, 38, 'HuilaActualizado', 1),
 (9, 43, 'EquipoArgentino2', 1),
 (10, 43, 'EquipoArgentino3', 1),
@@ -158,6 +171,32 @@ INSERT INTO `ligas` (`idLigas`, `codiPais`, `nombreLiga`, `habilitada`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `niveles`
+--
+
+CREATE TABLE `niveles` (
+  `idniveles` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `descripcion` varchar(45) NOT NULL,
+  `precio` decimal(10,0) NOT NULL,
+  `habilitado` tinyint(4) NOT NULL DEFAULT 1,
+  `dias` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `niveles`
+--
+
+INSERT INTO `niveles` (`idniveles`, `nombre`, `descripcion`, `precio`, `habilitado`, `dias`) VALUES
+(1, 'Gratis', 'Membresia de prueba gratis', '0', 1, 15),
+(2, 'Membresia 1', 'Membresia de 1 meses', '27', 1, 30),
+(3, 'Membresia 2', 'Membresia de 3 meses', '69', 1, 91),
+(4, 'Membresia 3', 'Membresia de 6 meses', '129', 1, 182),
+(5, 'Membresia 4', 'Membresia de 1 año', '150', 1, 365);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `paises`
 --
 
@@ -173,9 +212,9 @@ CREATE TABLE `paises` (
 --
 
 INSERT INTO `paises` (`idpaises`, `codiPais`, `nombrePais`, `logoPais`) VALUES
-(1, 'AF', 'Afghanistan', 'https://restcountries.eu/data/afg.svg'),
-(2, 'AX', 'Åland Islands', 'https://restcountries.eu/data/ala.svg'),
-(3, 'AL', 'Albania', 'https://restcountries.eu/data/alb.svg'),
+(1, 'AF', 'Afghanistan', 'http://localhost:4000/public/image-1632892543573-341380748.png'),
+(2, 'AX', 'Åland Islands', 'http://localhost:4000/public/image-1632968899517-800472178.png'),
+(3, 'AL', 'Albania', 'http://localhost:4000/public/image-1632892560514-713477505.png'),
 (4, 'DZ', 'Algeria', 'https://restcountries.eu/data/dza.svg'),
 (5, 'AS', 'American Samoa', 'https://restcountries.eu/data/asm.svg'),
 (6, 'AD', 'Andorra', 'https://restcountries.eu/data/and.svg'),
@@ -429,10 +468,6 @@ INSERT INTO `paises` (`idpaises`, `codiPais`, `nombrePais`, `logoPais`) VALUES
 
 CREATE TABLE `parleys` (
   `idparleys` int(11) NOT NULL,
-  `competencia1` int(11) DEFAULT NULL,
-  `competencia2` int(11) DEFAULT NULL,
-  `competencia3` int(11) DEFAULT NULL,
-  `competencia4` int(11) DEFAULT NULL,
   `cuotaTotal` varchar(4) NOT NULL DEFAULT '0',
   `fechaIngreso` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -441,9 +476,8 @@ CREATE TABLE `parleys` (
 -- Volcado de datos para la tabla `parleys`
 --
 
-INSERT INTO `parleys` (`idparleys`, `competencia1`, `competencia2`, `competencia3`, `competencia4`, `cuotaTotal`, `fechaIngreso`) VALUES
-(1, 112, 2234, 0, 534, '80', '2021-08-23 21:35:53'),
-(2, 1, 2, 3, 4, '60', '2021-08-23 21:37:00');
+INSERT INTO `parleys` (`idparleys`, `cuotaTotal`, `fechaIngreso`) VALUES
+(10, '60', '2021-10-21 00:04:33');
 
 -- --------------------------------------------------------
 
@@ -483,23 +517,24 @@ CREATE TABLE `usuarios` (
   `celular` varchar(12) DEFAULT NULL,
   `usuario` varchar(45) DEFAULT NULL,
   `fechaIngreso` datetime NOT NULL DEFAULT current_timestamp(),
-  `habilitado` tinyint(4) NOT NULL DEFAULT 1
+  `habilitado` tinyint(4) NOT NULL DEFAULT 1,
+  `nivel` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`idUsuarios`, `idRol`, `codiPais`, `nombre`, `apellidos`, `email`, `password`, `genero`, `celular`, `usuario`, `fechaIngreso`, `habilitado`) VALUES
-(1, 3, 'CO', 'Juan Diego', 'Pimentel Tenjo', 'tenjo2001@gmail.com', '$2b$08$6IfUh229waJtiqKnW9p1NegJLr6GGMcH.aBQnR5.ArmBT46p3H64i', 'Masculino', '3144147105', 'JuanTenjo', '2021-08-18 19:13:04', 1),
-(2, 1, 'AX', 'JUAN Diego', 'Pimentel', 'tenjddo2001@gmail.com', '$2b$08$F1YRNYdP1r.dI1kKTnkSJODbOAITjlz8fDt4NRsWN2Nj5fEDuhmx2', 'Masculino', '3204519083', NULL, '2021-08-18 19:13:04', 1),
-(3, 1, 'AX', 'asdasdP', 'Prueas', 'tenjddof2001@gmail.com', '$2b$08$3GxIa6yppJ3QCA0e80MBuOyBHEgSHdu5PeFltT/CvGZ1Y2uQwZ.oK', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0),
-(4, 1, 'AX', 'asdasdP', 'Prueas', 'pruebaActualizacion@gmail.com', '$2b$08$1P9lkrkeIqsWJ28GzLmYYOomAe96n9OkRru7l9Wy961sVmPVWTJuS', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0),
-(5, 1, 'AX', 'asdasdP', 'Prueas', 'teasdnjddof2002@gmail.com', '$2b$08$QySRzYVBhCacOg7nborc8elu7SeZDnYjDypo7QNDgIJZVtePIL5hq', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0),
-(6, 1, 'AX', 'asdasdP', 'Prueas', 'tenjo002@gmail.com', '$2b$08$zheraxk8ev3Vl95HLd2M6eR.V9NRy58utkGOJy4PyztUWJrZdl4xy', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0),
-(7, 1, 'AX', 'asdasdP', 'Prueas', 'tenjo0sdfsdf02@gmail.com', '$2b$08$4wR7uEybXThjxL9RXVXiS.wNZWYmf158DbPC3tWZVbRgkMNHigedG', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0),
-(9, 1, 'AR', 'Valentina', 'Pimentel Patino', 'paulaap.123@hotmail.com', '$2b$10$vuSq8FvbANzMMc/YBmpUDuWbM7i1ZmHRkbQeJWUMJ0w3L0zkCeGi6', 'Masculino', '3144147105', NULL, '2021-09-13 23:59:55', 0),
-(10, 1, 'CO', 'Juan', 'Tenjo', 'sigloxxistore@gmail.com', '$2b$10$uNVpTxrnI3nh2PD8um0QdOTZ7LwaGGvX3/S46MZjwzGFZIlahb2nm', 'Masculino', '3144147105', NULL, '2021-09-21 21:03:02', 1);
+INSERT INTO `usuarios` (`idUsuarios`, `idRol`, `codiPais`, `nombre`, `apellidos`, `email`, `password`, `genero`, `celular`, `usuario`, `fechaIngreso`, `habilitado`, `nivel`) VALUES
+(1, 3, 'CO', 'Juan Diego', 'Pimentel Tenjo', 'tenjo2001@gmail.com', '$2b$08$6IfUh229waJtiqKnW9p1NegJLr6GGMcH.aBQnR5.ArmBT46p3H64i', 'Masculino', '3144147105', 'JuanTenjo', '2021-08-18 19:13:04', 1, 1),
+(2, 1, 'AX', 'Juan Diego', 'Pimentel', 'tenjddo2001@gmail.com', '$2b$08$F1YRNYdP1r.dI1kKTnkSJODbOAITjlz8fDt4NRsWN2Nj5fEDuhmx2', 'Masculino', '3204519083', NULL, '2021-08-18 19:13:04', 1, 1),
+(3, 1, 'AX', 'asdasdP', 'Prueas', 'tenjddof2001@gmail.com', '$2b$08$3GxIa6yppJ3QCA0e80MBuOyBHEgSHdu5PeFltT/CvGZ1Y2uQwZ.oK', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0, 1),
+(4, 1, 'AX', 'asdasdP', 'Prueas', 'pruebaActualizacion@gmail.com', '$2b$08$1P9lkrkeIqsWJ28GzLmYYOomAe96n9OkRru7l9Wy961sVmPVWTJuS', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0, 1),
+(5, 1, 'AX', 'asdasdP', 'Prueas', 'teasdnjddof2002@gmail.com', '$2b$08$QySRzYVBhCacOg7nborc8elu7SeZDnYjDypo7QNDgIJZVtePIL5hq', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0, 1),
+(6, 1, 'AX', 'asdasdP', 'Prueas', 'tenjo002@gmail.com', '$2b$08$zheraxk8ev3Vl95HLd2M6eR.V9NRy58utkGOJy4PyztUWJrZdl4xy', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0, 1),
+(7, 1, 'AX', 'asdasdP', 'Prueas', 'tenjo0sdfsdf02@gmail.com', '$2b$08$4wR7uEybXThjxL9RXVXiS.wNZWYmf158DbPC3tWZVbRgkMNHigedG', 'Femenino', '3144147105', NULL, '2021-08-18 19:13:04', 0, 1),
+(9, 1, 'AR', 'Valentina', 'Pimentel Patino', 'paulaap.123@hotmail.com', '$2b$10$vuSq8FvbANzMMc/YBmpUDuWbM7i1ZmHRkbQeJWUMJ0w3L0zkCeGi6', 'Masculino', '3144147105', NULL, '2021-09-13 23:59:55', 0, 1),
+(10, 1, 'CO', 'Juan', 'Tenjo', 'sigloxxistore@gmail.com', '$2b$10$uNVpTxrnI3nh2PD8um0QdOTZ7LwaGGvX3/S46MZjwzGFZIlahb2nm', 'Masculino', '3144147105', NULL, '2021-09-21 21:03:02', 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -524,6 +559,14 @@ ALTER TABLE `detallecompentencia`
   ADD KEY `Competicion` (`idCompeticion`);
 
 --
+-- Indices de la tabla `detalleparley`
+--
+ALTER TABLE `detalleparley`
+  ADD PRIMARY KEY (`iddetalleParley`),
+  ADD KEY `idParley` (`idparleys`),
+  ADD KEY `idCompetencia` (`idCompeticiones`);
+
+--
 -- Indices de la tabla `equipos`
 --
 ALTER TABLE `equipos`
@@ -541,6 +584,12 @@ ALTER TABLE `estrategias`
 --
 ALTER TABLE `ligas`
   ADD PRIMARY KEY (`idLigas`);
+
+--
+-- Indices de la tabla `niveles`
+--
+ALTER TABLE `niveles`
+  ADD PRIMARY KEY (`idniveles`);
 
 --
 -- Indices de la tabla `paises`
@@ -574,13 +623,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `competencias`
 --
 ALTER TABLE `competencias`
-  MODIFY `idCompeticiones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `idCompeticiones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `detallecompentencia`
 --
 ALTER TABLE `detallecompentencia`
-  MODIFY `idDetalleCompentencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `idDetalleCompentencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+
+--
+-- AUTO_INCREMENT de la tabla `detalleparley`
+--
+ALTER TABLE `detalleparley`
+  MODIFY `iddetalleParley` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `equipos`
@@ -604,13 +659,13 @@ ALTER TABLE `ligas`
 -- AUTO_INCREMENT de la tabla `paises`
 --
 ALTER TABLE `paises`
-  MODIFY `idpaises` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=248;
+  MODIFY `idpaises` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=250;
 
 --
 -- AUTO_INCREMENT de la tabla `parleys`
 --
 ALTER TABLE `parleys`
-  MODIFY `idparleys` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idparleys` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -643,6 +698,13 @@ ALTER TABLE `competencias`
 ALTER TABLE `detallecompentencia`
   ADD CONSTRAINT `Competicion` FOREIGN KEY (`idCompeticion`) REFERENCES `competencias` (`idCompeticiones`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Estrategia` FOREIGN KEY (`idEstrategia`) REFERENCES `estrategias` (`idEstrategia`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `detalleparley`
+--
+ALTER TABLE `detalleparley`
+  ADD CONSTRAINT `idCompetencia` FOREIGN KEY (`idCompeticiones`) REFERENCES `competencias` (`idCompeticiones`),
+  ADD CONSTRAINT `idParley` FOREIGN KEY (`idparleys`) REFERENCES `parleys` (`idparleys`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `equipos`
