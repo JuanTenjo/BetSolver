@@ -24,16 +24,16 @@ const PageUser = () => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState({});
   const [dataToEdit, setDataToEdit] = useState(false);
-  const [dataUsuarios, setDataUsuarios] = useState(null);
+  const [dataparley, setDataparley] = useState(null);
 
   useEffect(() => {
-    traerUsuarios();
+    traerParleys();
   },[]);
 
-  const traerUsuarios = async () => {
+  const traerParleys = async () => {
     setLoading(true);       
-    const data = await helpHttpAxios().get(`${API.URI}/user`);                                                                                                                
-    setDataUsuarios(data);
+    const data = await helpHttpAxios().get(`${API.URI}/parley`);                                                                                                                
+    setDataparley(data);
     setLoading(false);
   };
 
@@ -63,7 +63,7 @@ const PageUser = () => {
 
     setLoading(false);
 
-    traerUsuarios();
+    traerParleys();
 
   };
   
@@ -95,7 +95,7 @@ const PageUser = () => {
 
     setLoading(false);
 
-    traerUsuarios();
+    traerParleys();
 
   };
 
@@ -128,7 +128,7 @@ const PageUser = () => {
 
     setLoading(false);
 
-    traerUsuarios();
+    traerParleys();
 
   };
 
@@ -163,7 +163,7 @@ const PageUser = () => {
               <Loader />
             ) : (
               <TableParley
-                dataUsuarios={dataUsuarios}
+                dataparley={dataparley}
                 setdataToEdit={setDataToEdit}
                 deleteData={deleteData}
               />

@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { yellow, red, green } from "@material-ui/core/colors";
+import { yellow } from "@material-ui/core/colors";
 import UpdateIcon from "@material-ui/icons/Update";
-import ClearIcon from "@material-ui/icons/Clear";
 import Dialogo from "../Necesarios/Dialogo";
-import CheckIcon from "@material-ui/icons/Check";
 
 import {
     makeStyles,
@@ -32,7 +30,7 @@ const useStyle = makeStyles((theme) => ({
   };
   
 
-const TableParley = ({setdataToEdit,dataUsuarios,deleteData}) => {
+const TableParley = ({setdataToEdit,dataparley,deleteData}) => {
 
     
     let classes = useStyle();
@@ -75,7 +73,7 @@ const TableParley = ({setdataToEdit,dataUsuarios,deleteData}) => {
 
     return (
         <Grid container justifyContent="center">
-        <h3>Lista de Usuarios</h3>
+        <h3>Lista de parleys</h3>
         <TableContainer component={Paper}>
           <Table
             className={classes.table}
@@ -84,33 +82,20 @@ const TableParley = ({setdataToEdit,dataUsuarios,deleteData}) => {
           >
             <TableHead>
               <TableRow>
-                <TableCell style={{ display: "none" }} align="center">
-                  ID
-                </TableCell>
-                <TableCell align="center">Permiso</TableCell>
-                <TableCell align="center">Pais</TableCell>
-                <TableCell align="center">Nombre</TableCell>
-                <TableCell align="center">Apellido</TableCell>
-                <TableCell align="center">Email</TableCell>
-                <TableCell align="center">Genero</TableCell>
-                <TableCell align="center">Celular</TableCell>
-                <TableCell align="center">Actualizar</TableCell>
-                <TableCell align="center">Habilitado</TableCell>
+                <TableCell align="center">Num Parley</TableCell>
+                <TableCell align="center">Fecha Parley</TableCell>
+                <TableCell align="center">Cuota Total</TableCell>
+                <TableCell align="center">Modificar</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {dataUsuarios &&
-                dataUsuarios.map((row) => (
-                  <TableRow key={row.idUsuarios}>
+              {dataparley &&
+                dataparley.map((row) => (
+                  <TableRow key={row.idparleys}>
 
-                    <TableCell style={{ display: "none" }} align="center">{row.idUsuarios}</TableCell>
-                    <TableCell align="center">{row.NombreRol}</TableCell>
-                    <TableCell align="center">{row.nombrePais}</TableCell>
-                    <TableCell align="center">{row.nombre}</TableCell>
-                    <TableCell align="center">{row.apellidos}</TableCell>
-                    <TableCell align="center">{row.email}</TableCell>
-                    <TableCell align="center">{row.genero}</TableCell>
-                    <TableCell align="center">{row.celular}</TableCell>
+                    <TableCell align="center">{row.idparleys}</TableCell>
+                    <TableCell align="center">{row.fechaIngreso}</TableCell>
+                    <TableCell align="center">{row.cuotaTotal}</TableCell>
                     <TableCell align="center">
                       <IconButton
                         aria-label="UpdateIcon"
@@ -122,31 +107,6 @@ const TableParley = ({setdataToEdit,dataUsuarios,deleteData}) => {
                         />
                       </IconButton>
                     </TableCell>
-                    {row.habilitado === 0 ? (
-                      <TableCell align="center">
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() => handleDialog("habilitar", row.idUsuarios)}
-                        >
-                          <ClearIcon
-                            style={{ color: red[700] }}
-                            fontSize="small"
-                          />
-                        </IconButton>
-                      </TableCell>
-                    ) : (
-                      <TableCell align="center">
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() => handleDialog("desabilitar", row.idUsuarios)}
-                        >
-                          <CheckIcon
-                            style={{ color: green[700] }}
-                            fontSize="small"
-                          />
-                        </IconButton>
-                      </TableCell>
-                    )}
                   </TableRow>
                 ))}
             </TableBody>
