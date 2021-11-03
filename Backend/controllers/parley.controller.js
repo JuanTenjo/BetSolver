@@ -3,7 +3,7 @@ const {
   ValidaIDTeam,
   ValidaNameTeam,
 } = require("../models/validation.models");
-const { register, update, erase,teamsAvalible, parleys,traerUltimoIDParley,registerDetalle } = require("../models/parley.model");
+const { register, update, erase,teamsAvalible, parleys,traerUltimoIDParley,registerDetalle,detalleParley } = require("../models/parley.model");
 const { validarNulo } = require("../utils/validationPatters");
 const controller = {};
 
@@ -340,6 +340,49 @@ controller.parleys = async function (req, res) {
         
     }    
     
+
+  }else {
+    res
+      .status(403)
+      .json({
+        message:
+          "Lo siento pero no tiene los permisos necesarios para hacer esta operacion",
+      });
+  }
+};
+
+controller.detalleParley = async function (req, res) {
+
+  if (req.user[0].idRol === 3) {
+
+  
+    const ErroresValidacion = [];
+
+    let idParley = req.body.idParley;
+
+    console.log(req.body);
+
+    await validarNulo(idParley) ? ErroresValidacion.push("El id del parley viene vacio") : true;
+
+    if (ErroresValidacion.length != 0) {
+
+      res.status(400).json({ message: ErroresValidacion });
+
+    } else {
+
+      const estado = await detalleParley(idParley);
+
+      if(estado.error || estado === false){
+  
+          res.status(400).json(estado);
+  
+      }else{
+  
+          res.status(200).json(estado);
+          
+      }    
+      
+    }
 
   }else {
     res

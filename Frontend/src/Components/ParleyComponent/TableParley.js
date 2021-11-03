@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { yellow } from "@material-ui/core/colors";
 import UpdateIcon from "@material-ui/icons/Update";
+import Message from "../../Components/Necesarios/Message";
 import Dialogo from "../Necesarios/Dialogo";
+import API from "../../Utils/dominioBackend";
+import { helpHttpAxios } from "../../Helpers/helpHttpsAxios";
+
 
 import {
     makeStyles,
@@ -37,24 +41,31 @@ const TableParley = ({setdataToEdit,dataparley,deleteData}) => {
     
     const [open, setOpen] = useState(false);
     const [InfoDialog, SetInfoDialog] = useState(initalDialog);
+    const [error, seterror] = useState(null);
+    const handleUpdate = async (idParley) => {
 
-    const handleUpdate = (data) => {
-
-      const row = {
-        idUsuarios: data.idUsuarios,
-        idRol:  data.idRol,
-        codiPais:  data.CodiPais,
-        nombre:  data.nombre,
-        apellidos:  data.apellidos,
-        email:  data.email,
-        password: "",
-        passwordConfirm: "",
-        genero:  data.genero,
-        celular:  data.celular,
+      
+      let config = {
+        data: {"idParley":"10"},
       };
-      
-      
-      setdataToEdit(row);
+
+      const res = await helpHttpAxios().post(`${API.URI}/parley/detalleParley`,config);
+
+      if (!res.err) {
+
+        console.log(res)
+        
+      }else{
+        seterror(res.message[0])
+
+        setTimeout(() => {
+          
+          seterror(null)
+
+        },4000)
+      }
+
+      //setdataToEdit(row);
 
 
     };
@@ -62,7 +73,7 @@ const TableParley = ({setdataToEdit,dataparley,deleteData}) => {
     const handleDialog = (operacion, ID) => {
         setOpen(!open);
         SetInfoDialog({
-        tipo: "Usuario",
+        tipo: "Parley",
         funcion: deleteData,
         operacion,
         ID,
@@ -74,6 +85,7 @@ const TableParley = ({setdataToEdit,dataparley,deleteData}) => {
     return (
         <Grid container justifyContent="center">
         <h3>Lista de parleys</h3>
+        {error && <Message msg={error} estado={false} />}
         <TableContainer component={Paper}>
           <Table
             className={classes.table}
@@ -99,7 +111,7 @@ const TableParley = ({setdataToEdit,dataparley,deleteData}) => {
                     <TableCell align="center">
                       <IconButton
                         aria-label="UpdateIcon"
-                        onClick={() => handleUpdate(row)}
+                        onClick={() => handleUpdate(row.idparleys)}
                       >
                         <UpdateIcon
                           style={{ color: yellow[700] }}
@@ -112,6 +124,7 @@ const TableParley = ({setdataToEdit,dataparley,deleteData}) => {
             </TableBody>
           </Table>
         </TableContainer>
+
   
         {open ? (
           <Dialogo handleDialog={handleDialog} InfoDialog={InfoDialog} />

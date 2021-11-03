@@ -153,21 +153,49 @@ model.teamsAvalible = async (idLiga = null) => {
 };
 
 
-model.parleys = async (idLiga = null) => {
+model.parleys = async () => {
   try {
 
       let query = `SELECT idparleys, cuotaTotal, date_format(fechaIngreso, '%d/%m/%Y') as fechaIngreso
       FROM databetsolver.parleys order by fechaIngreso asc`;
 
-      const TeamsA = await pool.query(query);
+      const Parleys = await pool.query(query);
 
-      return TeamsA;
+      return Parleys;
 
     
   } catch (err) {
     return {
       error: true,
-      mensaje: [`Hubo un error al traer las competiciones habilitadas en el Model: parley.model, en la funcion: teamsAvalible. ERROR: ${err.sqlMessage} `],
+      mensaje: [`Hubo un error al traer las competiciones habilitadas en el Model: parley.model, en la funcion: parleys. ERROR: ${err.sqlMessage} `],
+      respuesta: false,
+    };
+  }
+};
+
+model.detalleParley = async (idParley = null) => {
+  try {
+
+      let query = `select parleys.idparleys, detalleparley.* , competencias.fechaCompeticion, competencias.horaCompeticion,
+      competencias.idEquipoLocal, 
+      competencias.idEquipoVisitante,
+      eq1.nombreEquipo,
+      eq2.nombreEquipo
+      from parleys inner join detalleparley on parleys.idparleys = detalleparley.idparleys
+      inner join competencias on detalleparley.idCompeticiones = competencias.idCompeticiones
+      left join equipos as eq1 on competencias.idEquipoLocal = eq1.idEquipos
+      left join equipos as eq2 on competencias.idEquipoVisitante = eq2.idEquipos
+      where parleys.idparleys = ('${idParley}')`;
+
+      const detalleParley = await pool.query(query);
+
+      return detalleParley;
+
+    
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: [`Hubo un error al traer las competiciones habilitadas en el Model: parley.model, en la funcion: detalleParley. ERROR: ${err.sqlMessage} `],
       respuesta: false,
     };
   }
