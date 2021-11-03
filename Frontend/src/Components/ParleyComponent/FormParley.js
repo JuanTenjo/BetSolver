@@ -42,11 +42,8 @@ const useStyle = makeStyles((theme) => ({
 //Inicial Form
 const initialForm = {
   "idparleys": null,
-  "competencia1": "",
-  "competencia2": "",
-  "competencia3": "",
-  "competencia4": "",
-  "cuotaTotal": ""
+  "competencias": "",
+  "cuotaTotal": "",
 };
 
 
@@ -55,12 +52,10 @@ const initialForm = {
 const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
   let classes = useStyle();
-
+  const [cuotaTotal, setCuotaTotal] = useState("");
   const [dataCompetition, setDataCompetition] = useState(null);
-
   const [parley, setParley] = useState(initialForm);
   const [competitionSelect, setCompetitionSelect] = useState([]);
-
   const [error, setError] = useState({});
 
   useEffect(() => {
@@ -73,18 +68,16 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
   }, []);
 
+
   useEffect(() => {
-    //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
-    // if (dataToEdit) {
+    if(dataToEdit){
+      
+      setCuotaTotal(dataToEdit[0].cuotaTotal);
+      setCompetitionSelect(dataToEdit);
 
-    //   setForm(dataToEdit);
-    //   setError(validationForm(dataToEdit));
-    // } else {
-
-
-
-    //   setForm(initialForm);
-    // }
+    }else{
+      setCompetitionSelect([]);
+    }
   }, [dataToEdit]);
 
   const handleSubmit = async (e) => {
@@ -96,7 +89,7 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
         "compeSelect": "Ingresa minimo dos competiciones para generar un parley",
       })
     }else{ 
-      if(!parley.cuotaTotal){
+      if(!cuotaTotal){
         setError({
           "cuotaTotal": "Ingresa el porcentaje del parley",
         })
@@ -105,7 +98,21 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
             if(parley.idparleys){
               console.log("Act");
             }else{
-              createData(parley);
+              
+              let idCompetencias = [];
+              idCompetencias = competitionSelect.map(function(element){
+                return element.idCompeticiones;
+              });
+
+              const data = {
+                "competencias": idCompetencias,
+                "cuotaTotal": cuotaTotal,
+              }
+              
+              console.log(data);
+
+              //createData(parley);
+
             }
           }
       }
@@ -114,23 +121,6 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
 
   }
-
-
-  useEffect(() => {
-    
-    const Compe = {
-      "idparleys": parley.idparleys,
-      "competencia1": competitionSelect[0] ? competitionSelect[0].idCompeticiones : null,
-      "competencia2": competitionSelect[1] ? competitionSelect[1].idCompeticiones : null,
-      "competencia3": competitionSelect[2] ? competitionSelect[2].idCompeticiones : null,
-      "competencia4": competitionSelect[3] ? competitionSelect[3].idCompeticiones : null,
-      "cuotaTotal": parley.cuotaTotal,
-    };
-
-    setParley(Compe);
-
-    
-  }, [competitionSelect,parley.idparleys,parley.cuotaTotal]);
 
 
   const addCompetitionParley = async (row) => {
@@ -186,12 +176,9 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
   };
 
-  const handleInputChange = (event) => {
-    setParley({
-        ...parley,
-        [event.target.name] : event.target.value
-    })
-}
+  const handleInputChange = (event) => {  
+    setCuotaTotal(event.target.value);
+  }
 
   return (
     <div>
@@ -259,7 +246,7 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
               type="text"
               name="cuotaTotal"
               label="Porcentaje del parley"
-              value={parley.cuotaTotal}
+              value={cuotaTotal}
               onChange={handleInputChange}
               className={classes.text}
               variant="outlined"

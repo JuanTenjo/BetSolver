@@ -15,84 +15,17 @@ controller.register = async function (req, res) {
     const params = req.body;
 
     let competencias = params.competencias;
-    console.log(req.body);
 
     const ErroresValidacion = [];
 
-    let competenciasNulas = 0;
-    let competenciaRepet = 0;
-
-    // if (params.competencia1) {
-    //   let value = params.competencia1;
-
-    //   if (
-    //     value === params.competencia2 ||
-    //     value === params.competencia3 ||
-    //     value === params.competencia4
-    //   ) {
-    //     competenciaRepet += 1;
-    //   }
-    // } else {
-    //   competenciasNulas += 1;
-    // }
-    // if (params.competencia2) {
-    //   let value = params.competencia2;
-
-    //   if (
-    //     value === params.competencia1 ||
-    //     value === params.competencia3 ||
-    //     value === params.competencia4
-    //   ) {
-    //     competenciaRepet += 1;
-    //   }
-    // } else {
-    //   competenciasNulas += 1;
-    // }
-    // if (params.competencia3) {
-    //   let value = params.competencia3;
-
-    //   if (
-    //     value === params.competencia1 ||
-    //     value === params.competencia2 ||
-    //     value === params.competencia4
-    //   ) {
-    //     competenciaRepet += 1;
-    //   }
-    // } else {
-    //   competenciasNulas += 1;
-    // }
-    // if (params.competencia4) {
-    //   let value = params.competencia4;
-
-    //   if (
-    //     value === params.competencia1 ||
-    //     value === params.competencia2 ||
-    //     value === params.competencia3
-    //   ) {
-    //     competenciaRepet += 1;
-    //     ErroresValidacion.push(
-    //       "No puedes repetir una competencia en un parley"
-    //     );
-    //   }
-    // } else {
-    //   competenciasNulas += 1;
-    // }
-
-    // competenciasNulas > 2
-    //   ? ErroresValidacion.push(
-    //       "En un parley se deben registrar minimo dos competencias"
-    //     )
-    //   : true;
-    // competenciaRepet >= 1
-    //   ? ErroresValidacion.push("No puedes repetir una competencia en un parley")
-    //   : true;
-
     await validarNulo(params.cuotaTotal) ? ErroresValidacion.push("La cuota del parley no puede estar vacia") : true;
+
     let estadoDetalle;
 
     if (ErroresValidacion.length != 0) {
 
          res.status(400).json({ message: ErroresValidacion });
+         
     } else {
 
       const estado = await register(params);
@@ -107,13 +40,13 @@ controller.register = async function (req, res) {
           });
       } else {
 
-        const idenParley = await traerUltimoIDParley();
+        const idParley = await traerUltimoIDParley();
 
-        if(idenParley != null || idenParley != "") {
+        if(idParley != null || idParley != "") {
   
           competencias.forEach(competenciaRow => {
   
-            estadoDetalle = registerDetalle(idenParley,competenciaRow);
+            estadoDetalle = registerDetalle(idParley,competenciaRow);
             
           });
   

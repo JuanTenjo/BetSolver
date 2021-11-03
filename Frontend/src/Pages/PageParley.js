@@ -17,7 +17,7 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 
-const PageUser = () => {
+const PageParley = () => {
 
   let classes = useStyle();
   const [loading, setLoading] = useState(false);
@@ -177,4 +177,4 @@ const PageUser = () => {
 
 }
 
-export default PageUser;
+export default PageParley;

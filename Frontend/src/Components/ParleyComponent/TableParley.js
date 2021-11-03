@@ -52,8 +52,8 @@ const TableParley = ({setdataToEdit,dataparley,deleteData}) => {
       const res = await helpHttpAxios().post(`${API.URI}/parley/detalleParley`,config);
 
       if (!res.err) {
-
-        console.log(res)
+        
+        setdataToEdit(res);
         
       }else{
         seterror(res.message[0])

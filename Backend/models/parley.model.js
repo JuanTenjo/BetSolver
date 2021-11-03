@@ -176,12 +176,12 @@ model.parleys = async () => {
 model.detalleParley = async (idParley = null) => {
   try {
 
-      let query = `select parleys.idparleys, detalleparley.* , competencias.fechaCompeticion, competencias.horaCompeticion,
+      let query = `SELECT parleys.idparleys,parleys.cuotaTotal, detalleparley.* ,DATE_FORMAT(competencias.fechaCompeticion, "%Y-%m-%d") as fechaCompeticion, competencias.horaCompeticion,
       competencias.idEquipoLocal, 
       competencias.idEquipoVisitante,
-      eq1.nombreEquipo,
-      eq2.nombreEquipo
-      from parleys inner join detalleparley on parleys.idparleys = detalleparley.idparleys
+      eq1.nombreEquipo as equipoLocal,
+      eq2.nombreEquipo as equipoVisitante
+      FROM parleys inner join detalleparley on parleys.idparleys = detalleparley.idparleys
       inner join competencias on detalleparley.idCompeticiones = competencias.idCompeticiones
       left join equipos as eq1 on competencias.idEquipoLocal = eq1.idEquipos
       left join equipos as eq2 on competencias.idEquipoVisitante = eq2.idEquipos
