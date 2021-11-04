@@ -46,11 +46,11 @@ const TableParley = ({setdataToEdit,dataparley,deleteData}) => {
 
       
       let config = {
-        data: {"idParley":"10"},
+        data: {"idParley":idParley},
       };
 
       const res = await helpHttpAxios().post(`${API.URI}/parley/detalleParley`,config);
-
+      console.log(res);
       if (!res.err) {
         
         setdataToEdit(res);

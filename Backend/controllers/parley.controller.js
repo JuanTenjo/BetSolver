@@ -14,6 +14,8 @@ controller.register = async function (req, res) {
 
     const params = req.body;
 
+    console.log(params);
+
     let competencias = params.competencias;
 
     const ErroresValidacion = [];
@@ -292,8 +294,6 @@ controller.detalleParley = async function (req, res) {
     const ErroresValidacion = [];
 
     let idParley = req.body.idParley;
-
-    console.log(req.body);
 
     await validarNulo(idParley) ? ErroresValidacion.push("El id del parley viene vacio") : true;
 

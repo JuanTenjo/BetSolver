@@ -53,6 +53,7 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
   let classes = useStyle();
   const [cuotaTotal, setCuotaTotal] = useState("");
+  const [idParley, setIdParley] = useState(null);
   const [dataCompetition, setDataCompetition] = useState(null);
   const [parley, setParley] = useState(initialForm);
   const [competitionSelect, setCompetitionSelect] = useState([]);
@@ -71,11 +72,13 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
   useEffect(() => {
     if(dataToEdit){
-      
+      setIdParley(dataToEdit[0].idparleys);
       setCuotaTotal(dataToEdit[0].cuotaTotal);
       setCompetitionSelect(dataToEdit);
 
     }else{
+      setIdParley(null);
+      setCuotaTotal("");
       setCompetitionSelect([]);
     }
   }, [dataToEdit]);
@@ -108,10 +111,8 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
                 "competencias": idCompetencias,
                 "cuotaTotal": cuotaTotal,
               }
-              
-              console.log(data);
-
-              //createData(parley);
+            
+              createData(data);
 
             }
           }
