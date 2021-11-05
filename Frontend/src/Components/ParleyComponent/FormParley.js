@@ -40,11 +40,11 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 //Inicial Form
-const initialForm = {
-  "idparleys": null,
-  "competencias": "",
-  "cuotaTotal": "",
-};
+// const initialForm = {
+//   "idparleys": null,
+//   "competencias": "",
+//   "cuotaTotal": "",
+// };
 
 
 
@@ -55,7 +55,6 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
   const [cuotaTotal, setCuotaTotal] = useState("");
   const [idParley, setIdParley] = useState(null);
   const [dataCompetition, setDataCompetition] = useState(null);
-  const [parley, setParley] = useState(initialForm);
   const [competitionSelect, setCompetitionSelect] = useState([]);
   const [error, setError] = useState({});
 
@@ -97,9 +96,24 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
           "cuotaTotal": "Ingresa el porcentaje del parley",
         })
       }else{ 
+        
           if (Object.keys(error).length === 0) {
-            if(parley.idparleys){
-              console.log("Act");
+            if(idParley){
+
+              let idCompetencias = [];
+              idCompetencias = competitionSelect.map(function(element){
+                return element.idCompeticiones;
+              });
+
+
+              const data = {
+                "parley":idParley,
+                "competencias": idCompetencias,
+                "cuotaTotal": cuotaTotal,
+              }
+
+              console.log(data);
+
             }else{
               
               let idCompetencias = [];
@@ -172,7 +186,7 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
   const handleReset = () => {
     setCompetitionSelect([]);
-    setParley(initialForm);
+    // setParley(initialForm);
     setDataToEdit(null);
 
   };

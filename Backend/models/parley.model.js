@@ -62,7 +62,7 @@ model.registerDetalle = async (idParley, idCompetencia) => {
 
 model.update = async (params) => {
   try {
-    let query = `UPDATE parleys SET competencia1 = '${params.competencia1}', competencia2 = '${params.competencia2}', competencia3 = '${params.competencia3}',competencia4 = '${params.competencia4}',cuotaTotal = '${params.cuotaTotal}' WHERE idparleys  = ${params.idparleys}`;
+    let query = `UPDATE parleys SET cuotaTotal = '${params.cuotaTotal}' WHERE idparleys = ${params.parley}`;
 
     const UpdateParley = await pool.query(query);
 
@@ -95,6 +95,25 @@ model.erase = async (idEquipos) => {
     };
   }
 };
+
+model.eraseDetalle = async (parley) => {
+  try {
+    let query = `DELETE FROM parleys WHERE idparleys = ${parley}`;
+
+    const delDetaParly = await pool.query(query);
+
+    let estado = delDetaParly.affectedRows > 0 ? true : false;
+
+    return estado;
+  } catch (err) {
+    return {
+      error: true,
+      mensaje: [`Hubo un error al eliminar el detalle del parley en el Model: parley.model, en la funcion: eraseDetalle. ERROR: ${err.sqlMessage} `],
+      respuesta: false,
+    };
+  }
+};
+
 
 model.teams = async (idLiga = null) => {
   try {
