@@ -82,12 +82,15 @@ controller.register = async function (req, res) {
 };
 
 controller.update = async function (req, res) {
+  
   if (req.user[0].idRol === 3) {
     //Acepta idCompeticion, idLigas, idEquipoLocal, idEquipoVisitante, fechaCompeticion, hora competicion
 
     const params = req.body;
 
     let competencias = params.competencias;
+
+    let estadoDetalle;
 
     const ErroresValidacion = [];
 
@@ -98,18 +101,7 @@ controller.update = async function (req, res) {
       res.status(400).json({ message: ErroresValidacion });
     } else {
 
-      await update(params);
-
-      await eraseDetalle(params.parley);
-
-      competencias.forEach(competenciaRow => {
-  
-        estadoDetalle = registerDetalle(params.parley,competenciaRow);
-        
-      });
-
-
-      //falta de aqui para abajo
+      const estado = await update(params);
 
       if (estado.error || estado === false) {
         res
@@ -121,7 +113,19 @@ controller.update = async function (req, res) {
           });
       } else {
 
-        res.status(200).json({ message: "Actualizacion Exitosa" });
+        await eraseDetalle(params.parley);
+
+        competencias.forEach(competenciaRow => {
+  
+          estadoDetalle = registerDetalle(params.parley,competenciaRow);
+          
+        });
+
+        if(estadoDetalle.error){
+          res.status(200).json({ message: "El detalle del parley fallo al actualzar Actualizacion Exitosa" });
+        }else{
+          res.status(200).json({ message: "Actualizacion Exitosa" });
+        }   
 
       }
     }

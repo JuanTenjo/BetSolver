@@ -70,7 +70,7 @@ const PageParley = () => {
   const updateData = async (data) => {
     setLoading(true);
 
-    let URL = `${API.URI}/user/update`;
+    let URL = `${API.URI}/parley/update`;
 
     let config = {
       data: data,

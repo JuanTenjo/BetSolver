@@ -98,7 +98,7 @@ model.erase = async (idEquipos) => {
 
 model.eraseDetalle = async (parley) => {
   try {
-    let query = `DELETE FROM parleys WHERE idparleys = ${parley}`;
+    let query = `DELETE FROM detalleparley WHERE idparleys = ${parley}`;
 
     const delDetaParly = await pool.query(query);
 

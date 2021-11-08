@@ -39,15 +39,6 @@ const useStyle = makeStyles((theme) => ({
   }
 }));
 
-//Inicial Form
-// const initialForm = {
-//   "idparleys": null,
-//   "competencias": "",
-//   "cuotaTotal": "",
-// };
-
-
-
 
 const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
 
@@ -98,6 +89,7 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
       }else{ 
         
           if (Object.keys(error).length === 0) {
+            
             if(idParley){
 
               let idCompetencias = [];
@@ -112,7 +104,7 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
                 "cuotaTotal": cuotaTotal,
               }
 
-              console.log(data);
+              updateData(data);
 
             }else{
               
@@ -185,10 +177,9 @@ const FormParley = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
   };
 
   const handleReset = () => {
+    setIdParley(null);
     setCompetitionSelect([]);
-    // setParley(initialForm);
     setDataToEdit(null);
-
   };
 
   const handleInputChange = (event) => {  
