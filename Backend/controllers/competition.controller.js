@@ -185,14 +185,15 @@ controller.update = async function (req, res) {
         await ValidaIDTeam(params.idEquipoLocal) == false ? ErroresValidacion.push(`El equipo local ingresado ya no existe o esta desabilitado`) : true;
         await ValidaIDTeam(params.idEquipoVisitante) == false ? ErroresValidacion.push(`El equipo visitante ingresado ya no existe o esta desabilitado`) : true;
         params.estrategias.length <= 0 ? ErroresValidacion.push(`La competencia ingresada no tiene estrategias, agregale para poder registrar`) : true;
-
+ 
         if(params.golesLocal){
-            Number.isInteger(params.golesLocal) == false  ? ErroresValidacion.push("Se esperara un numero entero en el marcador del local") : false;
+            params.golesLocal = parseInt(params.golesLocal);
+            params.golesVisitante = parseInt(params.golesVisitante);        
             params.golesLocal.toString().length > 2 ? ErroresValidacion.push("Se esperaba un marcador de uno o maximo dos digitos del local") : false;
             params.golesLocal < 0 ? ErroresValidacion.push("Se esperaba un marcador del local mayor o igual a 0") : false;
         }
         if(params.golesVisitante){
-            Number.isInteger(params.golesVisitante) == false ? ErroresValidacion.push("Se esperara un numero entero en el marcador del visitante") : false;
+            params.golesVisitante = parseInt(params.golesVisitante);
             params.golesVisitante.toString().length > 2 ? ErroresValidacion.push("Se esperaba un marcador de uno o maximo dos del visitante") : false;
             params.golesVisitante < 0 ? ErroresValidacion.push("Se esperaba un marcador del visitante mayor o igual a 0") : false;
         }

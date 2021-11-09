@@ -60,6 +60,8 @@ const initialForm = {
   idLigaVisitante: "",
   idEquipoLocal: "",
   idEquipoVisitante: "",
+  golesLocal: 0, 
+  golesVisitante: 0, 
   fechaCompeticion: "",
   horaCompeticion: "",
   habiliParley: false,
@@ -244,6 +246,7 @@ const FormCompetition = ({
   const handleSelectPais = (e) => {
     setCodiPaisLocal(e.target.value);
   };
+
   const handleSelectPaisVisi = (e) => {
     setCodiPaisVisitante(e.target.value);
   };
@@ -281,6 +284,7 @@ const FormCompetition = ({
 
       <form onSubmit={handleSubmitData}>
         <Grid container justifyContent="center" spacing={1}>
+
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <Grid container justifyContent="center" spacing={1}>
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -378,10 +382,21 @@ const FormCompetition = ({
                   </FormControl>
                 )}
 
-                {error.idEquipoLocal && (
-                  <Alert severity="warning">{error.idEquipoLocal}</Alert>
+
+                {dataToEdit && (
+                  <TextField
+                    type="number"
+                    value={form.golesLocal}
+                    onChange={handleChange}
+                    label="Goles Local"
+                    name="golesLocal"
+                    className={classes.text}              
+                    variant="outlined"
+                    size="small"
+                  />
                 )}
 
+           
               </Grid>
 
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -478,9 +493,25 @@ const FormCompetition = ({
                     </Select>
                   </FormControl>
                 )}
+
+                {dataToEdit && (
+                  <TextField
+                    type="number"
+                    value={form.golesVisitante}
+                    onChange={handleChange}
+                    label="Goles Visitante"
+                    name="golesVisitante"
+                    className={classes.text}              
+                    variant="outlined"
+                    size="small"
+                  />
+                )}
+
                 {error.idEquipoVisitante && (
                   <Alert severity="warning">{error.idEquipoVisitante}</Alert>
                 )}
+
+
               </Grid>
             </Grid>
 
@@ -616,6 +647,7 @@ const FormCompetition = ({
                 <Alert severity="warning">{error.validacionStrategy}</Alert>
             )}
           </Grid>
+
         </Grid>
 
         <Grid container justifyContent="center" spacing={1}>

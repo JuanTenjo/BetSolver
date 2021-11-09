@@ -59,6 +59,8 @@ const TableCompetition = ({setdataToEdit,dataCompetition,deleteData}) => {
         idLigaVisitante: data.idLigaVisitante.toString(),
         idEquipoLocal: data.idEquipoLocal.toString(),
         idEquipoVisitante: data.idEquipoVisitante.toString(),
+        golesLocal: data.golesLocal.toString(),
+        golesVisitante: data.golesVisitante.toString(),
         fechaCompeticion: data.fechaCompeticion,
         horaCompeticion: data.horaCompeticion,
         habiliParley: data.habiliParley,
