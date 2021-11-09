@@ -89,9 +89,9 @@ model.deleteEstrategias = async (idCompeticiones) => {
 
         const deleteDetail = await pool.query(query);
 
-        let estado = deleteDetail.affectedRows > 0 ?  true : false
+        //let estado = deleteDetail.affectedRows > 0 ?  true : false
         
-        return estado;
+        return deleteDetail;
 
     } catch (err) {
         return {

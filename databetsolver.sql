@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-10-2021 a las 07:26:57
--- Versión del servidor: 10.4.20-MariaDB
--- Versión de PHP: 7.3.29
+-- Tiempo de generación: 09-11-2021 a las 22:26:51
+-- Versión del servidor: 10.4.19-MariaDB
+-- Versión de PHP: 8.0.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,8 +46,8 @@ CREATE TABLE `competencias` (
 --
 
 INSERT INTO `competencias` (`idCompeticiones`, `idLigaLocal`, `idLigaVisitante`, `idEquipoLocal`, `idEquipoVisitante`, `golesLocal`, `golesVisitante`, `fechaCompeticion`, `horaCompeticion`, `habilitado`, `habiliParley`) VALUES
-(27, 38, 47, 8, 13, 0, 0, '2021-11-06 00:00:00', '23:15:00', 1, 1),
-(28, 38, 47, 8, 13, 0, 0, '2021-10-31 00:00:00', '23:17:00', 1, 1);
+(27, 38, 47, 8, 13, 0, 0, '2021-11-19 00:00:00', '23:15:00', 1, 1),
+(28, 47, 37, 15, 7, 0, 0, '2022-01-14 00:00:00', '23:17:00', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -64,8 +64,16 @@ CREATE TABLE `detallecompentencia` (
   `PorceEmpate` int(2) NOT NULL DEFAULT 0,
   `cuotaLocal` varchar(4) DEFAULT '',
   `cuotaVisitante` varchar(4) DEFAULT '',
-  `cuotaEmpate` varchar(4) DEFAULT ''
+  `cuotaEmpate` varchar(4) DEFAULT '',
+  `resultado` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `detallecompentencia`
+--
+
+INSERT INTO `detallecompentencia` (`idDetalleCompentencia`, `idCompeticion`, `idEstrategia`, `PorceLocal`, `PorceVisitante`, `PorceEmpate`, `cuotaLocal`, `cuotaVisitante`, `cuotaEmpate`, `resultado`) VALUES
+(74, 27, 1, 40, 60, 0, '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -84,8 +92,10 @@ CREATE TABLE `detalleparley` (
 --
 
 INSERT INTO `detalleparley` (`iddetalleParley`, `idparleys`, `idCompeticiones`) VALUES
-(6, 10, 28),
-(7, 10, 27);
+(8, 11, 27),
+(9, 11, 28),
+(16, 10, 27),
+(17, 10, 28);
 
 -- --------------------------------------------------------
 
@@ -140,6 +150,28 @@ INSERT INTO `estrategias` (`idEstrategia`, `nombreEstrategia`, `habilitado`) VAL
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `factura`
+--
+
+CREATE TABLE `factura` (
+  `idFactura` int(11) NOT NULL,
+  `fecha` datetime NOT NULL DEFAULT current_timestamp(),
+  `producto` varchar(45) NOT NULL,
+  `valor` decimal(10,0) NOT NULL DEFAULT 0,
+  `cantidad` int(11) NOT NULL DEFAULT 1,
+  `archiFact` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `factura`
+--
+
+INSERT INTO `factura` (`idFactura`, `fecha`, `producto`, `valor`, `cantidad`, `archiFact`) VALUES
+(3, '2021-11-09 00:00:00', 'Membresia Gratuita', '0', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `ligas`
 --
 
@@ -167,6 +199,29 @@ INSERT INTO `ligas` (`idLigas`, `codiPais`, `nombreLiga`, `habilitada`) VALUES
 (45, 'AO', 'pruebaActualizarDesabilitada', 1),
 (46, 'AD', 'prueba8', 1),
 (47, 'CO', 'LigaColombiana', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `membresia`
+--
+
+CREATE TABLE `membresia` (
+  `idMembresia` int(11) NOT NULL,
+  `idUsuarios` int(11) NOT NULL,
+  `idFactura` int(11) NOT NULL,
+  `idNivel` int(11) NOT NULL DEFAULT 1,
+  `fechaInicial` datetime NOT NULL DEFAULT current_timestamp(),
+  `fechaCorte` datetime NOT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `membresia`
+--
+
+INSERT INTO `membresia` (`idMembresia`, `idUsuarios`, `idFactura`, `idNivel`, `fechaInicial`, `fechaCorte`, `estado`) VALUES
+(4, 1, 3, 1, '2021-11-09 00:00:00', '2021-11-05 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -477,7 +532,26 @@ CREATE TABLE `parleys` (
 --
 
 INSERT INTO `parleys` (`idparleys`, `cuotaTotal`, `fechaIngreso`) VALUES
-(10, '60', '2021-10-21 00:04:33');
+(10, '14', '2021-11-03 17:35:36'),
+(11, '60', '2021-11-03 17:35:36');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pruebatarea`
+--
+
+CREATE TABLE `pruebatarea` (
+  `idnew_table` int(11) NOT NULL,
+  `contador` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pruebatarea`
+--
+
+INSERT INTO `pruebatarea` (`idnew_table`, `contador`) VALUES
+(1, 130);
 
 -- --------------------------------------------------------
 
@@ -580,10 +654,25 @@ ALTER TABLE `estrategias`
   ADD PRIMARY KEY (`idEstrategia`);
 
 --
+-- Indices de la tabla `factura`
+--
+ALTER TABLE `factura`
+  ADD PRIMARY KEY (`idFactura`);
+
+--
 -- Indices de la tabla `ligas`
 --
 ALTER TABLE `ligas`
   ADD PRIMARY KEY (`idLigas`);
+
+--
+-- Indices de la tabla `membresia`
+--
+ALTER TABLE `membresia`
+  ADD PRIMARY KEY (`idMembresia`),
+  ADD KEY `pkUsuario` (`idUsuarios`),
+  ADD KEY `pkFactura` (`idFactura`),
+  ADD KEY `pkNivel` (`idNivel`);
 
 --
 -- Indices de la tabla `niveles`
@@ -602,6 +691,12 @@ ALTER TABLE `paises`
 --
 ALTER TABLE `parleys`
   ADD PRIMARY KEY (`idparleys`);
+
+--
+-- Indices de la tabla `pruebatarea`
+--
+ALTER TABLE `pruebatarea`
+  ADD PRIMARY KEY (`idnew_table`);
 
 --
 -- Indices de la tabla `roles`
@@ -629,13 +724,13 @@ ALTER TABLE `competencias`
 -- AUTO_INCREMENT de la tabla `detallecompentencia`
 --
 ALTER TABLE `detallecompentencia`
-  MODIFY `idDetalleCompentencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `idDetalleCompentencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT de la tabla `detalleparley`
 --
 ALTER TABLE `detalleparley`
-  MODIFY `iddetalleParley` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `iddetalleParley` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `equipos`
@@ -650,10 +745,22 @@ ALTER TABLE `estrategias`
   MODIFY `idEstrategia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de la tabla `factura`
+--
+ALTER TABLE `factura`
+  MODIFY `idFactura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `ligas`
 --
 ALTER TABLE `ligas`
   MODIFY `idLigas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+
+--
+-- AUTO_INCREMENT de la tabla `membresia`
+--
+ALTER TABLE `membresia`
+  MODIFY `idMembresia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `paises`
@@ -665,7 +772,7 @@ ALTER TABLE `paises`
 -- AUTO_INCREMENT de la tabla `parleys`
 --
 ALTER TABLE `parleys`
-  MODIFY `idparleys` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idparleys` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -711,6 +818,24 @@ ALTER TABLE `detalleparley`
 --
 ALTER TABLE `equipos`
   ADD CONSTRAINT `idLigas` FOREIGN KEY (`idLigas`) REFERENCES `ligas` (`idLigas`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `membresia`
+--
+ALTER TABLE `membresia`
+  ADD CONSTRAINT `pkFactura` FOREIGN KEY (`idFactura`) REFERENCES `factura` (`idFactura`),
+  ADD CONSTRAINT `pkNivel` FOREIGN KEY (`idNivel`) REFERENCES `niveles` (`idniveles`),
+  ADD CONSTRAINT `pkUsuario` FOREIGN KEY (`idUsuarios`) REFERENCES `usuarios` (`idUsuarios`);
+
+DELIMITER $$
+--
+-- Eventos
+--
+CREATE DEFINER=`root`@`localhost` EVENT `manage_expired_memberships` ON SCHEDULE EVERY 1 MINUTE STARTS '2021-11-09 00:00:01' ON COMPLETION NOT PRESERVE ENABLE DO update membresia
+set estado = False
+where fechaCorte < CURDATE()$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

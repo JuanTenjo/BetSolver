@@ -172,6 +172,7 @@ controller.update = async function (req, res) {
         const params = req.body;
 
         const ErroresValidacion = [];
+
    
         await validarNulo(params.idCompeticiones) ? ErroresValidacion.push("Codigo de la competicion no puede estar vacio") : true; 
         await validarNulo(params.idLigaLocal) ? ErroresValidacion.push("Codigo de la liga no puede estar vacio") : true; 
@@ -231,10 +232,8 @@ controller.update = async function (req, res) {
                     
                     const stateDeleteStrategy = await deleteEstrategias(params.idCompeticiones);
 
-                    if(stateDeleteStrategy){
-    
-    
-    
+                    if(!stateDeleteStrategy.error){
+                    
                         const estadoDetalle = await registerDetalle(params.estrategias,params.idCompeticiones)
     
                         if(estadoDetalle.error){
