@@ -13,6 +13,7 @@ import PageLeague from "../Pages/PageLeague";
 import PageCompetition from "../Pages/PageCompetition";
 import PagePais from "../Pages/PagePais";
 import PageParley from "../Pages/PageParley";
+import PageMembresias from "../Pages/PageMembresia";
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -25,7 +26,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const RoutesLogged = ({ nombreUser }) => {
+const RoutesLogged = ({ nombreUser, rolUser}) => {
 
   const classes = useStyle();
   const [abrir, setAbrir] = useState(false);
@@ -38,30 +39,47 @@ const RoutesLogged = ({ nombreUser }) => {
 
     <div className={classes.root}>
 
-      <NavBar accionAbrir={AccionAbrir} />
-      <Hidden xsDown>
-        <Cajon variant="permanent" nombreUser={nombreUser} open={true} />
-      </Hidden>
-      <Hidden smUp>
-        <Cajon variant="temporary" nombreUser={nombreUser} open={abrir} onClose={AccionAbrir} />
-      </Hidden>
+      {rolUser !== 3 ?  
+
+        <Switch>
+          <PrivateRoute exact path="/" component={Home} />
+          <Route exact path="/membresias" component={PageMembresias} />
+        </Switch>
+
+      :
+        <>
+          <NavBar accionAbrir={AccionAbrir} />
+          <Hidden xsDown>
+            <Cajon variant="permanent" nombreUser={nombreUser} open={true} />
+          </Hidden>
+          <Hidden smUp>
+            <Cajon variant="temporary" nombreUser={nombreUser} open={abrir} onClose={AccionAbrir} />
+          </Hidden>
 
 
-      <Switch>
-        <Route exact path="/gestionParley" component={PageParley} />
-        <Route exact path="/gestionPais" component={PagePais} />
-        <Route exact path="/gestionCompetition" component={PageCompetition} />
-        <Route exact path="/gestionTeam" component={PageTeam} />
-        <Route exact path="/gestionUser" component={PageUser} />
-        <Route exact path="/gestionLeague" component={PageLeague} />
-        {/* <Route exact path="/gestionUser" render={props => <GestionUserApp {...props} />} /> */}
-        <PrivateRoute exact path="/" component={Home} />
+          <Switch>
+           
+            <Route exact path="/gestionParley" component={PageParley} />
+            <Route exact path="/gestionPais" component={PagePais} />
+            <Route exact path="/gestionCompetition" component={PageCompetition} />
+            <Route exact path="/gestionTeam" component={PageTeam} />
+            <Route exact path="/gestionUser" component={PageUser} />
+            <Route exact path="/gestionLeague" component={PageLeague} />
+            {/* <Route exact path="/gestionUser" render={props => <GestionUserApp {...props} />} /> */}
+            <PrivateRoute exact path="/" component={Home} />
 
-        {/* <Route exact path="/IniciarSesion" component={LoginApp} />
-            <Route exact path="/">
-              <Redirect to="/IniciarSesion" />
-            </Route> */}
-      </Switch>
+            {/* <Route exact path="/IniciarSesion" component={LoginApp} />
+                <Route exact path="/">
+                  <Redirect to="/IniciarSesion" />
+                </Route> */}
+          </Switch>
+        </>
+      }
+
+
+     
+      
+
     </div>
   );
 };
@@ -111,7 +129,7 @@ const Routes = () => {
 
   };
 
-  return <>{auth ? <RoutesLogged nombreUser={nombreUser} /> : <PageLogin Auth={AccionAuth} />}</>;
+  return <>{auth ? <RoutesLogged nombreUser={nombreUser} rolUser={3} /> : <PageLogin Auth={AccionAuth} />}</>;
 
 };
 

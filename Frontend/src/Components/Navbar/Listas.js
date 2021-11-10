@@ -17,7 +17,7 @@ const Listas = (props) => {
       {
         text: "Home",
         icon: <HomeIcon />,
-        onClick: () => history.push("/Home") 
+        onClick: () => history.push("/") 
       },
       {
         text: "Gestionar Usuarios",
