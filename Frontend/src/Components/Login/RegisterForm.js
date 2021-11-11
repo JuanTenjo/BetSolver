@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { helpHttpAxios } from "../../Helpers/helpHttpsAxios";
 import UserForm from "../../Hooks/useForm";
 import Alert from "@material-ui/lab/Alert";
-import logo from '../../assets/Logo.png';
+import logo from "../../assets/Logo.png";
 import API from "../../Utils/dominioBackend";
 import {
   Grid,
@@ -17,7 +17,6 @@ import {
   FormControlLabel,
   Radio,
 } from "@material-ui/core";
-
 
 const useStyle = makeStyles((theme) => ({
   text: {
@@ -34,13 +33,11 @@ const useStyle = makeStyles((theme) => ({
   },
   Label: {
     textAlign: "center",
-  }
+  },
 }));
 
 //Inicial Form
 const initialForm = {
-  idUsuarios: null,
-  idRol: "",
   codiPais: "",
   nombre: "",
   apellidos: "",
@@ -66,24 +63,18 @@ const validationForm = (form) => {
   }
 
   if (form.idUsuarios === null) {
-
     if (!form.password.trim()) {
       error.password = "El campo password es requerido";
-    }else{  
-  
-        if(form.password !== form.passwordConfirm){
-          error.password = "El campo password y confirme password no son iguales";
-        }
-  
-    }
-    
-      if (!form.passwordConfirm.trim()) {
-        error.passwordConfirm = "Debes confirmar la password";
+    } else {
+      if (form.password !== form.passwordConfirm) {
+        error.password = "El campo password y confirme password no son iguales";
       }
+    }
 
+    if (!form.passwordConfirm.trim()) {
+      error.passwordConfirm = "Debes confirmar la password";
+    }
   }
-
-
 
   if (!form.email.trim()) {
     error.email = "El campo email es requerido";
@@ -95,10 +86,6 @@ const validationForm = (form) => {
     error.celular = "El campo celular es requerido";
   }
 
-  if (form.idRol === "" || form.idRol === null) {
-    error.idRol = "El permiso del usuario es requerido";
-  }
-
   if (form.codiPais === "" || form.codiPais === null) {
     error.codiPais = "El codigo del pais es requerido";
   }
@@ -106,22 +93,16 @@ const validationForm = (form) => {
   return error;
 };
 
-
-
-const FormUser = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
+const FormUser = ({ createData }) => {
   let classes = useStyle();
 
   const [dataPaises, setDataPaises] = useState(null);
 
   //Hood Personalizado para valizado
-  const { form, setForm, error, setError, handleChange, handleBlur } = UserForm(
+  const { form, error, setError, handleChange, handleBlur } = UserForm(
     initialForm,
     validationForm
   );
-
-  //const { data, isPending, error } = useAxios(urlPaises);
-
-
 
   useEffect(() => {
     const traerPais = async () => {
@@ -132,53 +113,26 @@ const FormUser = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
     traerPais();
   }, []);
 
-  useEffect(() => {
-    //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
-    if (dataToEdit) {
-
-      document.getElementById("password").setAttribute("disabled","");
-      document.getElementById("passwordConfirm").setAttribute("disabled","");
-
-      setForm(dataToEdit);
-      setError(validationForm(dataToEdit));
-    } else {
-
-      document.getElementById("password").removeAttribute("disabled");
-      document.getElementById("passwordConfirm").removeAttribute("disabled");
-
-      setForm(initialForm);
-    }
-  }, [dataToEdit, setForm, setError]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(validationForm(form));
     if (Object.keys(error).length === 0) {
-      if (form.idUsuarios === null) {
-        createData(form);
-      } else {
-        updateData(form);
-      }
-
+      createData(form);
     }
-  };
-
-  const handleReset = () => {
-    setForm(initialForm);
-    setDataToEdit(null);
   };
 
   return (
     <div>
-    <Grid item xs={12}>
-        <center>
+      <Grid container>
+        <Grid item xs={12}>
+          <center>
             <img src={logo} alt="Logo Bet Solver" width="40%" />
-        </center>
-        <Typography align="center" variant="h5">
-        Registrate Gratis
-    </Typography>
-    </Grid>
-
+          </center>
+          <Typography align="center" variant="h5">
+            Registrate Gratis
+          </Typography>
+        </Grid>
+      </Grid>
       <form onSubmit={handleSubmit}>
         <Grid container justifyContent="center" spacing={1}>
           <Grid item xs={6}>
@@ -213,7 +167,6 @@ const FormUser = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
               <Alert severity="warning">{error.codiPais}</Alert>
             )}
           </Grid>
-        
         </Grid>
 
         <Grid container justifyContent="center" spacing={1}>
@@ -300,7 +253,9 @@ const FormUser = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
               variant="outlined"
               size="small"
             />
-            {error.password && <Alert severity="warning">{error.password}</Alert>}
+            {error.password && (
+              <Alert severity="warning">{error.password}</Alert>
+            )}
           </Grid>
 
           <Grid item xs={6}>
@@ -317,7 +272,9 @@ const FormUser = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
               variant="outlined"
               size="small"
             />
-            {error.passwordConfirm && <Alert severity="warning">{error.passwordConfirm}</Alert>}
+            {error.passwordConfirm && (
+              <Alert severity="warning">{error.passwordConfirm}</Alert>
+            )}
           </Grid>
         </Grid>
 
@@ -353,25 +310,14 @@ const FormUser = ({ dataToEdit, setDataToEdit, createData, updateData }) => {
         </Grid>
 
         <Grid container justifyContent="center" spacing={1}>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <Button
-              variant="outlined"
-              onClick={handleReset}
-              type="button"
-              color="primary"
-              className={classes.boton}
-            >
-              Limpiar
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="outlined"
               type="submit"
+              variant="contained"
               color="primary"
               className={classes.boton}
             >
-              Enviar
+              Registrate Gratis
             </Button>
           </Grid>
         </Grid>

@@ -13,7 +13,13 @@ const useStyles = makeStyles(() => ({
     alignItems: "center",
     height: "100%",
   },
-  Banner: {},
+  Banner: {
+    maxWidth:"82%",
+    margin:"0",
+  },
+  margenSuperior: {
+    marginTop: "20%",
+  }
 }));
 
 
@@ -64,30 +70,26 @@ const PageLogin = ({ Auth }) => {
     };
 
 
-
-  const AltoImagen = (e) => {
-    setWidth(window.screen.width / 2 - 100);
-    setMaxHeight(window.screen.height - 200);
-  };
-
-  const [MaxHeight, setMaxHeight] = useState(150);
-  const [width, setWidth] = useState(150);
   return (
     <div className={styles.container}>
-      <Grid container alignItems="center">
+      <Grid container>
       
-        <Grid item xs={12} sm={6} md={6}>
 
+        <Grid item xs={12} sm={12} md={6}>
 
-        {funcion === 0 ? 
+          {funcion === 0 ?
 
-          <LoginForm handleSubmit={handleSubmit} setFuncion={setFuncion} />
+            <div className={styles.margenSuperior}>
+              <LoginForm handleSubmit={handleSubmit} setFuncion={setFuncion} /> 
+            </div>
 
-          :
+            :
 
-          <RegisterForm/>
+            <RegisterForm/>
+            
+          }
 
-        }
+        </Grid>
 
         {error.errores &&
           error.errores.map((el) => {
@@ -96,21 +98,24 @@ const PageLogin = ({ Auth }) => {
 
         {response && Auth()}
 
+        <Grid item md={6}>
+
+          <Hidden smDown>
+             
+            <center>
+              <img
+                src={Banner}
+                alt="Banner Bet Solver"
+                className={styles.Banner}
+              />
+            </center>
+
+          </Hidden>
 
         </Grid>
 
-        <Hidden smDown>
-          <center>
-            <img
-              onLoad={AltoImagen}
-              src={Banner}
-              alt="Banner Bet Solver"
-              style={{ maxHeight: MaxHeight, width: width, margin: 10 }}
-            />
-          </center>
-        </Hidden>
-
       </Grid>
+
     </div>
   );
 };
