@@ -3,7 +3,7 @@ import React from 'react';
 const PageHome = () => {
     return ( 
         <div>
-            <h3 style={{marginTop:"70px"}}>Vista Admnistrador: Bienvendo a BETSOLVER</h3>
+            <h3 style={{marginTop:"70px"}}>Vista Admnistrador</h3>
         </div>
      );
 }

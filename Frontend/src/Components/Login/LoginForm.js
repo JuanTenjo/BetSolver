@@ -6,7 +6,8 @@ import {
     TextField,
     Typography,
     makeStyles,
-    Button
+    Button,
+    Link 
 } from '@material-ui/core'
 
 import UseForm from '../../Hooks/useForm'
@@ -22,6 +23,14 @@ const useStyles = makeStyles(() => ({
     boton: {
         width: '100%',
         marginTop: '20px'
+    },
+    linkRegistro: {
+      marginTop: '20px',
+      textAlign: 'center',
+    },
+    linkOLvidarContra: {
+      marginTop: '40px',
+      textAlign: 'center',
     }
 }));
 
@@ -55,7 +64,7 @@ const validationForm = (form) => {
 
   };
 
-const LoginForm = ({handleSubmit}) => {
+const LoginForm = ({handleSubmit,setFuncion}) => {
 
     const styles = useStyles();
 
@@ -134,6 +143,20 @@ const LoginForm = ({handleSubmit}) => {
               >
                 Ingresar
               </Button>
+
+              <div className={styles.linkRegistro} >
+                <label>¿No tienes una cuenta? </label>
+                <Link href="#" underline='hover' className={styles.linkRegistro} onClick={() => setFuncion(1)}>
+                  Registrate Gratis
+                </Link>
+              </div>
+
+              <div className={styles.linkOLvidarContra} >
+                <Link href="#" underline='hover' className={styles.linkRegistro}>
+                  ¿Olvidaste tu contraseña? 
+                </Link>     
+              </div>
+       
             </form>
                
           </Grid>

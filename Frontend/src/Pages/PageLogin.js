@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Grid, makeStyles, Hidden } from "@material-ui/core";
 import LoginForm from "../Components/Login/LoginForm";
+import RegisterForm from "../Components/Login/RegisterForm";
 import Banner from "../assets/Banner.jpg";
 import Message from "../Components/Necesarios/Message";
 import { helpHttpAxios } from "../Helpers/helpHttpsAxios";
@@ -20,6 +21,7 @@ const PageLogin = ({ Auth }) => {
 
     const styles = useStyles();
     const [response, setResponse] = useState(null);
+    const [funcion, setFuncion] = useState(0);
     const [error, setError] = useState({});
     
     const handleSubmit = async (data) => {
@@ -31,8 +33,6 @@ const PageLogin = ({ Auth }) => {
         const BaseUrl = `${API.URI}/auth/login`;
 
         const res = await helpHttpAxios().post(BaseUrl, config);
-        console.log(res);
-
         if (!res.err) {
 
             if (res.rol === 3) {
@@ -63,6 +63,8 @@ const PageLogin = ({ Auth }) => {
 
     };
 
+
+
   const AltoImagen = (e) => {
     setWidth(window.screen.width / 2 - 100);
     setMaxHeight(window.screen.height - 200);
@@ -73,16 +75,27 @@ const PageLogin = ({ Auth }) => {
   return (
     <div className={styles.container}>
       <Grid container alignItems="center">
+      
         <Grid item xs={12} sm={6} md={6}>
 
-          <LoginForm handleSubmit={handleSubmit} />
-          
-          {error.errores &&
-            error.errores.map((el) => {
-              return <Message key={el} msg={el} estado={false} />;
-            })}
 
-          {response && Auth()}
+        {funcion === 0 ? 
+
+          <LoginForm handleSubmit={handleSubmit} setFuncion={setFuncion} />
+
+          :
+
+          <RegisterForm/>
+
+        }
+
+        {error.errores &&
+          error.errores.map((el) => {
+          return <Message key={el} msg={el} estado={false} />;
+        })}
+
+        {response && Auth()}
+
 
         </Grid>
 
@@ -96,6 +109,7 @@ const PageLogin = ({ Auth }) => {
             />
           </center>
         </Hidden>
+
       </Grid>
     </div>
   );

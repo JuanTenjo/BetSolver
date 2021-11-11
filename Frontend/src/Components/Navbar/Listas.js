@@ -7,11 +7,21 @@ import {
 } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { withRouter } from "react-router-dom";
 
 const Listas = (props) => {
 
     const { history } = props;
+
+        
+    const Salir = () => {
+      //Tumba la sesio por lo cual no tendra acceso a nada, con history.push modificamos la url para que quede limpia, y basta con solo
+      //recargar la pagina para volver a login
+      window.localStorage.removeItem('LoggedAppUser');
+      history.push("/")
+      window.location.reload();
+    }
 
     const itemsList = [
       {
@@ -48,9 +58,15 @@ const Listas = (props) => {
         text: "Gestionar paises",
         icon: <PlaylistAddIcon />,
         onClick: () => history.push("/gestionPais")
+      },
+      {
+        text: "Salir",
+        icon: <ExitToAppIcon />,
+        onClick: () => Salir()
       }
     ];
-    
+
+
     return ( 
         <div>
             <List component='nav'>
