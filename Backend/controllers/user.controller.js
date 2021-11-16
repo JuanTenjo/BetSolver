@@ -9,16 +9,12 @@ const controller = {};
 
 controller.registerUser = async function (req, res) {
 
-    if(req.user[0].idRol === 3){
 
         const params = req.body;
         //console.log(params);
         
         let espacios = false;
         let cont = 0;
-    
-
-
     
         const ErroresValidacion = [];
 
@@ -69,15 +65,16 @@ controller.registerUser = async function (req, res) {
 
             }else{
 
+
+
+                
                 res.status(200).json({"message": "Registro Exitoso"});
 
             }
 
         }
     
-    }else{
-        res.status(403).json({"message": "Lo siento pero no tiene los permisos necesarios para hacer esta peticion"});
-    }
+
 
 };
 

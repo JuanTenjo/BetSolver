@@ -23,12 +23,48 @@ const useStyles = makeStyles(() => ({
 }));
 
 
+
+
 const PageLogin = ({ Auth }) => {
 
     const styles = useStyles();
     const [response, setResponse] = useState(null);
     const [funcion, setFuncion] = useState(0);
     const [error, setError] = useState({});
+
+    const handleFuncion = () =>{
+      setFuncion(0);
+    }
+
+    
+  const createData = async (data) => {
+
+    console.log(data);
+
+    // let URL = `${API.URI}/user/register`;
+
+    // let config = {
+    //   data: data,
+    // };
+
+    // const res = await helpHttpAxios().post(URL, config);
+
+    // if (!res.err) {
+    //   setResponse(res.message);
+    //   setTimeout(() => {
+    //     setResponse(false);
+    //   }, 5000);
+    // } else {
+    //   let errores = { errores: res.message };
+    //   setError(errores);
+    //   setTimeout(() => {
+    //     setError(false);
+    //   }, 9000);
+    // }
+
+    // setFuncion(0);
+
+  };
     
     const handleSubmit = async (data) => {
 
@@ -85,7 +121,7 @@ const PageLogin = ({ Auth }) => {
 
             :
 
-            <RegisterForm setFuncion={setFuncion} />
+            <RegisterForm handleFuncion={handleFuncion} createData={createData} />
             
           }
 

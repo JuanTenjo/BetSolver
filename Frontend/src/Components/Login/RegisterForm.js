@@ -44,10 +44,12 @@ const useStyle = makeStyles((theme) => ({
 //Inicial Form
 const initialForm = {
   idUsuarios: null,
-  idRol: "",
+  idRol: "1",
   codiPais: "",
+  direccion: "",
   nombre: "",
   apellidos: "",
+  producto: "Membresia Gratis 15 Dias",
   email: "",
   password: "",
   passwordConfirm: "",
@@ -64,6 +66,7 @@ const validationForm = (form) => {
   if (!form.nombre.trim()) {
     error.nombre = "El campo nombre es requerido";
   }
+
 
   if (!form.apellidos.trim()) {
     error.apellidos = "El campo apellido es requerido";
@@ -99,10 +102,6 @@ const validationForm = (form) => {
     error.celular = "El campo celular es requerido";
   }
 
-  if (form.idRol === "" || form.idRol === null) {
-    error.idRol = "El permiso del usuario es requerido";
-  }
-
   if (form.codiPais === "" || form.codiPais === null) {
     error.codiPais = "El codigo del pais es requerido";
   }
@@ -112,19 +111,16 @@ const validationForm = (form) => {
 
 
 
-const FormUser = ({ setFuncion, setDataToEdit, createData, updateData }) => {
+const FormUser = ({ handleFuncion,createData }) => {
   let classes = useStyle();
 
   const [dataPaises, setDataPaises] = useState(null);
 
   //Hood Personalizado para valizado
-  const { form, setForm, error, setError, handleChange, handleBlur } = UserForm(
+  const { form, error, setError, handleChange, handleBlur } = UserForm(
     initialForm,
     validationForm
   );
-
-  //const { data, isPending, error } = useAxios(urlPaises);
-
 
 
   useEffect(() => {
@@ -136,33 +132,18 @@ const FormUser = ({ setFuncion, setDataToEdit, createData, updateData }) => {
     traerPais();
   }, []);
 
-  useEffect(() => {
-    //Evalua cualquier cambio que tenga esa variable, esta oyendo siempre
- 
-      document.getElementById("password").setAttribute("disabled","");
-      document.getElementById("passwordConfirm").setAttribute("disabled","");
-
-      setForm(initialForm);
-
-  }, [setForm, setError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(validationForm(form));
+    console.log(Object.keys(error).length);
     if (Object.keys(error).length === 0) {
-      if (form.idUsuarios === null) {
+      console.log("llego");
         createData(form);
-      } else {
-        updateData(form);
-      }
 
     }
   };
 
-  const handleReset = () => {
-    setForm(initialForm);
-    setDataToEdit(null);
-  };
 
   return (
     <div>
@@ -215,7 +196,7 @@ const FormUser = ({ setFuncion, setDataToEdit, createData, updateData }) => {
               type="text"
               name="direccion"
               label="Direccion"
-              value={form.nombre}
+              value={form.direccion}
               onChange={handleChange}
               onBlur={handleBlur}
               className={classes.text}
@@ -374,8 +355,8 @@ const FormUser = ({ setFuncion, setDataToEdit, createData, updateData }) => {
             </Button>
           </Grid>
           <div className={classes.LinkVolver} >
-                <Link href="#" underline='hover' className={classes.linkRegistro} onClick={() => setFuncion(1)}>
-                  Volver
+                <Link href="#" underline='hover' className={classes.linkRegistro} onClick={() => handleFuncion()}>
+                  Iniciar Sesión
                 </Link>
               </div>
         </Grid>

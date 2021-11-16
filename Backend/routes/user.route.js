@@ -4,7 +4,7 @@ const passport  = require('passport');
 const router = require('express').Router();
 
 //Registrar Usuario 
-router.post('/register',passport.authenticate('jwt', { session: false }), registerUser);
+router.post('/register', registerUser);
 
 //Actualizar Usuarrio
 router.put('/update', passport.authenticate('jwt', { session: false }), updateUser);
