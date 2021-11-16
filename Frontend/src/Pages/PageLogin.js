@@ -85,7 +85,7 @@ const PageLogin = ({ Auth }) => {
 
             :
 
-            <RegisterForm/>
+            <RegisterForm setFuncion={setFuncion} />
             
           }
 
