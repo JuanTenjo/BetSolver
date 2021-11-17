@@ -64,8 +64,7 @@ controller.register = async function (req, res) {
 
 
                         const estadoDetalle = await registerDetalle(params.estrategias,IDCompeticion)
-                        console.log("Si llega aqui");
-
+ 
                         if(estadoDetalle.error){
 
                             res.status(403).json({ "message": [`Se registro la competencia pero quedo sin estrategias. Motivo:${estadoDetalle.error}`] });

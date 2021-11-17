@@ -45,11 +45,10 @@ const useStyle = makeStyles((theme) => ({
 const initialForm = {
   idUsuarios: null,
   idRol: "1",
+  nivel: "1",
   codiPais: "",
-  direccion: "",
   nombre: "",
   apellidos: "",
-  producto: "Membresia Gratis 15 Dias",
   email: "",
   password: "",
   passwordConfirm: "",
@@ -111,12 +110,11 @@ const validationForm = (form) => {
 
 
 
-const FormUser = ({ handleFuncion,createData }) => {
+const RegisterForm = ({ handleFuncion,createData }) => {
   let classes = useStyle();
 
   const [dataPaises, setDataPaises] = useState(null);
 
-  //Hood Personalizado para valizado
   const { form, error, setError, handleChange, handleBlur } = UserForm(
     initialForm,
     validationForm
@@ -138,9 +136,7 @@ const FormUser = ({ handleFuncion,createData }) => {
     setError(validationForm(form));
     console.log(Object.keys(error).length);
     if (Object.keys(error).length === 0) {
-      console.log("llego");
         createData(form);
-
     }
   };
 
@@ -158,7 +154,8 @@ const FormUser = ({ handleFuncion,createData }) => {
 
       <form onSubmit={handleSubmit}>
         <Grid container justifyContent="center" spacing={1}>
-          <Grid item xs={6}>
+        
+          <Grid item xs={12}>
             <FormControl
               variant="outlined"
               className={classes.formControl}
@@ -190,20 +187,7 @@ const FormUser = ({ handleFuncion,createData }) => {
               <Alert severity="warning">{error.codiPais}</Alert>
             )}
           </Grid>
-          <Grid item xs={6}>
-          <TextField
-              required
-              type="text"
-              name="direccion"
-              label="Direccion"
-              value={form.direccion}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className={classes.text}
-              variant="outlined"
-              size="small"
-            />
-          </Grid>
+
         
         </Grid>
 
@@ -365,4 +349,4 @@ const FormUser = ({ handleFuncion,createData }) => {
   );
 };
 
-export default FormUser;
+export default RegisterForm;

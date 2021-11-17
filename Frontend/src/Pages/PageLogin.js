@@ -22,9 +22,6 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-
-
-
 const PageLogin = ({ Auth }) => {
 
     const styles = useStyles();
@@ -39,30 +36,28 @@ const PageLogin = ({ Auth }) => {
     
   const createData = async (data) => {
 
-    console.log(data);
+    let URL = `${API.URI}/user/register`;
 
-    // let URL = `${API.URI}/user/register`;
+    let config = {
+      data: data,
+    };
 
-    // let config = {
-    //   data: data,
-    // };
+    const res = await helpHttpAxios().post(URL, config);
 
-    // const res = await helpHttpAxios().post(URL, config);
+    if (!res.err) {
+      setResponse(res.message);
+      setTimeout(() => {
+        setResponse(false);
+      }, 5000);
+    } else {
+      let errores = { errores: res.message };
+      setError(errores);
+      setTimeout(() => {
+        setError(false);
+      }, 9000);
+    }
 
-    // if (!res.err) {
-    //   setResponse(res.message);
-    //   setTimeout(() => {
-    //     setResponse(false);
-    //   }, 5000);
-    // } else {
-    //   let errores = { errores: res.message };
-    //   setError(errores);
-    //   setTimeout(() => {
-    //     setError(false);
-    //   }, 9000);
-    // }
-
-    // setFuncion(0);
+    setFuncion(0);
 
   };
     

@@ -1,6 +1,6 @@
 const validator = require("email-validator");
 const {ValidarCorreo, ValidarPais, findUserById} = require('../models/validation.models')
-const {registerUser,updateUser, deleteUser, users, roles} = require('../models/user.model')
+const {registerUser,updateUser, deleteUser, users, roles,registerFactura,traerUltimoIDFactura,registerMembresia,NivelObte,traerUltimoIDUsuario} = require('../models/user.model')
 const {validarNulo, patternString, patternPassword} = require('../utils/validationPatters')
 const {encrypt} = require("../utils/bcrypt");
 
@@ -11,13 +11,12 @@ controller.registerUser = async function (req, res) {
 
 
         const params = req.body;
-        //console.log(params);
         
         let espacios = false;
         let cont = 0;
     
         const ErroresValidacion = [];
-
+        await validarNulo(params.nivel) ?  ErroresValidacion.push('El nivel del usuario esta vacio') : true; 
         await validarNulo(params.password) ?  ErroresValidacion.push('Password no puede estar vacio') : true; 
         await validarNulo(params.nombre) ?  ErroresValidacion.push('Nombre no puede estar vacio') : true;  
         await validarNulo(params.apellidos) ?  ErroresValidacion.push('Apellido no puede estar vacio') : true;  
@@ -46,8 +45,7 @@ controller.registerUser = async function (req, res) {
             espacios ? ErroresValidacion.push("La contraseña no puede contener espacios en blanco") : true;
         } 
 
-        
-    
+         
         
         if (ErroresValidacion.length != 0){
             
@@ -60,17 +58,62 @@ controller.registerUser = async function (req, res) {
             const estado = await registerUser(params);
 
             if(estado.error || estado === false){
-
                 res.status(400).json({"message": estado.mensaje ? estado.mensaje : "No se registro el usuario" });
-
-            }else{
-
-
-
-                
-                res.status(200).json({"message": "Registro Exitoso"});
-
+                return;
             }
+
+            const IdUsuario = await traerUltimoIDUsuario();
+
+            if(IdUsuario == null){
+                res.status(400).json({"message": estado.mensaje ? estado.mensaje : "No se encontro el usuario para completar el usuario. Comunicate con nosotros de inmediato para solucionarte este problema." });
+                return;
+            }
+
+            const nivel = await NivelObte(params.nivel);
+
+            if(nivel.error || nivel === false){
+                res.status(400).json({"message": estado.mensaje ? estado.mensaje : "No se encontro el nivel que desea. Comunicate con nosotros de inmediato para solucionarte este problema." });
+                return;
+            }
+
+            const regisFactura =  await registerFactura(nivel.nombre,nivel.precio);
+    
+            if(regisFactura.error || regisFactura === false){
+                res.status(400).json({"message": estado.mensaje ? estado.mensaje : "No se registro la factura por lo tanto no tiene membresia. Comunicate con nosotros de inmediato para solucionarte este problema." });
+                return;
+            }
+
+            //Se llama al nivel que se va a adquirir para obtener la informacion y hacer la factura
+
+            const idFactura = await traerUltimoIDFactura();
+
+            if(idFactura == null){
+                res.status(400).json({"message": estado.mensaje ? estado.mensaje : "No se registro la membresia ya que no se encontro el ultimo Id de la factura, por favor comunicate con nosotros" });
+                return;
+            }
+
+            
+            const fechaInicio = new Date();   
+
+            const fechaFinal = new Date();   
+
+            const diasMembresia = parseInt(nivel.dias);
+
+            fechaFinal.setDate(fechaFinal.getDate() + diasMembresia);
+
+            const fechaIniFormat =  fechaInicio.getFullYear() + "-" +  (fechaInicio.getMonth() + 1) + "-" + fechaInicio.getDate()
+            const fechaFinFormat = fechaFinal.getFullYear() + "-" +  (fechaFinal.getMonth() + 1) + "-" + fechaFinal.getDate()
+            console.log(fechaIniFormat);
+            console.log(fechaFinFormat);
+            
+            const regisMembresia = await registerMembresia(IdUsuario,idFactura,nivel.idniveles,fechaIniFormat,fechaFinFormat,true);
+
+            if(regisMembresia.error || regisMembresia === false){
+                res.status(400).json({"message": estado.mensaje ? estado.mensaje : "No se registro la membresia, por favor comunicate con nosotros" });
+                return;
+            }
+
+            res.status(200).json({"message": "Registro Exitoso"});  
 
         }
     

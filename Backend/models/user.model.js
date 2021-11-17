@@ -22,6 +22,101 @@ model.registerUser = async (params) => {
     }
 }
 
+model.registerFactura = async (producto, valor) => {
+    try {
+
+        let query = `INSERT INTO factura(producto,valor) Values('${producto}',${valor})`
+
+        const InsertFactura = await pool.query(query);
+
+        let estado = InsertFactura.affectedRows > 0 ?  true : false
+        
+        return estado;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje: [`Hubo un error al insertar la factura en el Model: user.model, en la funcion: registerFactura. ERROR: ${err.sqlMessage} `],
+            respuesta: false
+        };
+    }
+}
+
+model.NivelObte = async (idNivel) => {
+    try {
+
+        let query = `SELECT * FROM niveles where idniveles = ${idNivel}`
+
+        const result = await pool.query(query);
+    
+        return result[0];
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje:[ `Hubo un error al traer los dias del nivel en el Model: user.model, en la funcion: diasNivel. ERROR: ${err.sqlMessage} `],
+            respuesta: false
+        };
+    }
+}
+
+model.registerMembresia = async (idUsuarios,idFactura,idNivel,fechaInicial,fechaCorte,estadoUser) => {
+    try {
+
+        let query = `INSERT INTO membresia(idUsuarios,idFactura,idNivel,fechaInicial,fechaCorte,estado) Values(${idUsuarios},${idFactura},${idNivel},'${fechaInicial}','${fechaCorte}',${estadoUser})`
+
+        const InserMembre = await pool.query(query);
+
+        let estado = InserMembre.affectedRows > 0 ?  true : false
+        
+        return estado;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje: [`Hubo un error al insertar la membresia en el Model: user.model, en la funcion: registerMembresia. ERROR: ${err.sqlMessage} `],
+            respuesta: false
+        };
+    }
+}
+
+model.traerUltimoIDFactura = async () => {
+    try {
+
+        let query = `SELECT MAX(idFactura) AS idFactura FROM factura`
+
+        const result = await pool.query(query);
+    
+        return result[0].idFactura;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje:[ `Hubo un error al traer el ultimo id del la facturas el Model: user.model, en la funcion: traerUltimoIDFactura. ERROR: ${err.sqlMessage} `],
+            respuesta: false
+        };
+    }
+}
+
+model.traerUltimoIDUsuario = async () => {
+    try {
+
+        let query = `SELECT MAX(idUsuarios) AS idUsuarios FROM usuarios`
+
+        const result = await pool.query(query);
+    
+        return result[0].idUsuarios;
+
+    } catch (err) {
+        return {
+            error: true,
+            mensaje:[ `Hubo un error al traer el ultimo id del los usuarios el Model: user.model, en la funcion: traerUltimoIDUsuario. ERROR: ${err.sqlMessage} `],
+            respuesta: false
+        };
+    }
+}
+
+
 model.updateUser = async (params) => {
     try {
 
